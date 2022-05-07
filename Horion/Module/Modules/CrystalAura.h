@@ -35,10 +35,10 @@ public:
 
 	CrystalAura();
 	~CrystalAura();
-	//virtual const char* getModeName() {
-	//return ("Smart");
-	//}
-	// switchmode
+	// virtual const char* getModeName() {
+	// return ("Smart");
+	// }
+	//  switchmode
 	bool switch_silent = false;
 	bool switch_normal = false;
 	bool switch_better = false;
@@ -77,8 +77,8 @@ public:
 
 	// Inherited via IModule
 	virtual const char* getModuleName() override;
-	//virtual void onLevelRender() override;
-	// virtual const char* getModName() override;
+	// virtual void onLevelRender() override;
+	//  virtual const char* getModName() override;
 	virtual void onTick(C_GameMode* gm) override;
 	virtual void onEnable() override;
 	virtual void onDisable() override;

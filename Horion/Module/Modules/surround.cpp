@@ -17,6 +17,7 @@ Surround::Surround() : IModule(0, Category::WORLD, "Protect yourself from crysta
 				 .addEntry(EnumEntry("pitchUp", 3));
 	registerEnumSetting("Rotations", &this->rotate, 0);
 	registerBoolSetting("Center", &this->center, this->center);
+	//registerBoolSetting("Spoof", &this->spoof, this->spoof);
 }
 
 Surround::~Surround() {
@@ -43,6 +44,7 @@ void getObby() {
 		}
 	}
 }
+
 
 bool Surround::isSideEmpty() {
 	bool sendBack = false;
@@ -126,6 +128,7 @@ void Surround::onTick(C_GameMode* gm) {
 	if (g_Data.getLocalPlayer() == nullptr) return;
 
 	pn = false;
+
 
 	if (citySwitch && stopSwitch && g_Data.getLocalPlayer()->getSelectedItemId() != 49) {  // make sure that YOU actually have an obsidian in your hand before placing -> allows you to multitask eat, crystal, mining etc..
 		getObby();

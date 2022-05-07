@@ -150,7 +150,7 @@ bool pvpResources::isThereObsidian() {
 bool pvpResources::isThereCrystal() {
 	int mafs = 0;
 	for (int i = 0; i < 36; i++) {
-		int itemIDC = 629;
+		int itemIDC = 426;
 		C_ItemStack* itemToCount = g_Data.getLocalPlayer()->getSupplies()->inventory->getItemStack(i);
 		if (itemToCount->item != NULL && (*itemToCount->item)->itemId == itemIDC) {
 			int itemCountC = itemToCount->count;

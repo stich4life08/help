@@ -29,6 +29,7 @@ public:
 	bool jumpDisable = false;
 	bool disableOnComplete2 = true;
 	bool center = true;
+	bool spoof = true;
 
 	std::vector<vec3_t> regularBlocks = {
 
