@@ -16,6 +16,7 @@ Surround::Surround() : IModule(0, Category::WORLD, "Protect yourself from crysta
 				 .addEntry(EnumEntry("silent", 2))
 				 .addEntry(EnumEntry("pitchUp", 3));
 	registerEnumSetting("Rotations", &this->rotate, 0);
+	registerBoolSetting("Center", &this->center, this->center);
 }
 
 Surround::~Surround() {
@@ -133,7 +134,7 @@ void Surround::onTick(C_GameMode* gm) {
 
 	if (citySwitch && isSideEmpty() && !stopSwitch) {  // auto grab blocks when side empty/broken
 
-		clientMessageF(" You have been citied! Replacing block...");
+		//clientMessageF(" You have been citied! Replacing block...");
 		origSlot = g_Data.getLocalPlayer()->getSupplies()->selectedHotbarSlot;
 		getObby();
 		stopSwitch = true;
@@ -163,7 +164,9 @@ void Surround::onTick(C_GameMode* gm) {
 	vec3_t yR = vec3_t(floor(g_Data.getLocalPlayer()->getPos()->x), g_Data.getLocalPlayer()->getPos()->y, floor(g_Data.getLocalPlayer()->getPos()->z));
 	yR.x += 0.5f;
 	yR.z += 0.5f;
-	g_Data.getLocalPlayer()->setPos(yR);
+	if (center) {
+		g_Data.getLocalPlayer()->setPos(yR);
+	}
 
 	// GET BUILD BLOCK
 	if (isSideEmpty()) {

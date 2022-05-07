@@ -91,6 +91,8 @@ private:
 	int keybind = 0x0;
 	bool extended = false;
 	vec2_t ModulePos;
+	bool visible = true;
+
 private:
 	Category category;
 	const char* tooltip;
@@ -115,6 +117,7 @@ public:
 	inline vec2_t* getPos() { return &ModulePos; };
 
 	inline std::vector<SettingEntry*>* getSettings() { return &settings; };
+	inline bool isVisibleInArrayList() { return visible; };
 
 	virtual const char* getModuleName() = 0;
 	virtual const char* getRawModuleName();

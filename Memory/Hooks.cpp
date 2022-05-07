@@ -598,9 +598,9 @@ __int64 Hooks::RenderText(__int64 a1, C_MinecraftUIRenderContext* renderCtx) {
 						constexpr float borderPadding = 1;
 						constexpr float margin = 5;
 
-						static std::string name = "Velv-rion";
+						static std::string name = "Velvet";
 #ifdef _DEBUG
-						static std::string version = "dev";
+						static std::string version = "";
 #elif defined _BETA
 						static std::string version = "stop begging";
 #else
@@ -610,15 +610,15 @@ __int64 Hooks::RenderText(__int64 a1, C_MinecraftUIRenderContext* renderCtx) {
 						float nameLength = DrawUtils::getTextWidth(&name, nameTextSize);
 						float fullTextLength = nameLength + DrawUtils::getTextWidth(&version, versionTextSize);
 						vec4_t rect = vec4_t(
-							windowSize.x - margin - fullTextLength - borderPadding * 2,
-							windowSize.y - margin - textHeight,
-							windowSize.x - margin + borderPadding,
-							windowSize.y - margin);
+							0.f + margin - borderPadding,
+							21.f + margin - textHeight,
+							0.f + margin + fullTextLength + borderPadding * 2,
+							21.f + margin);
 
-						DrawUtils::drawRectangle(rect, MC_Color(rcolors), 1.f, 2.f);
-						DrawUtils::fillRectangle(rect, MC_Color(12, 12, 12), 1.f);
-						DrawUtils::drawText(vec2_t(rect.x + borderPadding, rect.y), &name, MC_Color(rcolors), nameTextSize);
-						DrawUtils::drawText(vec2_t(rect.x + borderPadding + nameLength, rect.w - 7), &version, MC_Color(rcolors), versionTextSize);
+						//DrawUtils::drawRectangle(rect, MC_Color(rcolors), 1.f, 2.f);
+						//DrawUtils::fillRectangle(rect, MC_Color(12, 12, 12), 0.2f);
+						DrawUtils::drawText(vec2_t(rect.x + borderPadding, rect.y), &name, MC_Color(255, 255, 255), nameTextSize);
+						DrawUtils::drawText(vec2_t(rect.x + borderPadding + nameLength, rect.w - 7), &version, MC_Color(255, 255, 255), versionTextSize);
 					}
 
 					// Draw ArrayList
@@ -685,7 +685,7 @@ __int64 Hooks::RenderText(__int64 a1, C_MinecraftUIRenderContext* renderCtx) {
 							auto lock = moduleMgr->lockModuleList();
 							std::vector<std::shared_ptr<IModule>>* moduleList = moduleMgr->getModuleList();
 							for (auto it : *moduleList) {
-								if (it.get() != hudModule)
+								if (it.get()->isVisibleInArrayList())
 									modContainerList.emplace(IModuleContainer(it));
 							}
 						}
@@ -744,8 +744,8 @@ __int64 Hooks::RenderText(__int64 a1, C_MinecraftUIRenderContext* renderCtx) {
 							currColor[0] += 1.f / a * c;
 							Utils::ColorConvertHSVtoRGB(currColor[0], currColor[1], currColor[2], currColor[0], currColor[1], currColor[2]);
 
-							DrawUtils::fillRectangle(rectPos, MC_Color(12, 12, 12), 1.f);
-							DrawUtils::fillRectangle(leftRect, MC_Color(currColor), 1.f);
+							DrawUtils::fillRectangle(rectPos, MC_Color(12, 12, 12), 0.2f);
+							//DrawUtils::fillRectangle(leftRect, MC_Color(currColor), 1.f);
 							if (!GameData::canUseMoveKeys() && rectPos.contains(&mousePos) && hudModule->clickToggle) {
 								vec4_t selectedRect = rectPos;
 								selectedRect.x = leftRect.z;
@@ -756,7 +756,7 @@ __int64 Hooks::RenderText(__int64 a1, C_MinecraftUIRenderContext* renderCtx) {
 								} else
 									DrawUtils::fillRectangle(selectedRect, MC_Color(0.8f, 0.8f, 0.8f, 0.8f), 0.3f);
 							}
-							DrawUtils::drawText(textPos, &textStr, MC_Color(currColor), textSize);
+							DrawUtils::drawText(textPos, &textStr, MC_Color(255, 255, 255), textSize);
 
 							yOffset += textHeight + (textPadding * 2);
 						}
