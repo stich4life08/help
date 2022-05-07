@@ -1,8 +1,7 @@
 #include "CrystalAura.h"
 CrystalAura::CrystalAura() : IModule(0x0, Category::COMBAT, "CrystalAura by SBReality#1948") {
 	dmgEnum = SettingEnum(this)
-				  .addEntry(EnumEntry("Vanilla", dmg_vanilla))
-				  .addEntry(EnumEntry("Java", dmg_java))
+				  .addEntry(EnumEntry("Aurora", dmg_vanilla))
 				  .addEntry(EnumEntry("2b2e", dmg_2b2e))
 				  .addEntry(EnumEntry("2b2eOLD", dmg_2b2elow));
 
@@ -16,8 +15,7 @@ CrystalAura::CrystalAura() : IModule(0x0, Category::COMBAT, "CrystalAura by SBRe
 	registerIntSetting("Place-Delay", &delay, delay, 0, 20);
 	registerIntSetting("Break-Delay", &delay2, delay2, 0, 20);
 
-	registerBoolSetting("WallHack", &esp, esp);
-	registerBoolSetting("VisualTarget", &VisTarget, VisTarget);
+	
 	registerBoolSetting("AntiCrystal", &xc, xc);
 
 	// registerBoolSetting("AutoSwitch", &autoswitch, autoswitch);
@@ -49,7 +47,7 @@ int crystalDelay = 0;
 int crystalDelay2 = 0;
 int crystalDelay3 = 0;
 const char* CrystalAura::getModuleName() {
-	return ("CrystalAuraSBR");
+	return ("CrystalAuraWTA+");
 }
 
 static std::vector<C_Entity*> targetList7;
