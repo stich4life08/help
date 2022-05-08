@@ -8,8 +8,10 @@ public:
 
 	bool tabgui = true;
 	bool arraylist = true;
+	bool arraylistbottom = true;
+	bool arraylisttop = true;
 	bool clickToggle = true;
-	bool watermark = true;
+	bool watermark = false;
 	bool coordinates = false;
 	bool keybinds = true;
 	bool displayArmor = true;

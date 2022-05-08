@@ -37,6 +37,7 @@
 #include "Modules/HoleESP.h"      // fixed
 #include "Modules/HoleFiller.h"	  // fixed
 #include "Modules//FastExp.h"
+#include "Modules/Arraylist.h"
 
 #include "Modules/Aimbot.h"
 #include "Modules/AirJump.h"
@@ -60,7 +61,7 @@
 #include "Modules/Teleport.h"
 #include "Modules/Crasher.h"
 #include "Modules/Criticals.h"
-#include "Modules/CrystalAura.h"
+//#include "Modules/CrystalAura.h"
 #include "Modules/Derp.h"
 #include "Modules/ESP.h"
 #include "Modules/EditionFaker.h"
@@ -125,6 +126,7 @@
 #include "Modules/ViewModel.h"
 #include "Modules/Twerk.h"
 #include "Modules/FontChanger.h"
+#include "Modules/Watermark.h"
 
 #ifdef _DEBUG
 #include "Modules/PacketLogger.h"

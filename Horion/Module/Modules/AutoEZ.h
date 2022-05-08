@@ -10,12 +10,13 @@ private:
 	bool sayUserDied = true;
 	bool sayEnemDied = true;
 
-	std::string deathMsg[5] = {
+	std::string deathMsg[6] = {
 		"stfu fanNN kuku hurensohn Ks omk dont say ez no life",
 		"Stupidity kills. In this case, it is you that killed me",
 		"Ewww stop using hakcs nab!!1!!",
 		"kill me again to die irl",
 		"yur hacking stfu nab"
+		"Kys nn i have 9000ms"
 	};
 
 	std::string killMsg[12] = {

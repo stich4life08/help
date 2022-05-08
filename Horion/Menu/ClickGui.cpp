@@ -14,6 +14,12 @@ bool resetStartPos = true;
 bool initialised = false;
 int scrollingDirection = 0;
 
+SettingEntry* keybindMenuCurrent = nullptr;
+int newKeybind = 0;
+bool isCapturingKey = false;
+bool shouldStopCapturing = false;
+bool isConfirmingKey = false;
+
 struct SavedWindowSettings {
 	vec2_t pos = {-1, -1};
 	bool isExtended = true;
@@ -49,8 +55,8 @@ static const MC_Color selectedSettingColor2 = MC_Color(85, 85, 85);
 static const MC_Color SettingColor1 = MC_Color(12, 12, 12);
 static const MC_Color SettingColor2 = MC_Color(12, 12, 12);*/
 
-static constexpr float textSize = .59f;
-static constexpr float textHeight = textSize * 8.0f;
+static constexpr float textSize = 0.59f;
+static constexpr float textHeight = textSize * 10.0f;
 static constexpr float categoryMargin = 0.5f;
 static constexpr float paddingRight = 13.f;
 static constexpr float crossSize = textHeight / 2.f;
@@ -365,7 +371,7 @@ void ClickGui::renderCategory(Category category) {
 								// Text
 								{
 									// Convert first letter to uppercase for more friendlieness
-									char name[0x21];
+									char name[0x22];
 									sprintf_s(name, 0x21, "%s", setting->name);
 									if (name[0] != 0)
 										name[0] = toupper(name[0]);

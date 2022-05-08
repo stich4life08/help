@@ -421,6 +421,8 @@ __int64 Hooks::RenderText(__int64 a1, C_MinecraftUIRenderContext* renderCtx) {
 		bool shouldRenderTabGui = true;
 		bool shouldRenderWatermark = true;
 
+		static auto arrayMod = moduleMgr->getModule<ArrayList>();
+
 		static float rcolors[4];          // Rainbow color array RGBA
 		static float disabledRcolors[4];  // Rainbow Colors, but for disabled modules
 		static float currColor[4];        // ArrayList colors
@@ -562,7 +564,7 @@ __int64 Hooks::RenderText(__int64 a1, C_MinecraftUIRenderContext* renderCtx) {
 				}
 			} else {
 				shouldRenderTabGui = hudModule->tabgui && hudModule->isEnabled();
-				shouldRenderArrayList = hudModule->arraylist && hudModule->isEnabled();
+				shouldRenderArrayList = arrayMod->isEnabled();
 				shouldRenderWatermark = hudModule->watermark && hudModule->isEnabled();
 
 				if (clickGuiModule->isEnabled()) {
@@ -579,7 +581,7 @@ __int64 Hooks::RenderText(__int64 a1, C_MinecraftUIRenderContext* renderCtx) {
 					// Display ArrayList on the Right?
 					static constexpr bool isOnRightSide = true;
 
-					float yOffset = 0;  // Offset of next Text
+					float yOffset = 0;// Offset of next Text
 					vec2_t windowSize = g_Data.getClientInstance()->getGuiData()->windowSize;
 					vec2_t windowSizeReal = g_Data.getClientInstance()->getGuiData()->windowSizeReal;
 					vec2_t mousePos = *g_Data.getClientInstance()->getMousePos();
@@ -628,6 +630,9 @@ __int64 Hooks::RenderText(__int64 a1, C_MinecraftUIRenderContext* renderCtx) {
 						float textPadding = 1.0f * textSize;
 						float textHeight = 10.0f * textSize;
 						float smoothness = 2;
+
+						if (arrayMod->bottom)
+							yOffset = windowSize.y - textHeight;
 
 						struct IModuleContainer {
 							// Struct used to Sort IModules in a std::set
@@ -681,6 +686,7 @@ __int64 Hooks::RenderText(__int64 a1, C_MinecraftUIRenderContext* renderCtx) {
 
 						std::set<IModuleContainer> modContainerList;
 						// Fill modContainerList with Modules
+						static auto arrayMod = moduleMgr->getModule<ArrayList>();
 						{
 							auto lock = moduleMgr->lockModuleList();
 							std::vector<std::shared_ptr<IModule>>* moduleList = moduleMgr->getModuleList();
@@ -744,7 +750,11 @@ __int64 Hooks::RenderText(__int64 a1, C_MinecraftUIRenderContext* renderCtx) {
 							currColor[0] += 1.f / a * c;
 							Utils::ColorConvertHSVtoRGB(currColor[0], currColor[1], currColor[2], currColor[0], currColor[1], currColor[2]);
 
-							DrawUtils::fillRectangle(rectPos, MC_Color(12, 12, 12), 0.2f);
+							if (arrayMod->Backgroundrgba) {
+								DrawUtils::fillRectangle(rectPos, MC_Color(rcolors), 0.2f);
+							} else {
+								DrawUtils::fillRectangle(rectPos, MC_Color(12, 12, 12), 0.2f);
+							}
 							//DrawUtils::fillRectangle(leftRect, MC_Color(currColor), 1.f);
 							if (!GameData::canUseMoveKeys() && rectPos.contains(&mousePos) && hudModule->clickToggle) {
 								vec4_t selectedRect = rectPos;
@@ -756,9 +766,17 @@ __int64 Hooks::RenderText(__int64 a1, C_MinecraftUIRenderContext* renderCtx) {
 								} else
 									DrawUtils::fillRectangle(selectedRect, MC_Color(0.8f, 0.8f, 0.8f, 0.8f), 0.3f);
 							}
-							DrawUtils::drawText(textPos, &textStr, MC_Color(255, 255, 255), textSize);
+							if (arrayMod->rgba) {
+								DrawUtils::drawText(textPos, &textStr, MC_Color(currColor), textSize);
+							} else {
+								DrawUtils::drawText(textPos, &textStr, MC_Color(255, 255, 255), textSize);
+							}
 
-							yOffset += textHeight + (textPadding * 2);
+							if (arrayMod->bottom) {
+								yOffset -= textHeight + (textPadding * 2);
+							} else {
+								yOffset += textHeight + (textPadding * 2);
+							}
 						}
 						c = 0;
 						modContainerList.clear();

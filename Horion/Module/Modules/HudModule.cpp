@@ -4,9 +4,9 @@
 
 HudModule::HudModule() : IModule(0, Category::VISUAL, "Displays ArrayList/TabGUI") {
 	registerBoolSetting("TabGui", &tabgui, tabgui);
-	registerBoolSetting("ArrayList", &arraylist, arraylist);
+	//registerBoolSetting("ArrayList", &arraylist, arraylist);
 	registerBoolSetting("ClickToggle", &clickToggle, clickToggle);
-	registerBoolSetting("Watermark", &watermark, watermark);
+	//registerBoolSetting("Watermark", &watermark, watermark);
 	registerBoolSetting("Coordinates", &coordinates, coordinates);
 	registerBoolSetting("Show Keybinds", &keybinds, keybinds);
 	registerBoolSetting("Show ArmorHUD", &displayArmor, displayArmor);

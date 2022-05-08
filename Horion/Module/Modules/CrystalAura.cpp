@@ -15,7 +15,6 @@ CrystalAura::CrystalAura() : IModule(0x0, Category::COMBAT, "CrystalAura by SBRe
 	registerIntSetting("Place-Delay", &delay, delay, 0, 20);
 	registerIntSetting("Break-Delay", &delay2, delay2, 0, 20);
 
-	
 	registerBoolSetting("AntiCrystal", &xc, xc);
 
 	// registerBoolSetting("AutoSwitch", &autoswitch, autoswitch);
@@ -402,7 +401,7 @@ void CrystalAura::onTick(C_GameMode* gm) {
 		if (!targetList7.empty()) {
 			if (editime == 1) slot = g_Data.getLocalPlayer()->getSupplies()->selectedHotbarSlot;
 			editime++;
-			if (editime >= 2)  //getCrystal();
+			if (editime >= 2)  // getCrystal();
 				better = 0;
 		} else {
 			better++;
@@ -470,7 +469,7 @@ void CrystalAura::onTick(C_GameMode* gm) {
 			if (id == 71 && g_Data.getLocalPlayer()->getPos()->dist(*ent->getPos()) <= range) {
 				moduleMgr->getModule<CrystalAura>()->empty2 = true;
 
-				//moduleMgr->getModule<CrystalAura>()->angle = g_Data.getLocalPlayer()->getPos()->CalcAngle(vec3_t(ent->getPos()->x, ent->getPos()->y + 0.7f, ent->getPos()->z));
+				// moduleMgr->getModule<CrystalAura>()->angle = g_Data.getLocalPlayer()->getPos()->CalcAngle(vec3_t(ent->getPos()->x, ent->getPos()->y + 0.7f, ent->getPos()->z));
 				g_Data.getCGameMode()->attack(ent);
 				hasPlacedA = false;
 
@@ -528,7 +527,7 @@ void CrystalAura::onSendPacket(C_Packet* packet) {
 	if (packet->isInstanceOf<C_MovePlayerPacket>() && g_Data.getLocalPlayer() != nullptr && silent) {
 		if (!targetList7.empty()) {
 			auto* movePacket = reinterpret_cast<C_MovePlayerPacket*>(packet);
-			//vec2_t angle = g_Data.getLocalPlayer()->getPos()->CalcAngle(*targetList7[0]->getPos());
+			// vec2_t angle = g_Data.getLocalPlayer()->getPos()->CalcAngle(*targetList7[0]->getPos());
 			movePacket->pitch = angle.x;
 			movePacket->headYaw = angle.y;
 			movePacket->yaw = angle.y;
