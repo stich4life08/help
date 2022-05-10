@@ -1,7 +1,7 @@
 #include "Arraylist.h"
 ArrayList::ArrayList() : IModule(0, Category::HUD, "ArrayList") {
-	// registerEnumSetting("Modes", &Modes, 0);
-	// Modes = SettingEnum(this)
+	//registerEnumSetting("Modes", &Modes, 0);
+		//Modes = SettingEnum(this)
 	//.addEntry(EnumEntry("Top", 0))
 	//.addEntry(EnumEntry("Bottom", 1));
 

@@ -66,9 +66,9 @@ private:
 			case Category::MISC:
 				categoryName = "Misc";
 				break;
-			case Category::CUSTOM:
-				categoryName = "Scripts";
-				break;
+			//case Category::CUSTOM:
+				//categoryName = "Scripts";
+				//break;
 			case Category::HUD:
 				categoryName = "Hud";
 				break;
