@@ -133,6 +133,7 @@ public:
 	virtual const char* getModName();
 	virtual const char* getRawModuleName();
 	virtual int getKeybind();
+	virtual const char* getModName();
 	virtual void setKeybind(int key);
 	virtual bool allowAutoStart();
 	virtual void onWorldTick(C_GameMode*);

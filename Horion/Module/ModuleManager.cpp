@@ -35,7 +35,7 @@ void ModuleManager::initModules() {
 		moduleList.push_back(std::shared_ptr<IModule>(new BowSpam()));
 		moduleList.push_back(std::shared_ptr<IModule>(new LiquidMove()));
 		moduleList.push_back(std::shared_ptr<IModule>(new ReverseStep()));
-
+		moduleList.push_back(std::shared_ptr<IModule>(new Theme()));
 		moduleList.push_back(std::shared_ptr<IModule>(new FastXP()));
 		moduleList.push_back(std::shared_ptr<IModule>(new CrystalPlace()));
 		moduleList.push_back(std::shared_ptr<IModule>(new CrystalBreak()));

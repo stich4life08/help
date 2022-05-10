@@ -186,6 +186,9 @@ const char* IModule::getModName() {
 const char* IModule::getRawModuleName() {
 	return getModuleName();
 }
+const char* IModule::getModName() {
+	return "";
+}
 
 int IModule::getKeybind() {
 	return this->keybind;
