@@ -8,6 +8,7 @@ ArrayList::ArrayList() : IModule(0, Category::VISUAL, "ArrayList") {
 	registerBoolSetting("Bottom", &this->bottom, this->bottom);
 	//registerBoolSetting("RGBAback", &this->Backgroundrgba, this->Backgroundrgba);
 	registerBoolSetting("RGBA", &this->rgba, this->rgba);
+	registerBoolSetting("Cool", &this->Cool, this->Cool);
 }
 
 ArrayList::~ArrayList(){};

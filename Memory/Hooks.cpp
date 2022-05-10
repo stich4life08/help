@@ -638,8 +638,11 @@ __int64 Hooks::RenderText(__int64 a1, C_MinecraftUIRenderContext* renderCtx) {
 							// Struct used to Sort IModules in a std::set
 							std::shared_ptr<IModule> backingModule;
 							std::string moduleName;
+							std::string modName;
 							bool enabled;
 							int keybind;
+							float textWidth2;
+							bool mode;
 							float textWidth;
 							vec2_t* pos;
 							bool shouldRender = true;
@@ -648,6 +651,7 @@ __int64 Hooks::RenderText(__int64 a1, C_MinecraftUIRenderContext* renderCtx) {
 								const char* moduleNameChr = mod->getModuleName();
 								this->enabled = mod->isEnabled();
 								this->keybind = mod->getKeybind();
+								this->mode = mod->getModName();
 								this->backingModule = mod;
 								this->pos = mod->getPos();
 
@@ -662,6 +666,7 @@ __int64 Hooks::RenderText(__int64 a1, C_MinecraftUIRenderContext* renderCtx) {
 								if (!this->enabled && *this->pos == vec2_t(0.f, 0.f))
 									this->shouldRender = false;
 								this->textWidth = DrawUtils::getTextWidth(&moduleName, hudModule->scale);
+								this->textWidth2 = DrawUtils::getTextWidth(&modName, hudModule->scale);
 							}
 
 							bool operator<(const IModuleContainer& other) const {
@@ -699,14 +704,20 @@ __int64 Hooks::RenderText(__int64 a1, C_MinecraftUIRenderContext* renderCtx) {
 						int a = 0;
 						int b = 0;
 						int c = 0;
-
+						float lastTextLenght = 0.f;
 						// Loop through mods to display Labels
 						for (std::set<IModuleContainer>::iterator it = modContainerList.begin(); it != modContainerList.end(); ++it) {
 							if (!it->shouldRender)
 								continue;
-
+							vec4_t underline;
 							std::string textStr = it->moduleName;
-							float textWidth = it->textWidth;
+							std::string textStr2 = it->modName;
+
+							float textWidth = it->textWidth + it->textWidth2 + 1.2f;
+
+							float textWidth2 = it->textWidth;
+
+							float textWidth3 = it->textWidth2;
 
 							float xOffsetOri = windowSize.x - textWidth - (textPadding * 2);
 
@@ -725,20 +736,48 @@ __int64 Hooks::RenderText(__int64 a1, C_MinecraftUIRenderContext* renderCtx) {
 								it->pos->x = 0.f;
 								it->pos->y = 0.f;
 							}
+							vec2_t textPos2 = vec2_t(
+								xOffset + 1.f + textPadding,
+								yOffset + 1.f + textPadding);
 
 							vec2_t textPos = vec2_t(
 								xOffset + textPadding,
 								yOffset + textPadding);
+
+							vec2_t modePos = vec2_t(
+								xOffset + 2.f + textWidth2 + textPadding,
+								yOffset + textPadding);
+
+							vec2_t modePos2 = vec2_t(
+								xOffset + 3.f + textWidth2 + textPadding,
+								yOffset + 1.f + textPadding);
+
 							vec4_t rectPos = vec4_t(
-								xOffset - 2,
+								xOffset - 0.2,
 								yOffset,
-								isOnRightSide ? windowSize.x : textWidth + (textPadding * 2),
+								isOnRightSide ? windowSize.x : textWidth + (textPadding * 0.2),
 								yOffset + textPadding * 2 + textHeight);
 							vec4_t leftRect = vec4_t(
-								xOffset - 2,
+								xOffset - 1.8,
 								yOffset,
-								xOffset - 1,
+								xOffset - 0.8,
 								yOffset + textPadding * 2 + textHeight);
+
+							vec4_t leftRect2 = vec4_t(
+								xOffset - 1.9,
+								yOffset,
+								xOffset - 0.9,
+								yOffset + textPadding * 2 + textHeight);
+
+							vec4_t rightbar = vec4_t(
+								xOffset - textWidth + 0.2,
+								yOffset,
+								xOffset - textWidth,
+								yOffset + textPadding * 2 + textHeight);
+
+							underline = vec4_t(windowSize.x - (lastTextLenght + 1.18f + (textPadding * 1.18f)), leftRect.y - textHeight + (textPadding * 2), leftRect.x, leftRect.y + 1.f);
+
+							lastTextLenght = textWidth;
 							c++;
 							b++;
 							if (b < 20)
@@ -771,7 +810,23 @@ __int64 Hooks::RenderText(__int64 a1, C_MinecraftUIRenderContext* renderCtx) {
 							} else {
 								DrawUtils::drawText(textPos, &textStr, MC_Color(255, 255, 255), textSize);
 							}
+							if (arrayMod->Cool) {
+								currColor[3] = rcolors[5];
+								Utils::ColorConvertRGBtoHSV(rcolors[0 & 1], rcolors[2], rcolors[01], currColor[0], currColor[1], currColor[2]);
+								currColor[0] += 0.2f / a * c;
+								Utils::ColorConvertHSVtoRGB(currColor[0 & 1], currColor[2], currColor[2], currColor[0], currColor[1], currColor[2]);
 
+							
+								DrawUtils::drawText(textPos2, &textStr, MC_Color(Theme::rFloat4, Theme::gFloat4, Theme::bFloat4), textSize);
+								DrawUtils::drawText(modePos2, &textStr2, MC_Color(Theme::rFloat3, Theme::gFloat3, Theme::bFloat3), textSize);
+
+								DrawUtils::drawText(modePos, &textStr2, MC_Color(Theme::rFloat2, Theme::gFloat2, Theme::bFloat2), textSize);
+								DrawUtils::drawText(textPos, &textStr, MC_Color(currColor), textSize);
+
+								//;xOffset += textWidth + (textPadding * 2);
+								
+							
+							}
 							if (arrayMod->bottom) {
 								yOffset -= textHeight + (textPadding * 2);
 							} else {

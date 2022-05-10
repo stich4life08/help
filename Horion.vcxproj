@@ -293,6 +293,7 @@
     <ClCompile Include="Horion\Module\Modules\BowSpam.cpp" />
     <ClCompile Include="Horion\Module\Modules\LiquidMove.cpp" />
     <ClCompile Include="Horion\Module\Modules\ReverseStep.cpp" />
+    <ClCompile Include="Horion\Module\Modules\Theme.cpp" />
     <ClCompile Include="Horion\Module\Modules\Verification.cpp" />
     <ClCompile Include="Horion\Module\Modules\ManualCrystal.cpp" />
     <ClCompile Include="Horion\Module\Modules\CrystalPlace.cpp" />
@@ -508,6 +509,7 @@
     <ClInclude Include="Horion\Module\Modules\LiquidMove.h" />
     <ClInclude Include="Horion\Module\Modules\ReverseStep.h" />
     <ClInclude Include="Horion\Module\Modules\FastExp.h" />
+    <ClInclude Include="Horion\Module\Modules\Theme.h" />
     <ClInclude Include="Horion\Module\Modules\Verification.h" />
     <ClInclude Include="Horion\Module\Modules\ManualCrystal.h" />
     <ClInclude Include="Horion\Module\Modules\CrystalUtilsJTWD.h" />

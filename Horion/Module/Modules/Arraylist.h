@@ -10,6 +10,7 @@ public:
 	bool bottom = true;
 	bool Backgroundrgba = false;
 	bool rgba = false;
+	bool Cool = false;
 
 	virtual const char* getModuleName() override;
 };
