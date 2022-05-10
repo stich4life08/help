@@ -809,6 +809,7 @@ __int64 Hooks::RenderText(__int64 a1, C_MinecraftUIRenderContext* renderCtx) {
 								DrawUtils::drawText(textPos, &textStr, MC_Color(currColor), textSize);
 							} else {
 								DrawUtils::drawText(textPos, &textStr, MC_Color(255, 255, 255), textSize);
+								
 							}
 							if (arrayMod->Cool) {
 								currColor[3] = rcolors[5];
@@ -824,7 +825,10 @@ __int64 Hooks::RenderText(__int64 a1, C_MinecraftUIRenderContext* renderCtx) {
 								DrawUtils::drawText(textPos, &textStr, MC_Color(currColor), textSize);
 
 								//;xOffset += textWidth + (textPadding * 2);
+								if (arrayMod->bugs) {
+									yOffset -= textHeight + (textPadding * 2);
 								
+								}
 							
 							}
 							if (arrayMod->bottom) {

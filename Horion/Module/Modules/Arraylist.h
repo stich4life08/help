@@ -11,6 +11,7 @@ public:
 	bool Backgroundrgba = false;
 	bool rgba = false;
 	bool Cool = false;
+	bool bugs = false;
 
 	virtual const char* getModuleName() override;
 };
