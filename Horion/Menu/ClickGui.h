@@ -8,7 +8,7 @@
 #include "../GuiUtils.h"
 #include "../Module/ModuleManager.h"
 
-struct ClickModule {
+	struct ClickModule {
 	bool isExtended = false;
 };
 
@@ -33,7 +33,6 @@ struct ClickWindow {
 
 class ClickGui {
 private:
-
 	inline static std::shared_ptr<ClickWindow> getWindow(const char* id);
 	inline static std::shared_ptr<ClickModule> getClickModule(std::shared_ptr<ClickWindow> window, const char* id);
 
@@ -43,7 +42,7 @@ private:
 	static void renderCategory(Category category);
 	inline static void getModuleListByCategory(Category category, std::vector<std::shared_ptr<IModule>>* modList);
 
-	inline static const char* catToName(Category cat){
+	inline static const char* catToName(Category cat) {
 		const char* categoryName;
 
 		// Get Category Name
@@ -70,6 +69,9 @@ private:
 			case Category::CUSTOM:
 				categoryName = "Scripts";
 				break;
+			case Category::HUD:
+				categoryName = "Hud";
+				break;
 			}
 		}
 		return categoryName;
@@ -80,7 +82,7 @@ public:
 	static void render();
 	static void onKeyUpdate(int key, bool isDown);
 	static void onMouseClickUpdate(int key, bool isDown);
-	static void onWheelScroll(bool direction); // true = up, false = down
+	static void onWheelScroll(bool direction);  // true = up, false = down
 	static void onLoadConfig(void* confVoid);
 	static void onSaveConfig(void* confVoid);
 };

@@ -17,7 +17,7 @@ using namespace Microsoft::WRL::Wrappers;
 
 char logPath[200];
 bool initializedLogger = false;
-bool loggerActive = false;
+bool loggerActive = true;
 CRITICAL_SECTION loggerLock;
 std::mutex vecMutex;
 std::mutex injMutex;

@@ -33,7 +33,7 @@ CrystalPlace::CrystalPlace() : IModule(0, Category::COMBAT, "p100 java CA by Joh
 	registerFloatSetting("FP MinimumDmg", &this->dmgAtThresh, this->dmgAtThresh, 0.f, 20.f);
 
 	registerBoolSetting("Render", &this->renderPlacing, this->renderPlacing);
-	registerBoolSetting("Allow 1blk gap", &this->noCheckUpper, this->noCheckUpper);
+	registerBoolSetting("1.13+ ", &this->noCheckUpper, this->noCheckUpper);
 	registerBoolSetting("Multi-Attack", &this->attackMulti, this->attackMulti);
 
 	switchType = SettingEnum(this)

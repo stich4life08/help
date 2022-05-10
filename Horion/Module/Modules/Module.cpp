@@ -179,6 +179,10 @@ const char* IModule::getModuleName() {
 	return "Module";
 }
 
+const char* IModule::getModName() {
+	return "";
+}
+
 const char* IModule::getRawModuleName() {
 	return getModuleName();
 }

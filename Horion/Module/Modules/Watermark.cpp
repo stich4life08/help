@@ -1,7 +1,7 @@
 #include "Watermark.h"
 #include "../../DrawUtils.h"
 
-Watermark::Watermark() : IModule(0, Category::VISUAL, "Watermark of thee client") {
+Watermark::Watermark() : IModule(0, Category::HUD, "Watermark of thee client") {
 	registerBoolSetting("Outline", &this->outline, this->outline);
 	registerBoolSetting("Background", &this->background, this->background);
 	registerBoolSetting("Bottom", &this->bottom, this->bottom);

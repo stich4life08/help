@@ -2,7 +2,7 @@
 
 #include "../../DrawUtils.h"
 
-Surround::Surround() : IModule(0, Category::WORLD, "Protect yourself from crystals :)") {
+Surround::Surround() : IModule(0, Category::COMBAT, "Protect yourself from crystals :)") {
 	registerBoolSetting("Jump-disable", &this->jumpDisable, false);
 	registerBoolSetting("City-Switch", &this->citySwitch, true);
 	registerBoolSetting("Show placements", &this->renderSurround, true);

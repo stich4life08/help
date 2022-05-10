@@ -177,6 +177,9 @@ void ClickGui::renderCategory(Category category) {
 		case Category::CUSTOM:
 			ourWindow->pos.x = yot / 7.f * 6.f;
 			break;
+		case Category::HUD : 
+			ourWindow->pos.x = yot / 7.f * 6.f;
+			break;
 		}
 	}
 
@@ -378,7 +381,7 @@ void ClickGui::renderCategory(Category category) {
 
 									std::string elTexto = name;
 									windowSize->x = fmax(windowSize->x, DrawUtils::getTextWidth(&elTexto, textSize) + 10 /* because we add 10 to text padding + checkbox*/);
-									DrawUtils::drawText(textPos, &elTexto, isFocused ? whiteColor : MC_Color(0.8f, 0.8f, 0.8f), textSize);
+									DrawUtils::drawText(textPos, &elTexto, isFocused ? whiteColor : MC_Color(0.8f, 0.8f, 0.8f), 0.54f);
 									currentYOffset += textHeight + (textPaddingY * 2);
 								}
 								break;
@@ -434,7 +437,7 @@ void ClickGui::renderCategory(Category category) {
 											name[0] = toupper(name[0]);
 										std::string elTexto = name;
 										windowSize->x = fmax(windowSize->x, DrawUtils::getTextWidth(
-																				&elTexto, textSize) +
+																				&elTexto, 0.54f) +
 																				5);  // because we add 5 to text padding
 										textPos.y = currentYOffset + textPaddingY;
 										vec4_t selectableSurface = vec4_t(
@@ -457,7 +460,7 @@ void ClickGui::renderCategory(Category category) {
 										// Background of individual enum
 										DrawUtils::fillRectangle(rectPos, moduleColor, backgroundAlpha);
 										DrawUtils::fillRectangle(selectableSurface, col, backgroundAlpha);
-										DrawUtils::drawText(textPos, &elTexto, whiteColor);
+										DrawUtils::drawText(textPos, &elTexto, whiteColor, 0.54f);
 										// logic
 										if (selectableSurface.contains(&mousePos) &&
 											shouldToggleLeftClick && !ourWindow->isInAnimation) {
@@ -806,6 +809,7 @@ void ClickGui::render() {
 	renderCategory(Category::PLAYER);
 	renderCategory(Category::WORLD);
 	renderCategory(Category::MISC);
+	renderCategory(Category::HUD);
 
 	if (scriptMgr.getNumEnabledScripts() > 0)
 		renderCategory(Category::CUSTOM);

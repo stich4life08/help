@@ -61,7 +61,7 @@
 #include "Modules/Teleport.h"
 #include "Modules/Crasher.h"
 #include "Modules/Criticals.h"
-//#include "Modules/CrystalAura.h"
+#include "Modules/CrystalAura.h"
 #include "Modules/Derp.h"
 #include "Modules/ESP.h"
 #include "Modules/EditionFaker.h"
@@ -127,6 +127,9 @@
 #include "Modules/Twerk.h"
 #include "Modules/FontChanger.h"
 #include "Modules/Watermark.h"
+#include "Modules/Theme.h"
+#include "Modules/Coordinates.h"
+#include "Modules/Keystroke.h"
 
 #ifdef _DEBUG
 #include "Modules/PacketLogger.h"

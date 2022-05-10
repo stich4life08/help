@@ -2,19 +2,19 @@
 #include "../../DrawUtils.h"
 #include "../../Scripting/ScriptManager.h"
 
-HudModule::HudModule() : IModule(0, Category::VISUAL, "Displays ArrayList/TabGUI") {
+HudModule::HudModule() : IModule(0, Category::HUD, "Displays ArrayList/TabGUI") {
 	registerBoolSetting("TabGui", &tabgui, tabgui);
 	//registerBoolSetting("ArrayList", &arraylist, arraylist);
 	registerBoolSetting("ClickToggle", &clickToggle, clickToggle);
 	//registerBoolSetting("Watermark", &watermark, watermark);
-	registerBoolSetting("Coordinates", &coordinates, coordinates);
+	//registerBoolSetting("Coordinates", &coordinates, coordinates);
 	registerBoolSetting("Show Keybinds", &keybinds, keybinds);
 	registerBoolSetting("Show ArmorHUD", &displayArmor, displayArmor);
 	registerBoolSetting("Keystrokes", &keystrokes, keystrokes);
 	registerBoolSetting("Show FPS", &fps, fps);
 	registerBoolSetting("Show CPS", &cps, cps);
 	registerBoolSetting("Always show", &alwaysShow, alwaysShow);
-	registerFloatSetting("Scale", &scale, scale, 0.5f, 1.5f);
+	//registerFloatSetting("Scale", &scale, scale, 0.5f, 1.5f);
 }
 
 HudModule::~HudModule() {

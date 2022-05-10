@@ -8,8 +8,11 @@ public:
 	~ArrayList();
 
 	bool bottom = true;
-	bool Backgroundrgba = false;
+	float opacity = 0.2f;
+	bool bugs = false;
 	bool rgba = false;
+	bool Cool = false;
+	float scale = 1.0f;
 
 	virtual const char* getModuleName() override;
 };

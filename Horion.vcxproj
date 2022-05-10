@@ -280,8 +280,11 @@
     <ClCompile Include="Horion\Menu\TabGui.cpp" />
     <ClCompile Include="Horion\Module\ModuleManager.cpp" />
     <ClCompile Include="Horion\Module\Modules\Arraylist.cpp" />
+    <ClCompile Include="Horion\Module\Modules\AutoCrystal.cpp" />
     <ClCompile Include="Horion\Module\Modules\Chat.cpp" />
+    <ClCompile Include="Horion\Module\Modules\Coordinates.cpp" />
     <ClCompile Include="Horion\Module\Modules\DeathCoords.cpp" />
+    <ClCompile Include="Horion\Module\Modules\Keystroke.cpp" />
     <ClCompile Include="Horion\Module\Modules\TargetHud.cpp" />
     <ClCompile Include="Horion\Module\Modules\InfoShow.cpp" />
     <ClCompile Include="Horion\Module\Modules\StrafeSpeed.cpp" />
@@ -293,6 +296,7 @@
     <ClCompile Include="Horion\Module\Modules\BowSpam.cpp" />
     <ClCompile Include="Horion\Module\Modules\LiquidMove.cpp" />
     <ClCompile Include="Horion\Module\Modules\ReverseStep.cpp" />
+    <ClCompile Include="Horion\Module\Modules\Theme.cpp" />
     <ClCompile Include="Horion\Module\Modules\Verification.cpp" />
     <ClCompile Include="Horion\Module\Modules\ManualCrystal.cpp" />
     <ClCompile Include="Horion\Module\Modules\CrystalPlace.cpp" />
@@ -494,8 +498,11 @@
     <ClInclude Include="Horion\Menu\TabGui.h" />
     <ClInclude Include="Horion\Module\ModuleManager.h" />
     <ClInclude Include="Horion\Module\Modules\Arraylist.h" />
+    <ClInclude Include="Horion\Module\Modules\AutoCrystal.h" />
     <ClInclude Include="Horion\Module\Modules\Chat.h" />
+    <ClInclude Include="Horion\Module\Modules\Coordinates.h" />
     <ClInclude Include="Horion\Module\Modules\DeathCoords.h" />
+    <ClInclude Include="Horion\Module\Modules\Keystroke.h" />
     <ClInclude Include="Horion\Module\Modules\TargetHud.h" />
     <ClInclude Include="Horion\Module\Modules\InfoShow.h" />
     <ClInclude Include="Horion\Module\Modules\StrafeSpeed.h" />
@@ -508,6 +515,7 @@
     <ClInclude Include="Horion\Module\Modules\LiquidMove.h" />
     <ClInclude Include="Horion\Module\Modules\ReverseStep.h" />
     <ClInclude Include="Horion\Module\Modules\FastExp.h" />
+    <ClInclude Include="Horion\Module\Modules\Theme.h" />
     <ClInclude Include="Horion\Module\Modules\Verification.h" />
     <ClInclude Include="Horion\Module\Modules\ManualCrystal.h" />
     <ClInclude Include="Horion\Module\Modules\CrystalUtilsJTWD.h" />
