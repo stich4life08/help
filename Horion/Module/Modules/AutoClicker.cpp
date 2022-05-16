@@ -32,7 +32,7 @@ void AutoClicker::onTick(C_GameMode* gm) {
 
 			if (pointing->hasEntity() != 0)
 				gm->attack(pointing->getEntity());
-			
+
 			else if (breakBlocks) {
 				bool isDestroyed = false;
 				gm->startDestroyBlock(pointing->block, pointing->blockSide, isDestroyed);
@@ -79,3 +79,4 @@ void AutoClicker::onTick(C_GameMode* gm) {
 			}
 		}
 	}
+}

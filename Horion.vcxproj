@@ -281,6 +281,7 @@
     <ClCompile Include="Horion\Module\ModuleManager.cpp" />
     <ClCompile Include="Horion\Module\Modules\Arraylist.cpp" />
     <ClCompile Include="Horion\Module\Modules\AutoCrystal.cpp" />
+    <ClCompile Include="Horion\Module\Modules\BPGRewriet.cpp" />
     <ClCompile Include="Horion\Module\Modules\Chat.cpp" />
     <ClCompile Include="Horion\Module\Modules\Coordinates.cpp" />
     <ClCompile Include="Horion\Module\Modules\DeathCoords.cpp" />
@@ -499,6 +500,7 @@
     <ClInclude Include="Horion\Module\ModuleManager.h" />
     <ClInclude Include="Horion\Module\Modules\Arraylist.h" />
     <ClInclude Include="Horion\Module\Modules\AutoCrystal.h" />
+    <ClInclude Include="Horion\Module\Modules\BPGRewrite.h" />
     <ClInclude Include="Horion\Module\Modules\Chat.h" />
     <ClInclude Include="Horion\Module\Modules\Coordinates.h" />
     <ClInclude Include="Horion\Module\Modules\DeathCoords.h" />
