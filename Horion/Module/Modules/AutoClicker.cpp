@@ -18,7 +18,7 @@ const char* AutoClicker::getModuleName() {
 void AutoClicker::onTick(C_GameMode* gm) {
 	if ((GameData::isLeftClickDown() || !hold) && GameData::canUseMoveKeys()) {
 		C_LocalPlayer* localPlayer = g_Data.getLocalPlayer();
-		Level* level = g_Data.getLocalPlayer()->level;
+		Level* pointing = g_Data.getLocalPlayer()->level;
 		Odelay++;
 
 		if (Odelay >= delay) {
@@ -30,14 +30,38 @@ void AutoClicker::onTick(C_GameMode* gm) {
 
 			localPlayer->swingArm();
 
-			if (level->hasEntity() != 0)
-				gm->attack(level->getEntity());
+			if (pointing->hasEntity() != 0)
+				gm->attack(pointing->getEntity());
+			
 			else if (breakBlocks) {
 				bool isDestroyed = false;
-				gm->startDestroyBlock(level->block, level->blockSide, isDestroyed);
-				gm->stopDestroyBlock(level->block);
-				if (isDestroyed && localPlayer->region->getBlock(level->block)->blockLegacy->blockId != 0)
-					gm->destroyBlock(&level->block, 0);
+				gm->startDestroyBlock(pointing->block, pointing->blockSide, isDestroyed);
+				gm->stopDestroyBlock(pointing->block);
+				gm->startDestroyBlock(pointing->block, pointing->blockSide, isDestroyed);
+				gm->stopDestroyBlock(pointing->block);
+				gm->startDestroyBlock(pointing->block, pointing->blockSide, isDestroyed);
+				gm->stopDestroyBlock(pointing->block);
+				gm->startDestroyBlock(pointing->block, pointing->blockSide, isDestroyed);
+				gm->stopDestroyBlock(pointing->block);
+				gm->startDestroyBlock(pointing->block, pointing->blockSide, isDestroyed);
+				gm->stopDestroyBlock(pointing->block);
+				gm->startDestroyBlock(pointing->block, pointing->blockSide, isDestroyed);
+				gm->stopDestroyBlock(pointing->block);
+				gm->startDestroyBlock(pointing->block, pointing->blockSide, isDestroyed);
+				gm->stopDestroyBlock(pointing->block);
+				gm->startDestroyBlock(pointing->block, pointing->blockSide, isDestroyed);
+				gm->stopDestroyBlock(pointing->block);
+				if (isDestroyed && localPlayer->region->getBlock(pointing->block)->blockLegacy->blockId != 0)
+					gm->destroyBlock(&pointing->block, 0);
+				gm->destroyBlock(&pointing->block, 0);
+				gm->destroyBlock(&pointing->block, 0);
+				gm->destroyBlock(&pointing->block, 0);
+				gm->destroyBlock(&pointing->block, 0);
+				gm->destroyBlock(&pointing->block, 0);
+				gm->destroyBlock(&pointing->block, 0);
+				gm->destroyBlock(&pointing->block, 0);
+				gm->destroyBlock(&pointing->block, 0);
+				gm->destroyBlock(&pointing->block, 0);
 			}
 			Odelay = 0;
 		}
@@ -45,14 +69,13 @@ void AutoClicker::onTick(C_GameMode* gm) {
 
 	if (rightclick) {
 		if ((GameData::isRightClickDown() || !hold) && GameData::canUseMoveKeys()) {
-			Level* level = g_Data.getLocalPlayer()->level;
+			Level* pstruct = g_Data.getLocalPlayer()->level;
 			Odelay++;
 			if (Odelay >= delay) {
 				g_Data.rightclickCount++;
 				bool idk = true;
-				gm->buildBlock(new vec3_ti(level->block), level->blockSide, idk);
+				gm->buildBlock(new vec3_ti(pstruct->block), pstruct->blockSide, idk);
 				Odelay = 0;
 			}
 		}
 	}
-}

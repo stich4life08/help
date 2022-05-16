@@ -140,6 +140,24 @@ bool findCry3() {
 	g_Data.getClientInstance()->loopbackPacketSender->sendToServer(&a);
 	return false;
 }
+/*bool CrystalPlace::getCrystalSpoof() {
+	__int64 id = *g_Data.getLocalPlayer()->getUniqueId();
+	C_PlayerInventoryProxy* supplies = g_Data.getLocalPlayer()->getSupplies();
+	C_Inventory* inv = supplies->inventory;
+	for (int n = 0; n < 9; n++) {
+		C_ItemStack* stack = inv->getItemStack(n);
+		if (stack->item != nullptr) {
+			if ((*stack->item)->itemId == 637) {
+				C_MobEquipmentPacket a(id, *stack, n, n);
+				g_Data.getClientInstance()->loopbackPacketSender->sendToServer(&a);
+				return true;
+			}
+		}
+	}
+	C_MobEquipmentPacket a(id, *g_Data.getLocalPlayer()->getSelectedItem(), supplies->selectedHotbarSlot, supplies->selectedHotbarSlot);
+	g_Data.getClientInstance()->loopbackPacketSender->sendToServer(&a);
+	return false;
+*/
 
 bool SetOldSlot3() {
 	__int64 id = *g_Data.getLocalPlayer()->getUniqueId();

@@ -790,8 +790,8 @@ bool CrystalPlace::getCrystalSpoof() {
 			}
 		}
 	}
-	//C_MobEquipmentPacket a(id, *g_Data.getLocalPlayer()->getSelectedItem(), supplies->selectedHotbarSlot, supplies->selectedHotbarSlot);
-	//g_Data.getClientInstance()->loopbackPacketSender->sendToServer(&a);
+	C_MobEquipmentPacket a(id, *g_Data.getLocalPlayer()->getSelectedItem(), supplies->selectedHotbarSlot, supplies->selectedHotbarSlot);
+	g_Data.getClientInstance()->loopbackPacketSender->sendToServer(&a);
 	return false;
 }
 
