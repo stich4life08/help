@@ -15,7 +15,7 @@ private:
 		"Stupidity kills. In this case, it is you that killed me",
 		"Ewww stop using hakcs nab!!1!!",
 		"kill me again to die irl",
-		"yur hacking stfu nab"
+		"yur hacking stfu nab",
 		"Kys nn i have 9000ms"
 	};
 
