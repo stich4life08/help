@@ -66,6 +66,7 @@ private:
 	vec3_t toPlace;
 
 	bool currentlySwitchingHotbar = false;
+	float dmg_nukkit = false;
 
 public:
 	std::vector<CrystalInfo> CJTWDPlaceArr;

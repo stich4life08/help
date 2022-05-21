@@ -48,7 +48,7 @@ private:
 	bool renderCrystal;
 
 public:
-	BPGRewrite() : IModule(0x0, Category::COMBAT, "Crystal Aura Moment") {
+	BPGRewrite() : IModule(0x0, Category::COMBAT, "BPG but better") {
 		dmgEnum = SettingEnum(this)
 					  .addEntry(EnumEntry("Nukkit", dmg_nukkit))
 					  .addEntry(EnumEntry("Java", dmg_java))
@@ -85,7 +85,7 @@ public:
 	}
 	~BPGRewrite(){};
 
-	virtual const char* getModuleName() override { return "CrystalAura"; };
+	virtual const char* getModuleName() override { return "CABPGRewrite"; };
 	virtual bool isFlashMode() override { return flash; };
 	virtual void onPreTick(C_GameMode* gm);
 	virtual void onTick(C_GameMode* gm) override;

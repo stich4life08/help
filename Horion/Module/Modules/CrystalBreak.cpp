@@ -1,4 +1,6 @@
 #include "CrystalUtilsJTWD.h"
+#include "../../../Utils/Target.h"
+#include <tuple>
 
 #include "../ModuleManager.h"
 
