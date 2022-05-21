@@ -10,7 +10,7 @@ int tick_runs = 0;
 int offset_step = 0;
 
 int old_slot = -1;
-RenSurround::RenSurround() : IModule(0, Category::WORLD, "RenSurrounds you with Obsidian") {
+RenSurround::RenSurround() : IModule(0, Category::COMBAT, "RenSurrounds you with Obsidian") {
 	enum1 = SettingEnum(this)
 				.addEntry(EnumEntry("Anti-City", 1))
 				.addEntry(EnumEntry("Regular", 2))

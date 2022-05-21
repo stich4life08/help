@@ -2,7 +2,7 @@
 
 #include "../../../Utils/Logger.h"
 
-SilentLook::SilentLook() : IModule(0, Category::VISUAL, "BROKEN") {
+SilentLook::SilentLook() : IModule(0, Category::MISC, "BROKEN") {
 }
 SilentLook::~SilentLook() {
 }
