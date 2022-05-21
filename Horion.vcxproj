@@ -279,6 +279,8 @@
     <ClCompile Include="Horion\Menu\ClickGui.cpp" />
     <ClCompile Include="Horion\Menu\TabGui.cpp" />
     <ClCompile Include="Horion\Module\ModuleManager.cpp" />
+    <ClCompile Include="Horion\Module\Modules\SilentLook.cpp" />
+    <ClCompile Include="Horion\Module\Modules\RenSurround.cpp" />
     <ClCompile Include="Horion\Module\Modules\Arraylist.cpp" />
     <ClCompile Include="Horion\Module\Modules\AutoCrystal.cpp" />
     <ClCompile Include="Horion\Module\Modules\BPGRewriet.cpp" />
@@ -498,6 +500,8 @@
     <ClInclude Include="Horion\Menu\ClickGui.h" />
     <ClInclude Include="Horion\Menu\TabGui.h" />
     <ClInclude Include="Horion\Module\ModuleManager.h" />
+    <ClInclude Include="Horion\Module\Modules\SilentLook.h" />
+    <ClInclude Include="Horion\Module\Modules\RenSurround.h" />
     <ClInclude Include="Horion\Module\Modules\Arraylist.h" />
     <ClInclude Include="Horion\Module\Modules\AutoCrystal.h" />
     <ClInclude Include="Horion\Module\Modules\BPGRewrite.h" />
