@@ -223,7 +223,7 @@ void ClickGui::renderCategory(Category category) {
 		}
 
 		bool overflowing = false;
-		const float cutoffHeight = roundf(g_Data.getGuiData()->heightGame * 0.75f) + 0.5f /*fix flickering related to rounding errors*/;
+		const float cutoffHeight = roundf(g_Data.getGuiData()->heightGame * 0.90f) + 0.5f /*fix flickering related to rounding errors*/;
 		int moduleIndex = 0;
 		for (auto& mod : moduleList) {
 			moduleIndex++;
