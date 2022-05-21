@@ -7,6 +7,9 @@
 AutoTrap::AutoTrap() : IModule(0x0, Category::COMBAT, "Automatically traps the nearest player") {
 	this->registerIntSetting("range", &this->range, this->range, 3, 12);
 	registerBoolSetting("onClick", &this->onClick, this->onClick);
+	registerBoolSetting("PitchUp", &this->ATRots, this->ATRots);
+	registerBoolSetting("Full body", &this->fullbody, this->fullbody);
+	registerBoolSetting("Auto CA", &this->niggerTurnCAOn, this->niggerTurnCAOn);
 }
 
 AutoTrap::~AutoTrap() {
@@ -94,6 +97,10 @@ bool AutoTrap::tryAutoTrap(vec3_t blkPlacement) {
 
 void AutoTrap::onTick(C_GameMode* gm) {
 	C_GameSettingsInput* input = g_Data.getClientInstance()->getGameSettingsInput();
+
+	bool mustGoUp = false;
+	placements.clear();
+
 	if (g_Data.getLocalPlayer() == nullptr)
 		return;
 	if (!g_Data.canUseMoveKeys())
@@ -123,42 +130,68 @@ void AutoTrap::onTick(C_GameMode* gm) {
 	if (!targetList15.empty()) {
 		//ground level
 		vec3_t enemLoc = (targetList15[0]->eyePos0).floor();
-		/* GROUND   FEET     HEAD
+
+		if (!fullbody) {
+			/* GROUND   FEET     HEAD
 	       0 0 N	0 0 N    N N N    +x
 	       0 0 0    0 0 0    N 0 N  -z   +z
 	       0 0 0	0 0 0    0 N N	  -x
-		*/
-		f1 = enemLoc.add(1, 0, 1);
-		g1 = enemLoc.add(1, -1, 1);
+			*/
+			placements.clear();
+			placements.push_back(enemLoc.add(1, 0, 1) );
+			placements.push_back(enemLoc.add(1, -1, 1)) ;
+			placements.push_back(enemLoc.add(1, 1, 1) );
+			placements.push_back(enemLoc.add(0, 1, 1) );
+			placements.push_back(enemLoc.add(-1, 1, 1)) ;
+			placements.push_back(enemLoc.add(-1, 1, 0)) ;
+			placements.push_back(enemLoc.add(1, 1, 0) ) ;
+			placements.push_back(enemLoc.add(1, 1, -1)) ;
+			placements.push_back(enemLoc.add(0, 1, -1)) ;
+		} else {
+			/*
+			GROUND   FEET     HEAD 
+			0 N 0	 0 N 0	  0 N 0     +x
+			N 0 N	 N 0 N	  N N N	  -z   +z
+			0 N 0 	 0 N 0	  0 N 0	    -x
+			*/
+			placements.clear();
 
-		h1 = enemLoc.add(1, 1, 1);
-		h2 = enemLoc.add(0, 1, 1);
-		h3 = enemLoc.add(-1, 1, 1);
-		h4 = enemLoc.add(-1, 1, 0);
-		h5 = enemLoc.add(1, 1, 0);
-		h6 = enemLoc.add(1, 1, -1);
-		h7 = enemLoc.add(0, 1, -1);
+			placements.push_back(enemLoc.add(1, -1, 0));
+			placements.push_back(enemLoc.add(-1, -1, 0));
+			placements.push_back(enemLoc.add(0, -1, 1));
+			placements.push_back(enemLoc.add(0, -1, -1));
+			
+			placements.push_back(enemLoc.add(1, 0, 0));
+			placements.push_back(enemLoc.add(-1,0, 0));
+			placements.push_back(enemLoc.add(0, 0, 1));
+			placements.push_back(enemLoc.add(0, 0, -1));
+
+			placements.push_back(enemLoc.add(1, 1, 0));
+			placements.push_back(enemLoc.add(-1,1, 0));
+			placements.push_back(enemLoc.add(0, 1, 1));
+			placements.push_back(enemLoc.add(0, 1, -1));
+
+			placements.push_back(enemLoc.add(1, 2, 0));
+			placements.push_back(enemLoc.add(0, 2, 0));
+		}
 
 		if (place == 0) {
-			// L1 to R4 are x + z sides ground level
-			if (!tryAutoTrap(g1))
-				;
-			if (!tryAutoTrap(f1))
-				;
-			if (!tryAutoTrap(h1))
-				;
-			if (!tryAutoTrap(h2))
-				;
-			if (!tryAutoTrap(h3))
-				;
-			if (!tryAutoTrap(h4))
-				;
-			if (!tryAutoTrap(h5))
-				;
-			if (!tryAutoTrap(h6))
-				;
-			if (!tryAutoTrap(h7))
-				;
+			if (ATRots)
+				mustGoUp = true;
+
+			for (vec3_t i : placements) {
+				tryAutoTrap(i);
+			}
+
+			if (niggerTurnCAOn) {
+				auto CBreak = moduleMgr->getModule<CrystalBreak>();
+				if (!CBreak->isEnabled())
+					CBreak->setEnabled(true);
+
+				placements.clear();
+				this->setEnabled(false);
+			}
 		}
 	}
+	placements.clear();
 }

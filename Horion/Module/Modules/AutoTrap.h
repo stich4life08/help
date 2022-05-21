@@ -3,12 +3,17 @@
 class AutoTrap : public IModule {
 private:
 	bool tryAutoTrap(vec3_t AutoTrap);
+	bool ATRots = true;
+	bool fullbody = false;
+	bool niggerTurnCAOn = false;
 
 	/* GROUND   FEET     HEAD
 	   0 0 N	0 0 N    N N N
 	   0 0 0    0 0 0    N 0 N
 	   0 0 0	0 0 0    0 N N
 	*/
+
+	std::vector<vec3_t> placements;
 
 	vec3_t h1;
 	vec3_t h2;
@@ -22,6 +27,8 @@ private:
 	vec3_t f1;
 
 public:
+	bool mustGoUp = false;
+
 	AutoTrap();
 	~AutoTrap();
 
