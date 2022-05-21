@@ -18,7 +18,8 @@ RenSurround::RenSurround() : IModule(0, Category::WORLD, "RenSurrounds you with 
 	enum3 = SettingEnum(this)
 			   .addEntry(EnumEntry("None", 1))
 			   .addEntry(EnumEntry("Regular", 2))
-			   .addEntry(EnumEntry("Java", 3));
+			   .addEntry(EnumEntry("Java", 3))
+			   .addEntry(EnumEntry("PitchUp", 4));
 	enum2 = SettingEnum(this)
 				.addEntry(EnumEntry("Normal", 1))
 				.addEntry(EnumEntry("Aurora", 2));
@@ -354,7 +355,10 @@ bool Packet(int ne) {
 	g_Data.getClientInstance()->loopbackPacketSender->sendToServer(&a);
 	return false;
 }
-	void RenSurround::onTick(C_GameMode* gm) {
+
+void RenSurround::onTick(C_GameMode* gm) {
+	mustPitchUp = false;
+
 	C_GameSettingsInput* input = g_Data.getClientInstance()->getGameSettingsInput();
 	if (g_Data.getLocalPlayer() == nullptr)
 		return;
@@ -383,6 +387,8 @@ bool Packet(int ne) {
 		rot1 = false;
 		rotate = true;
 		break;
+	//case 3:
+	//	mustPitchUp = true;
 	}
 	switch (enum1.selected) {
 	case 0:
@@ -440,6 +446,9 @@ bool Packet(int ne) {
 
 			if (!g_Data.getLocalPlayer()->region->getBlock(*targetPos)->blockLegacy->material->isReplaceable) {
 				try_to_place = false;
+			}
+			if (enum3.GetSelectedEntry().GetValue() == 3) {
+				mustPitchUp = true;
 			}
 			if (rotate) {
 				auto player = g_Data.getLocalPlayer();

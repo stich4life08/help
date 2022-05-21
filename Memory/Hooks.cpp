@@ -1792,6 +1792,9 @@ void Hooks::Actor__setRot(C_Entity* _this, vec2_t& angle) {
 	auto jtwdBRMod = moduleMgr->getModule<CrystalBreak>();
 	auto surrMod = moduleMgr->getModule<Surround>();
 	auto aaMod = moduleMgr->getModule<Derp>();
+	auto rensurrMod = moduleMgr->getModule<RenSurround>();
+	auto hfMod = moduleMgr->getModule<HoleFiller>();
+	auto atMod = moduleMgr->getModule<AutoTrap>();
 
 	if (killauraMod->isEnabled() && !killauraMod->targetListEmpty && killauraMod->rotations && _this == g_Data.getLocalPlayer()) {
 		func(_this, angle = killauraMod->angle);
@@ -1829,19 +1832,24 @@ void Hooks::Actor__setRot(C_Entity* _this, vec2_t& angle) {
 			func(_this, angle = surrMod->rotAngle);
 		}
 	}
-	/*
-	if (aaMod->isEnabled() && aaMod->real) {
-		vec2_t yes;
 
-		if (aaMod->enableRealPitch)
-			yes.x = (float)(aaMod->realPitch + aaMod->pJit);
+	if (rensurrMod->isEnabled() && rensurrMod->enum3.GetSelectedEntry().GetValue() == 3 && _this == g_Data.getLocalPlayer() && rensurrMod->mustPitchUp) {
+		for (int i = 0; i > -90; i--) {
+			func(_this, angle = vec2_t(i, 0));
+		}
+	}
 
-		if (aaMod->enableRealLBY)
-			yes.y = (float)(aaMod->realLBY + aaMod->lJit);
+	if (hfMod->isEnabled() && hfMod->attemptPitchUp && _this == g_Data.getLocalPlayer()) {
+		for (int i = 0; i > -90; i--) {
+			func(_this, angle = vec2_t(i, 0));
+		}
+	}
 
-		if (aaMod->enableRealPitch || aaMod->enableRealLBY)
-			func(_this, angle = yes);
-	}*/
+	if (atMod->isEnabled() && atMod->mustGoUp && _this == g_Data.getLocalPlayer()) {
+		for (int i = 0; i > -90; i--) {
+			func(_this, angle = vec2_t(i, 0));
+		}
+	}
 
 	func(_this, angle);
 }

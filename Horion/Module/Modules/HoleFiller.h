@@ -8,6 +8,7 @@ private:
 	bool obsidian = true;
 	bool bedrock = true;
 	bool holeSwitch = true;
+	bool doPitchUp = true;
 	int Odelay = 0;
 	float delay = 0.14f;
 
@@ -15,6 +16,8 @@ private:
 
 public:
 	int origSlot;
+
+	bool attemptPitchUp = false;
 
 	int range = 5;
 	HoleFiller();

@@ -3,6 +3,7 @@
 HoleFiller::HoleFiller() : IModule(0x0, Category::WORLD, "Places a buttplug in your gf's pussy") {
 	this->registerBoolSetting("Obsidian Hole", &this->obsidian, this->obsidian);
 	this->registerBoolSetting("Bedrock Hole", &this->bedrock, this->bedrock);
+	this->registerBoolSetting("PitchUp", &this->doPitchUp, this->doPitchUp);
 	registerBoolSetting("Switch2Obby", &this->holeSwitch, true);
 	registerIntSetting("Range", &this->range, 1.f, 5.f, 15.f);
 }
@@ -93,6 +94,8 @@ void HoleFiller::onDisable() {
 
 void HoleFiller::onTick(C_GameMode* gm) {
 
+	attemptPitchUp = false;
+
 	if (!(g_Data.getLocalPlayer() == nullptr || !GameData::canUseMoveKeys())) {
 		if (hasStarted) {
 			hasStarted = false;
@@ -151,6 +154,9 @@ void HoleFiller::onTick(C_GameMode* gm) {
 							bool obs = false;
 							vec3_ti plugHole = blockPos;
 							if (blockId == 0) obs = true;
+
+							if (doPitchUp)
+								attemptPitchUp = true;
 
 							if (bedrock) {
 								if ((blockId2 == 7 && blockId3 == 7 && blockId4 == 7 && blockId5 == 7 && blockId6 == 7 && blockId == 0) && (aircheck == 0)) {

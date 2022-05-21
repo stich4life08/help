@@ -53,6 +53,8 @@ public:
 	bool jumpDisable = false;
 	bool disableOnComplete2 = false;
 
+	bool mustPitchUp = false;
+
 	std::vector<vec3_t> regularBlocks = {
 
 		vec3_t(0, -1, 0),
