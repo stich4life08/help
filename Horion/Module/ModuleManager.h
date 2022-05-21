@@ -14,6 +14,8 @@
 #endif
 
 #include "Modules/DeathCoords.h"
+#include "Modules/RenSurround.h"
+#include "Modules/SilentLook.h"
 #include "Modules/TargetHud.h"
 #include "Modules/InfoShow.h"
 #include "Modules/StrafeSpeed.h"

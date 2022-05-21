@@ -24,6 +24,8 @@ void ModuleManager::initModules() {
 #endif  // BETA
 
 		moduleList.push_back(std::shared_ptr<IModule>(new DeathCoords()));
+		moduleList.push_back(std::shared_ptr<IModule>(new SilentLook()));
+		moduleList.push_back(std::shared_ptr<IModule>(new RenSurround()));
 		moduleList.push_back(std::shared_ptr<IModule>(new TargetHud()));
 		moduleList.push_back(std::shared_ptr<IModule>(new Bps()));  // btw this module is InfoShow ~ i was just too lazy to rename
 		moduleList.push_back(std::shared_ptr<IModule>(new StrafeSpeed()));
