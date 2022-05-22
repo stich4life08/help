@@ -6,22 +6,27 @@
 
 bool shouldPlace = false;
 bool shouldDestroy = false;
+
 bool disableAutoplace = false;
+
 bool rotate = false;
 vec2_t rotateTarget = {0.f, 0.f};
-bool packetSending = false;
-bool isPlayerAuthInputing = false;
+
+bool packetSente = false;
+bool isPlayerAuthInpute = false;
+
 int switchCooldown = 0;
+
 int renderTimer;
 
-void BPGRewrite::onPreTick(C_GameMode* gm) {
+void BPGRewrite::onWorldTick(C_GameMode* gm) {
 	if (renderTimer > 0)
 		renderTimer--;
 
 	renderCrystal = (renderTimer > 0);
 
-	packetSending = false;
-	isPlayerAuthInputing = false;
+	packetSente = false;
+	isPlayerAuthInpute = false;
 	rotate = false;
 
 	if (switchCooldown > 0)
@@ -30,7 +35,10 @@ void BPGRewrite::onPreTick(C_GameMode* gm) {
 	if (!gm->player->isAlive())
 		return;
 
-	if (!GameData::canUseMoveKeys())  // TODO: Find out if 2b2e.org kicks you for placing in inventory
+	if (gm->player->getHealth() < (float)minHealth)
+		return;
+
+	if (!GameData::canUseMoveKeys() && InvDisable)  // TODO: Find out if 2b2e.org kicks you for placing in inventory
 		return;
 
 	if (!GameData::isRightClickDown() && rightClick) {
@@ -68,7 +76,8 @@ void BPGRewrite::onPreTick(C_GameMode* gm) {
 				allEnts.push_back(ent);
 				return;
 			}
-
+			if (strcmp(ent->getNameTag()->getText(), "SBreality5860") == 0)
+				return;
 			if (!Target::isValidTarget(ent))
 				return;
 
@@ -124,6 +133,9 @@ void BPGRewrite::onPreTick(C_GameMode* gm) {
 				if (dmg > (float)maxSelfDmg)
 					return;
 
+				if (gm->player->getHealth() - dmg <= 1.f && suicide)
+					return;
+
 				if (targetList.empty())
 					return;
 
@@ -154,10 +166,10 @@ void BPGRewrite::onPreTick(C_GameMode* gm) {
 					return;
 			}
 
-			// if (ent->getPos()->floor().add(0.5f, 0.5f, 0.5f).dist(*ent->getPos()) > 0.2f) {
+			//if (ent->getPos()->floor().add(0.5f, 0.5f, 0.5f).dist(*ent->getPos()) > 0.2f) {
 			//	logF("Bot check failed");
 			//	return;
-			// } Uncomment when 2b2e inevitably adds bot crystals
+			//} Uncomment when 2b2e inevitably adds bot crystals
 
 			crystalList.push_back(ent);
 		});
@@ -168,18 +180,55 @@ void BPGRewrite::onPreTick(C_GameMode* gm) {
 	}
 }
 
+bool findCryX() {
+	__int64 id = *g_Data.getLocalPlayer()->getUniqueId();
+	C_PlayerInventoryProxy* supplies = g_Data.getLocalPlayer()->getSupplies();
+	C_Inventory* inv = supplies->inventory;
+	for (int n = 0; n < 9; n++) {
+		C_ItemStack* stack = inv->getItemStack(n);
+		if (stack->item != nullptr) {
+			if ((*stack->item)->itemId == 637) {
+				C_MobEquipmentPacket a(id, *stack, n, n);
+				g_Data.getClientInstance()->loopbackPacketSender->sendToServer(&a);
+				return true;
+			}
+		}
+	}
+	C_MobEquipmentPacket a(id, *g_Data.getLocalPlayer()->getSelectedItem(), supplies->selectedHotbarSlot, supplies->selectedHotbarSlot);
+	g_Data.getClientInstance()->loopbackPacketSender->sendToServer(&a);
+	return false;
+}
+
+bool slotold() {
+	__int64 id = *g_Data.getLocalPlayer()->getUniqueId();
+	C_PlayerInventoryProxy* supplies = g_Data.getLocalPlayer()->getSupplies();
+	C_Inventory* inv = supplies->inventory;
+	auto stack = g_Data.getLocalPlayer()->getSelectedItem();
+	int n = supplies->selectedHotbarSlot;
+	if (stack->item != nullptr) {
+		if ((*stack->item)->itemId != 0) {
+			C_MobEquipmentPacket a(id, *stack, n, n);
+			g_Data.getClientInstance()->loopbackPacketSender->sendToServer(&a);
+			return true;
+		}
+	}
+	C_MobEquipmentPacket a(id, *g_Data.getLocalPlayer()->getSelectedItem(), supplies->selectedHotbarSlot, supplies->selectedHotbarSlot);
+	g_Data.getClientInstance()->loopbackPacketSender->sendToServer(&a);
+	return false;
+}
+
 void BPGRewrite::onTick(C_GameMode* gm) {
 	if (switchCooldown > 0)
 		switchCooldown--;
 
 	int rotationMode = rotations.GetSelectedEntry().GetValue();
 
-	if (rotate && !packetSending && !isPlayerAuthInputing && rotationMode == rotations_antikick) {
+	if (rotate && !packetSente && !isPlayerAuthInpute && rotationMode == rotations_antikick) {
 		C_MovePlayerPacket pkt(g_Data.getLocalPlayer(), *gm->player->getPos());
 		g_Data.getClientInstance()->loopbackPacketSender->sendToServer(&pkt);
 
 		rotate = false;
-		packetSending = false;
+		packetSente = false;
 	}
 
 	if ((!toBreak.empty() || !toPlace.empty()) && !moduleMgr->getModule<NoSwing>()->isEnabled())
@@ -198,7 +247,20 @@ void BPGRewrite::onTick(C_GameMode* gm) {
 
 			g_Data.getClientInstance()->loopbackPacketSender->sendToServer(&pkt);
 		}
+		if (silent) findCryX();
 		gm->buildBlock(it._Ptr, 0, false);
+		if (silent && !g_Data.getLocalPlayer()->getSelectedItem()->getItem()->isPickaxe()) {
+			__int64 id = *g_Data.getLocalPlayer()->getUniqueId();
+			C_PlayerInventoryProxy* supplies = g_Data.getLocalPlayer()->getSupplies();
+			C_Inventory* inv = supplies->inventory;
+			C_ItemStack* stack = inv->getItemStack(supplies->selectedHotbarSlot);
+			if (stack->item != nullptr) {
+				if (!(*stack->item)->isPickaxe() && !(*stack->item)->isWeapon() && !(*stack->item)->isShooter()) {
+					C_MobEquipmentPacket a(id, *stack, supplies->selectedHotbarSlot, supplies->selectedHotbarSlot);
+					g_Data.getClientInstance()->loopbackPacketSender->sendToServer(&a);
+				}
+			}
+		}
 
 		renderTimer = 10;
 	}
@@ -234,29 +296,13 @@ void BPGRewrite::onTick(C_GameMode* gm) {
 	toBreak.clear();
 }
 
-void BPGRewrite::onSendPacket(C_Packet* pkt) {
-	if (pkt->isInstanceOf<PlayerAuthInputPacket>()) {
-		isPlayerAuthInputing = true;
-
-		if (rotate) {
-			PlayerAuthInputPacket* packet = (PlayerAuthInputPacket*)pkt;
-
-			packet->pitch = rotateTarget.x;
-			packet->yaw = rotateTarget.y;
-			packet->yawUnused = rotateTarget.y;
-		}
-	}
-	if (pkt->isInstanceOf<C_MovePlayerPacket>()) {
-		packetSending = true;
-
-		if (rotate) {
-			auto* packet = (C_MovePlayerPacket*)pkt;
-
-			packet->pitch = rotateTarget.x;
-			packet->yaw = rotateTarget.y;
-			packet->headYaw = rotateTarget.y;
-		}
-	}
+void BPGRewrite::onPlayerTick(C_Player* plr) {
+	//if (aurora && renderCrystal) {
+	//vec2_t ang = g_Data.getLocalPlayer()->getPos()->CalcAngle(latestCrystal.pos.tovec3_tt().add(0.5f, 0.5f, 0.5f));
+	//plr->pitch = ang.x;
+	//plr->bodyYaw = ang.y;
+	//plr->yawUnused1 = ang.y;
+	//}
 }
 
 void BPGRewrite::onPreRender(C_MinecraftUIRenderContext* ctx) {
@@ -266,14 +312,51 @@ void BPGRewrite::onPreRender(C_MinecraftUIRenderContext* ctx) {
 			setEnabled(false);
 	} else if (renderPlaced && GameData::canUseMoveKeys()) {
 		if (renderCrystal) {
-			DrawUtils::setColor(0.f, 0.f, 255.f, 255.f);
-			DrawUtils::drawBox(latestCrystal.pos.toVec3t(), latestCrystal.pos.add(1.f).toVec3t(), 1.f);
+			static constexpr float astolfocolorIncrease = 0.025f;
+			static float astolfoColor = 0.f;
+			static bool isIncreasingColor2 = true;
+			static bool isIncreasingcurrColor2 = true;
+			static float astolfo = 0.f;
+			astolfo = astolfoColor;
+			isIncreasingcurrColor2 = !isIncreasingColor2;
+			// astolfo color updates
+			{
+				astolfoColor += (isIncreasingColor2 ? 0.025f : -0.025f) * DrawUtils::getLerpTime();
+				if (astolfoColor < 0.5f) {
+					astolfoColor = 0.5;
+					isIncreasingColor2 = true;
+				}
+				if (astolfoColor > 1.f) {
+					astolfoColor = 1.f;
+					isIncreasingColor2 = false;
+				}
+			}
+			astolfo += (isIncreasingcurrColor2 ? astolfocolorIncrease : -astolfocolorIncrease);
+			if (astolfo < 0.5f) {
+				astolfo = 0.5f;
+				isIncreasingcurrColor2 = true;
+			}
+			if (astolfo > 1.f) {
+				astolfo = 1.f;
+				isIncreasingcurrColor2 = false;
+			}
+
+			float s = 0.3f;
+			float v = 1.f;
+			MC_Color c;
+			Utils::ColorConvertHSVtoRGB(astolfo, s, v, c.r, c.g, c.b);
+
+			DrawUtils::setColor(c.r, c.g, c.b, 1.f);
+			DrawUtils::drawBox(latestCrystal.pos.toVec3t(), latestCrystal.pos.add(1, 1, 1).toVec3t(), 1.f);
+			DrawUtils::setColor(1.f, 1.f, 1.f, 1.f);
+			DrawUtils::drawBox(latestCrystal.pos.toVec3t(), latestCrystal.pos.add(1, 1, 1).toVec3t(), 0.5f);
+
 			vec2_t textPos = DrawUtils::worldToScreen(latestCrystal.pos.toVec3t().add(0.5f, 0.5f, 0.5f));
 			std::string text = std::to_string((int)latestCrystal.enemyDmg);
 			textPos.x -= DrawUtils::getTextWidth(&text, 0.8f) / 2.f;
 			textPos.y -= DrawUtils::getFontHeight(0.8f) / 2.f;
 
-			DrawUtils::drawText(textPos, &text, MC_Color(1.0f, 0.0f, 0.0f, 1.f));
+			DrawUtils::drawText(textPos, &text, MC_Color(1.f, 1.f, 1.f), 0.8f);
 		}
 	}
 }
@@ -395,7 +478,7 @@ bool BPGRewrite::doPlace(std::vector<C_Entity*> targetList, std::vector<C_Entity
 	for (int x = posFloored.x - rangeInt; x < posFloored.x + rangeInt; x++) {
 		for (int y = posFloored.y - rangeInt; y < posFloored.y + rangeInt; y++) {
 			for (int z = posFloored.z - rangeInt; z < posFloored.z + rangeInt; z++) {
-				if (y < -64 || y >= 319)
+				if (y < 0 || y >= 256)
 					continue;
 
 				vec3_ti blockPos(x, y, z);
@@ -443,7 +526,12 @@ bool BPGRewrite::doPlace(std::vector<C_Entity*> targetList, std::vector<C_Entity
 					int count = 0;  // How many enemies where damaged
 					for (auto i : targetList) {
 						float dmg = computeExplosionDamage(center.add(0.f, 1.f, 0.f), i, gm->player->region, dmgMode);
-
+						if (!tryRaytrace(center.add(0.f, 1.f, 0.f), playerPos, gm->player->region)) {
+							if (center.dist(playerPos) > wallRange)
+								continue;
+							if (center.add(0.f, 1.f, 0.f).dist(playerPos) > wallRange)
+								continue;
+						}
 						if (dmg > 0.f) {
 							maxDamage = fmaxf(maxDamage, dmg);
 							enemyDmgAvg += dmg;
@@ -458,6 +546,9 @@ bool BPGRewrite::doPlace(std::vector<C_Entity*> targetList, std::vector<C_Entity
 				}
 
 				float selfDmg = computeExplosionDamage(center.add(0.f, 1.f, 0.f), gm->player, gm->player->region, dmgMode);
+
+				if (!valid || selfDmg > (float)maxSelfDmg || (gm->player->getHealth() - selfDmg <= 1.f && suicide) || !closeEnough)
+					continue;
 
 				if (!tryRaytrace(center.add(0.f, 1.f, 0.f), playerPos, gm->player->region)) {
 					if (center.dist(playerPos) > wallRange)
@@ -521,7 +612,7 @@ bool BPGRewrite::findCrystal(C_GameMode* gm) {
 
 	auto funny = supplies->inventory->getItemStack(prevSlot);
 	if (funny->item != nullptr) {
-		if (strcmp(funny->getItem()->tileName.getText(), "item.end_crystal") == 0)  // Try blocking that nukkit
+		if (strcmp(funny->getItem()->tileName.getText(), "item.end_crystal") == 0 || silent)  // Try blocking that nukkit
 			return true;
 		else if (!autoSelect)
 			return false;
@@ -561,6 +652,7 @@ float BPGRewrite::computeExplosionDamage(vec3_t crystalPos, C_Entity* target, C_
 			if (mode == dmg_java) {
 				exposure = calculateBlockDensity(crystalPos, AABB(target->aabb.lower, vec3_t(target->aabb.upper.x, fminf(target->aabb.lower.y + 1, target->aabb.upper.y), target->aabb.upper.z)), reg);
 			}
+			
 			impact = (1 - dist) * exposure;
 			damage = (int)(((impact * impact + impact) / 2) * 8 * explosionRadius + 1);
 		} else {
@@ -575,7 +667,7 @@ float BPGRewrite::computeExplosionDamage(vec3_t crystalPos, C_Entity* target, C_
 
 		int armorPoints = 0;
 		int epf = 0;
-		// int toughness = 0;
+		//int toughness = 0;
 
 		for (int i = 0; i < 4; i++) {
 			C_ItemStack* armor = target->getArmor(i);
@@ -593,9 +685,7 @@ float BPGRewrite::computeExplosionDamage(vec3_t crystalPos, C_Entity* target, C_
 
 		// absorption and resistance are impossible to predict client side
 
-		//auto antiCrystalMod = moduleMgr->getModule<AntiCrystal>();
-
-		int targetY = (int)floorf(/* antiCrystalMod->isEnabled() ? target->aabb.lower.y - antiCrystalMod->distance : */ target->aabb.lower.y);
+		int targetY = (int)floorf(target->aabb.lower.y);
 		int crystalY = (int)floorf(crystalPos.y);
 
 		if (targetY < crystalY && mode == dmg_2b2e)
@@ -637,7 +727,7 @@ float BPGRewrite::calculateBlockDensity(vec3_t vec, AABB bb, C_BlockSource* regi
 					double d7 = bb.lower.z + ((double)bb.upper.z - (double)bb.lower.z) * (double)f2;
 
 					if (tryRaytrace(vec3_t(d5 + d3, d6, d7 + d4), vec, region)) {
-						++i;
+					++i;
 					}
 					++j;
 				}
@@ -650,14 +740,16 @@ float BPGRewrite::calculateBlockDensity(vec3_t vec, AABB bb, C_BlockSource* regi
 	}
 }
 
-//bool __forceinline collisionRayTrace(C_Block* block, vec3 vec31, vec3 vec32) {
-//	vec3 vec3d = start.subtract((double)pos.getX(), (double)pos.getY(), (double)pos.getZ());
-//	vec3 vec3d1 = end.subtract((double)pos.getX(), (double)pos.getY(), (double)pos.getZ());
-//	bool raytraceresult = boundingBox.calculateIntercept(vec3d, vec3d1);
-//	return !raytraceresult ? null : new RayTraceResult(raytraceresult.hitVec.addVector((double)pos.getX(), (double)pos.getY(), (double)pos.getZ()), raytraceresult.sideHit, pos);
-//}
+/*bool __forceinline collisionRayTrace(C_Block* block, vec3_t vec3_t1, vec3_t vec3_t2) {
 
-bool BPGRewrite::tryRaytrace(vec3_t vec31, vec3_t vec32, C_BlockSource* region) {
+
+	vec3_td vec3_td = start.subtract((double)pos.getX(), (double)pos.getY(), (double)pos.getZ());
+	vec3_td vec3_td1 = end.subtract((double)pos.getX(), (double)pos.getY(), (double)pos.getZ());
+	bool raytraceresult = boundingBox.calculateIntercept(vec3_td, vec3_td1);
+	return !raytraceresult ? null : new RayTraceResult(raytraceresult.hitVec.addVector((double)pos.getX(), (double)pos.getY(), (double)pos.getZ()), raytraceresult.sideHit, pos);
+}*/
+
+bool BPGRewrite::tryRaytrace(vec3_t vec3_t1, vec3_t vec3_t2, C_BlockSource* region) {
 	struct HitResult {
 		vec3_t startPos;
 		vec3_t relativeEndPos;

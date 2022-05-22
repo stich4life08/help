@@ -164,6 +164,7 @@ public:
 	void onPostRender(C_MinecraftUIRenderContext* renderCtx);
 	void onLevelRender();
 	void onMove(C_MoveInputHandler* handler);
+	void onPlayerTick(C_Player* plr);
 	void onSendPacket(C_Packet*);
 
 	std::shared_lock<std::shared_mutex> lockModuleList() { return std::shared_lock(moduleListMutex); }

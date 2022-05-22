@@ -165,7 +165,7 @@ void GameData::setRakNetInstance(C_RakNetInstance* raknet) {
 
 void GameData::forEachEntity(std::function<void(C_Entity*, bool)> callback) {
 	/*//Player EntityList
-	C_EntityList* entityList = (C_EntityList*)g_Data.getLocalPlayer()->level;
+	C_EntityList* entityList = (C_EntityList*)g_Data.getLocalPlayer()->pointingStru;
 	uintptr_t start = ((uintptr_t)entityList + 0x70);
 	uintptr_t stop = ((uintptr_t)entityList + 0x78);
 	start = *(uintptr_t*)start;
@@ -179,7 +179,7 @@ void GameData::forEachEntity(std::function<void(C_Entity*, bool)> callback) {
 	}
 	// New EntityList
 	{
-		// MultiplayerLevel::directTickEntities
+		//MultiplayerLevel::directTickEntities
 		__int64 region = reinterpret_cast<__int64>(g_Data.getLocalPlayer()->region);
 		__int64* entityIdMap = *(__int64**)(*(__int64*)(region + 0x20) + 0x138i64);
 		for (__int64* i = (__int64*)*entityIdMap; i != entityIdMap; i = (__int64*)*i) {
@@ -191,13 +191,7 @@ void GameData::forEachEntity(std::function<void(C_Entity*, bool)> callback) {
 			}
 		}
 	}*/
-	/*
-	if (this->localPlayer && this->localPlayer->level) {
-		for (const auto& ent : g_Hooks.entityList)
-			if (ent.ent != nullptr && g_Data.canUseMoveKeys()) callback(ent.ent, false);
-		for (const auto& ent : g_Data.getLocalPlayer()->level->getMiscEntityList())
-			if (ent != nullptr && ent->getEntityTypeId() >= 1 && ent->getEntityTypeId() <= 999999999 && g_Data.canUseMoveKeys()) callback(ent, false);
-	}*/
+
 	if (this->localPlayer && this->localPlayer->level) {
 		for (const auto& ent : g_Hooks.entityList)
 			if (ent.ent != nullptr) callback(ent.ent, false);
@@ -245,12 +239,12 @@ void GameData::sendPacketToInjector(HorionDataPacket horionDataPack) {
 	horionToInjectorQueue.push(horionDataPack);
 }
 void GameData::callInjectorResponseCallback(int id, std::shared_ptr<HorionDataPacket> packet) {
-	if (injectorToHorionResponseCallbacks.find(id) == injectorToHorionResponseCallbacks.end()) {
+	if (this->injectorToHorionResponseCallbacks.find(id) == this->injectorToHorionResponseCallbacks.end()) {
 		logF("No response callback for request with id=%i!", id);
 		return;
 	}
-	injectorToHorionResponseCallbacks[id](packet);
-	injectorToHorionResponseCallbacks.erase(id);
+	this->injectorToHorionResponseCallbacks[id](packet);
+	this->injectorToHorionResponseCallbacks.erase(id);
 }
 void GameData::log(const char* fmt, ...) {
 	auto lock = std::lock_guard<std::mutex>(g_Data.textPrintLock);

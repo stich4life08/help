@@ -207,6 +207,17 @@ void ModuleManager::onSaveConfig(void* confVoid) {
 	}
 }
 
+void ModuleManager::onPlayerTick(C_Player* plr) {
+	if (!isInitialized())
+		return;
+	auto lock = lockModuleList();
+	for (auto& mod : moduleList) {
+		if (mod->isEnabled() || mod->callWhenDisabled())
+			mod->onPlayerTick(plr);
+	}
+}
+
+
 void ModuleManager::onWorldTick(C_GameMode* gameMode) {
 	if (!isInitialized())
 		return;

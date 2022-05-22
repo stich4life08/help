@@ -138,8 +138,8 @@ public:
 	virtual void onWorldTick(C_GameMode*);
 	virtual void onTick(C_GameMode*);
 
-	virtual void onPlayerTick(C_GameMode*);
 
+	virtual void onPlayerTick(C_Player*);
 	virtual void onKeyUpdate(int key, bool isDown);
 	virtual void onEnable();
 	virtual void onDisable();

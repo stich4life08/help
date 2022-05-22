@@ -202,8 +202,10 @@ bool IModule::allowAutoStart() {
 void IModule::onTick(C_GameMode*) {
 }
 
-void IModule::onPlayerTick(C_GameMode*) {
+
+void IModule::onPlayerTick(C_Player*) {
 }
+
 
 void IModule::onKeyUpdate(int key, bool isDown) {
 	if (key == getKeybind()) {

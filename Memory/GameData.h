@@ -51,7 +51,8 @@ struct InfoBoxData {
 	std::string title;
 	std::string message;
 
-	InfoBoxData(std::string title, std::string message) : title(title), message(message){};
+	InfoBoxData(std::string title, std::string message)
+		: title(title), message(message){};
 
 	void fade() {
 		fadeVal = fadeTarget - ((fadeTarget - fadeVal) * 0.65f);
@@ -79,11 +80,11 @@ private:
 	std::mutex textPrintLock;
 	std::mutex chestListMutex;
 	std::queue<HorionDataPacket> horionToInjectorQueue;
-	std::map<int, std::function<void(std::shared_ptr<HorionDataPacket>)>> injectorToHorionResponseCallbacks;
+	std::map<int, std::function<void(std::shared_ptr<HorionDataPacket>)> > injectorToHorionResponseCallbacks;
 	int lastRequestId = 0;
 	std::shared_ptr<std::string> customGeometry;
 	bool customGeoActive = false;
-	std::shared_ptr<std::tuple<std::shared_ptr<unsigned char[]>, size_t>> customTexture;
+	std::shared_ptr<std::tuple<std::shared_ptr<unsigned char[]>, size_t> > customTexture;
 	bool customTextureActive = false;
 
 private:
@@ -99,7 +100,7 @@ private:
 
 public:
 	C_HIDController* hidController = nullptr;
-	std::queue<std::shared_ptr<InfoBoxData>> infoBoxQueue;
+	std::queue<std::shared_ptr<InfoBoxData> > infoBoxQueue;
 	NetworkedData networkedData;
 
 	static bool canUseMoveKeys();
@@ -129,13 +130,13 @@ public:
 
 	void clearChestList() {
 		std::lock_guard<std::mutex> listGuard(chestListMutex);
-		chestList.clear();
+		this->chestList.clear();
 	}
 	inline std::shared_ptr<InfoBoxData> getFreshInfoBox() {
-		while (!infoBoxQueue.empty()) {
-			auto box = infoBoxQueue.front();
+		while (!this->infoBoxQueue.empty()) {
+			auto box = this->infoBoxQueue.front();
 			if (!box->isOpen) {
-				infoBoxQueue.pop();
+				this->infoBoxQueue.pop();
 				continue;
 			}
 			return box;
@@ -144,33 +145,33 @@ public:
 	}
 	inline std::shared_ptr<InfoBoxData> addInfoBox(std::string title, std::string message) {
 		auto box = std::make_shared<InfoBoxData>(title, message);
-		infoBoxQueue.push(box);
+		this->infoBoxQueue.push(box);
 		return box;
 	}
 	inline void setCustomGeometryOverride(bool setActive, std::shared_ptr<std::string> customGeoPtr) {
-		customGeoActive = setActive;
+		this->customGeoActive = setActive;
 		if (setActive)
-			customGeometry.swap(customGeoPtr);
+			this->customGeometry.swap(customGeoPtr);
 		else
-			customGeometry.reset();
+			this->customGeometry.reset();
 	}
-	inline std::tuple<bool, std::shared_ptr<std::string>> getCustomGeoOverride() {
-		return std::make_tuple(customGeoActive, customGeometry);
+	inline std::tuple<bool, std::shared_ptr<std::string> > getCustomGeoOverride() {
+		return std::make_tuple(this->customGeoActive, this->customGeometry);
 	}
-	inline void setCustomTextureOverride(bool setActive, std::shared_ptr<std::tuple<std::shared_ptr<unsigned char[]>, size_t>> customTexturePtr) {
-		customTextureActive = setActive;
+	inline void setCustomTextureOverride(bool setActive, std::shared_ptr<std::tuple<std::shared_ptr<unsigned char[]>, size_t> > customTexturePtr) {
+		this->customTextureActive = setActive;
 		if (setActive)
-			customTexture.swap(customTexturePtr);
+			this->customTexture.swap(customTexturePtr);
 		else
-			customTexture.reset();
+			this->customTexture.reset();
 	}
 	inline auto getCustomTextureOverride() {
-		return std::make_tuple(customTextureActive, customTexture);
+		return std::make_tuple(this->customTextureActive, this->customTexture);
 	}
 	void sendPacketToInjector(HorionDataPacket horionDataPack);
 	inline int addInjectorResponseCallback(std::function<void(std::shared_ptr<HorionDataPacket>)> callback) {
 		lastRequestId++;
-		injectorToHorionResponseCallbacks[lastRequestId] = callback;
+		this->injectorToHorionResponseCallbacks[lastRequestId] = callback;
 		return lastRequestId;
 	}
 	void callInjectorResponseCallback(int id, std::shared_ptr<HorionDataPacket> packet);
@@ -208,7 +209,7 @@ public:
 			localPlayer = nullptr;
 		else
 			localPlayer = *reinterpret_cast<C_LocalPlayer**>(reinterpret_cast<__int64>(clientInstance) + converted);
-		
+
 		#else*/
 		localPlayer = clientInstance->getLocalPlayer();
 
@@ -235,7 +236,7 @@ public:
 	C_HIDController** getHIDController() { return &hidController; };
 	C_RakNetInstance* getRakNetInstance() { return raknetInstance; };
 	std::unordered_set<AABB, AABBHasher>& getChestList() { return chestList; };
-	auto lockChestList() { return std::lock_guard<std::mutex>(chestListMutex); }
+	auto lockChestList() { return std::lock_guard<std::mutex>(this->chestListMutex); }
 	void setFakeName(TextHolder* name) { fakeName = name; };
 	TextHolder* getFakeName() { return fakeName; };
 	inline __int64 getLastUpdateTime() { return lastUpdate; };
