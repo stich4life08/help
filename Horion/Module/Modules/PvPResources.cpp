@@ -61,9 +61,9 @@ void pvpResources::onPostRender(C_MinecraftUIRenderContext* renderCtx) {
 		DrawUtils::fillRectangle(vec2_t(centerPoint.x - testValYe / 2, centerPoint.y - lineWidth2 / 2), vec2_t(centerPoint.x + testValYe / 2, centerPoint.y + lineWidth2 / 2));
 
 		if (isThereCrystal()) {
-			int gSlot = pullSlot(629);
+			int gSlot = pullSlot(637);
 			DrawUtils::drawItem(g_Data.getLocalPlayer()->getSupplies()->inventory->getItemStack(gSlot), vec2_t(pvpX + (lineWidth2 * scale + 1.f) + testValYe / 2, pvpY + (lineWidth2 * scale - 1.f + testValYe / 2)), 1.f, scale, false);
-			std::string yikes = std::to_string(countItem(629));
+			std::string yikes = std::to_string(countItem(637));
 			DrawUtils::drawText(vec2_t(pvpX + (lineWidth2 * scale + 4.f) + testValYe / 2, pvpY + (lineWidth2 * scale + 7.f) + testValYe / 2), &yikes, MC_Color(255, 255, 255), scale);
 		}
 
@@ -105,7 +105,7 @@ void pvpResources::onPostRender(C_MinecraftUIRenderContext* renderCtx) {
 		std::string gapples = std::to_string(countItem(259));
 		DrawUtils::drawText(vec2_t(pvpX, pvpY + 20.f * scale), &std::string("Gapples: " + gapples), MC_Color(200, 200, 0), scale);
 		//Crystals
-		std::string crystals = std::to_string(countItem(629));
+		std::string crystals = std::to_string(countItem(637));
 		DrawUtils::drawText(vec2_t(pvpX, pvpY + 30.f * scale), &std::string("Crystals: " + crystals), MC_Color(215, 0, 235), scale);
 		//Obsidians
 		std::string obsidians = std::to_string(countItem(49));
@@ -150,7 +150,7 @@ bool pvpResources::isThereObsidian() {
 bool pvpResources::isThereCrystal() {
 	int mafs = 0;
 	for (int i = 0; i < 36; i++) {
-		int itemIDC = 426;
+		int itemIDC = 637;
 		C_ItemStack* itemToCount = g_Data.getLocalPlayer()->getSupplies()->inventory->getItemStack(i);
 		if (itemToCount->item != NULL && (*itemToCount->item)->itemId == itemIDC) {
 			int itemCountC = itemToCount->count;

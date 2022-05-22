@@ -4,6 +4,7 @@
 
 CityESP::CityESP() : IModule(0, Category::VISUAL, "Makes it easier to find entities around you") {
 	registerFloatSetting("Range", &this->range, this->range, 0.f, 10.f);
+	registerBoolSetting("Incl. Self", &this->inclSelf, this->inclSelf);
 
 	registerBoolSetting("Show Exposed", &this->showExposed, this->showExposed);
 	registerIntSetting("ExposedBox-R", &this->expR, this->expR, 0, 255);
@@ -52,12 +53,16 @@ void CityESP::onTick(C_GameMode* gm) {
 
 	if (g_Data.getLocalPlayer() == nullptr) return;
 
+	g_Data.forEachEntity(weLookForAGuy);
+	if (inclSelf)
+		guyzz.push_back(g_Data.getLocalPlayer());
+
 	if (!g_Data.canUseMoveKeys() || guyzz.empty() || !g_Data.isInGame() || guyzz[0] == NULL || guyzz.size() == 0)
 		return;
 
 	for (auto& guy : guyzz) {
 
-		vec3_ti loc = guy->getHumanPos();
+		vec3_ti loc = guy->getHumanPos().floor();
 		bool guyExposed = false;
 
 		const vec3_ti sides[4] = {
@@ -66,6 +71,8 @@ void CityESP::onTick(C_GameMode* gm) {
 			loc.sub(0, 0, 1),
 			loc.add(0, 0, 1)
 		};
+
+		std::vector<vec3_ti> possibleCities;
 
 		for (vec3_ti side : sides) {
 			// check if for empty sides
@@ -77,22 +84,46 @@ void CityESP::onTick(C_GameMode* gm) {
 			}
 
 			// check for non-bedrock sides
-			if (blockLegacy->blockId != 7) {
-				highlightCity.push_back(side);
+			if (!guyExposed && blockLegacy->blockId != 7) {
+				possibleCities.push_back(side);
 			} 
 		}
-
+	
 		if (guyExposed) {
-			exposee.push_back(loc.toVec3t());
+			exposee.push_back(guy->getHumanPos());
+		} else {
+			for (vec3_ti i : possibleCities) {
+				highlightCity.push_back(i);
+			}
 		}
+		possibleCities.clear();
 	}
 }
 
 void CityESP::onPreRender(C_MinecraftUIRenderContext* renderCtx) {
 	if (g_Data.getLocalPlayer() == nullptr) return;
 
-	if (!g_Data.canUseMoveKeys() || guyzz.empty() || !g_Data.isInGame() || guyzz[0] == NULL || guyzz.size() == 0)
+	if (!g_Data.canUseMoveKeys())
 		return;
 
-	
+	if (showExposed) {
+		for (vec3_t loc : exposee) {
+			//clientMessageF("%f %f %f %i", loc.x, loc.y, loc.z, exposee.size());
+			float r = (expR / 255.f);
+			float g = (expG / 255.f);
+			float b = (expB / 255.f);
+
+			DrawUtils::setColor(r, g, b, 1.f);
+			DrawUtils::drawBox(loc.add(-0.5f,0,-0.5f), loc.add(0.5f,1,0.5f), expT, false);
+		}
+	}
+
+	for (vec3_ti blk : highlightCity) {
+		float r = (cityR / 255.f);
+		float g = (cityG / 255.f);
+		float b = (cityB / 255.f);
+
+		DrawUtils::setColor(r, g, b, 1.f);
+		DrawUtils::drawBox(blk.toVec3t(), blk.add(1).toVec3t(), cityT, false);
+	}
 }

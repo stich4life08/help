@@ -13,6 +13,7 @@
 #include "Modules/Verification.h"
 #endif
 
+#include "Modules/CityESP.h"
 #include "Modules/DeathCoords.h"
 #include "Modules/RenSurround.h"
 #include "Modules/SilentLook.h"

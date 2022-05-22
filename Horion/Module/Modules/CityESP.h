@@ -6,9 +6,10 @@
 class CityESP : public IModule {
 private:
 	bool showExposed = true;
+	bool inclSelf = true;
 
 	int expR = 255;
-	int expG = 255;
+	int expG = 50;
 	int expB = 0;
 	float expT = 0.4f;
 
