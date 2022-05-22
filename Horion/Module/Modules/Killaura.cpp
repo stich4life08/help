@@ -50,7 +50,7 @@ void findEntity(C_Entity* currentEntity, bool isRegularEntity) {
 			return;
 		if(currentEntity->getEntityTypeId() == 64) // item
 			return;
-		if (currentEntity->getEntityTypeId() == 80)  // Arrows
+		if (currentEntity->getEntityTypeId() == 0xC00050)  // Arrows - new item id
 			return;
 		if (currentEntity->getEntityTypeId() == 51) // NPC
 			return;

@@ -17,6 +17,7 @@ ExamModule::ExamModule() : IModule(0, Category::MISC, "JohnTWD skidded this hack
 
 	registerBoolSetting("Obj in Hand?", &this->tryFindId, true);
 	registerBoolSetting("Find ID of Ent?", &this->tryLookEnt, true);
+	registerBoolSetting("Test Unlookable", &this->testUnlookableEnt, false);
 	registerBoolSetting("vec2 test", &this->testLook, false);
 }
 
@@ -354,6 +355,21 @@ void ExamModule::onEnable() {
 	}
 }
 
+static std::vector<C_Entity*> objectList2022;
+bool look4fags(C_Entity* curEnt, bool isRegularEntity) {
+	if (curEnt == nullptr) return false;
+	if (curEnt == g_Data.getLocalPlayer()) return false;  // Skip Local player
+	if (!curEnt->isAlive()) return false;
+	if (!g_Data.getLocalPlayer()->isAlive()) return false;
+
+	float dist = (curEnt->getHumanPos()).dist(g_Data.getLocalPlayer()->getHumanPos());
+	if (dist <= 7) {
+		objectList2022.push_back(curEnt);
+		return true;
+	}
+	return false;
+}
+
 void ExamModule::onTick(C_GameMode* gm) {
 	if (g_Data.getLocalPlayer() == nullptr) return;  // dont forget
 
@@ -370,6 +386,16 @@ void ExamModule::onTick(C_GameMode* gm) {
 
 		clientMessageF("p1: %f ~ p2: %f", p1, p2);
 		clientMessageF("yaw: %f", ang);
+	
+	}
+
+	if (testUnlookableEnt) {
+		objectList2022.clear();
+		g_Data.forEachEntity(look4fags);
+
+		for (auto& i : objectList2022) {
+			clientMessageF("fag ID: %i", i->getEntityTypeId());
+		}
 	}
 
 	auto ptr = g_Data.getLocalPlayer()->getlevel();
