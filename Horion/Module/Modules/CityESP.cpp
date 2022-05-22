@@ -2,7 +2,7 @@
 
 #include "../../../Utils/Target.h"
 
-CityESP::CityESP() : IModule(0, Category::VISUAL, "Makes it easier to find entities around you") {
+CityESP::CityESP() : IModule(0, Category::VISUAL, "Reminds you to city that guy your fighting") {
 	registerFloatSetting("Range", &this->range, this->range, 0.f, 10.f);
 	registerBoolSetting("Incl. Self", &this->inclSelf, this->inclSelf);
 
