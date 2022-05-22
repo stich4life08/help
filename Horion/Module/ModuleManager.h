@@ -30,6 +30,7 @@
 #include "Modules/LiquidMove.h"
 #include "Modules/ReverseStep.h"
 
+#include "Modules/FastXPtwo.h"
 #include "Modules/BPGRewrite.h"
 #include "Modules/CrystalUtilsJTWD.h"  // in progress
 #include "Modules/ManualCrystal.h"// fixed

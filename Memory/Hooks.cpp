@@ -137,6 +137,8 @@ void Hooks::Init() {
 		void* fogColorFunc = reinterpret_cast<void*>(FindSignature("41 0F 10 08 48 8B C2 0F"));
 		g_Hooks.Dimension_getFogColorHook = std::make_unique<FuncHook>(fogColorFunc, Hooks::Dimension_getFogColor);
 
+			
+
 		/*void* testy = reinterpret_cast<void*>(FindSignature("48 8B 05 61 DF CD 02 48 85 C0 75 07"));
 		g_Hooks.testyHook = std::make_unique<FuncHook>(testy, Hooks::testy);*/
 		void* timeOfDay = reinterpret_cast<void*>(FindSignature("44 8B C2 B8 ? ? ? ? F7 EA"));
@@ -1096,6 +1098,8 @@ void Hooks::LoopbackPacketSender_sendToServer(C_LoopbackPacketSender* a, C_Packe
 	static auto freecamMod = moduleMgr->getModule<Freecam>();
 	static auto blinkMod = moduleMgr->getModule<Blink>();
 	static auto noPacketMod = moduleMgr->getModule<NoPacket>();
+	static auto packetM = moduleMgr->getModule<InstaBreak>();
+	static auto pm = moduleMgr->getModule<FastXPtwo>();
 
 	if (noPacketMod->isEnabled() && g_Data.isInGame())
 		return;
@@ -1148,9 +1152,14 @@ void Hooks::LoopbackPacketSender_sendToServer(C_LoopbackPacketSender* a, C_Packe
 		auto text = reinterpret_cast<TextHolder*>(reinterpret_cast<__int64>(packet) + 0x30);
 		auto bet = reinterpret_cast<unsigned char*>(reinterpret_cast<__int64>(packet) + 0x50);
 		logF("emote %llX %s %i", *varInt, text->getText(), *bet);
-	} fix emote crashing*/ 
-
-	oFunc(a, packet);
+	} fix emote crashing*/
+	auto* pp = reinterpret_cast<C_PlayerActionPacket*>(packet);
+	if ((pm->isEnabled() && pm->okPacketSent && !(packet->isInstanceOf<C_MovePlayerPacket>() && packet->isInstanceOf<PlayerAuthInputPacket>())) || (packetM->isEnabled() && !(packet->isInstanceOf<C_MovePlayerPacket>() && packet->isInstanceOf<PlayerAuthInputPacket>()) && (pp->action == 2 && pp->entityRuntimeId == g_Data.getLocalPlayer()->entityRuntimeId))) {
+		for (int PacketMult = 0; PacketMult < pm->multiplier; PacketMult++)
+			oFunc(a, packet);
+	} else {
+		oFunc(a, packet);
+	}
 }
 
 float Hooks::LevelRendererPlayer_getFov(__int64 _this, float a2, bool a3) {
