@@ -383,11 +383,40 @@ void DrawUtils::drawTextInWorld(std::string* textToSay, const vec3_t& location, 
 	}
 }
 
+std::string CODMW6969(std::string STUFF, int digits) {
+	bool afterDecimalPt = false;
+	int dp = 0;
+	std::string toOutput;
+
+	for (int i = 0; i < STUFF.length(); ++i) {
+		if (STUFF.at(i) == '.') {
+			afterDecimalPt = true;
+		}
+
+		toOutput.append(std::string(1, STUFF.at(i)));
+
+		if (afterDecimalPt) {
+			dp++;
+
+			if (dp > digits)
+				break;
+		}
+	}
+
+	return toOutput;
+}
+
 void DrawUtils::drawNameTags(C_Entity* ent, float textSize, bool drawHealth, bool useUnicodeFont) {
 	vec2_t textPos;
 	vec4_t rectPos;
 	std::string text = ent->getNameTag()->getText();
 	text = Utils::sanitize(text);
+
+	if (drawHealth) {
+		std::string healthStr = CODMW6969(std::to_string(ent->getHealth()), 1);
+		text.append(" ");
+		text.append(healthStr);
+	}
 
 	float textWidth = getTextWidth(&text, textSize);
 	float textHeight = DrawUtils::getFont(Fonts::SMOOTH)->getLineHeight() * textSize;
@@ -406,6 +435,7 @@ void DrawUtils::drawNameTags(C_Entity* ent, float textSize, bool drawHealth, boo
 		if (nametagsMod->underline) {
 			fillRectangle(subRectPos, MC_Color(85, 85, 85), 0.9f);
 		}
+
 		drawText(textPos, &text, MC_Color(255, 255, 255), textSize);
 
 		static auto nameTagsMod = moduleMgr->getModule<NameTags>();

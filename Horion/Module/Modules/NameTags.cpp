@@ -3,9 +3,10 @@
 #include "../../../Utils/Target.h"
 #include "../ModuleManager.h"
 
-NameTags::NameTags() : IModule(0, Category::VISUAL, "Shows betterar aways") {
+NameTags::NameTags() : IModule(0, Category::VISUAL, "shows who tf is joe") {
 	registerBoolSetting("Underline", &underline, underline);
 	registerBoolSetting("Armor", &displayArmor, displayArmor);
+	registerBoolSetting("Health", &showHealth, showHealth);
 	registerFloatSetting("Opacity", &opacity, opacity, 0.f, 1.f);
 }
 
@@ -28,7 +29,7 @@ void drawNameTags(C_Entity* ent, bool) {
 		if (Target::isValidTarget(ent) && nameTagsMod != nullptr) {
 			nameTagsMod->nameTags.insert(Utils::sanitize(ent->getNameTag()->getText()));
 			float dist = ent->getPos()->dist(*g_Data.getLocalPlayer()->getPos());
-			DrawUtils::drawNameTags(ent, fmax(0.6f, 3.f / dist));
+			DrawUtils::drawNameTags(ent, fmax(0.6f, 3.f / dist), nameTagsMod->showHealth);
 			DrawUtils::flush();
 		}
 	}

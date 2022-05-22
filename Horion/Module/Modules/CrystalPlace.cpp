@@ -19,7 +19,7 @@ CrystalPlace::CrystalPlace() : IModule(0, Category::COMBAT, "p100 java CA by Joh
 	calcDmgType = SettingEnum(this)
 					  .addEntry(EnumEntry("Java", 0))
 					  .addEntry(EnumEntry("Bedrock", 1));
-	registerEnumSetting("calcDmgType", &this->calcDmgType, 1);
+	registerEnumSetting("calcDmgType", &this->calcDmgType, 0);
 
 	registerBoolSetting("Safety First!", &this->safetyFirst, this->safetyFirst);
 	registerFloatSetting("Minimum Health", &this->minHealth, this->minHealth, 0.f, 20.f);
@@ -29,7 +29,7 @@ CrystalPlace::CrystalPlace() : IModule(0, Category::COMBAT, "p100 java CA by Joh
 	facePlaceType = SettingEnum(this)
 						.addEntry(EnumEntry("Smart", 0))
 						.addEntry(EnumEntry("None", 1));
-	registerEnumSetting("Faceplace Type", &this->facePlaceType, 1);
+	registerEnumSetting("Faceplace Type", &this->facePlaceType, 0);
 	registerFloatSetting("FP Threshold", &this->fpThresh, this->fpThresh, 0.f, 20.f);
 	registerFloatSetting("FP MinimumDmg", &this->dmgAtThresh, this->dmgAtThresh, 0.f, 20.f);
 

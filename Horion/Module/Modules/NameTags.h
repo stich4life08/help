@@ -8,6 +8,7 @@ public:
 	std::set<std::string> nameTags;
 	bool displayArmor = true;
 	bool underline = true;
+	bool showHealth = true;
 	float opacity = 0.2f;
 	NameTags();
 	~NameTags();
