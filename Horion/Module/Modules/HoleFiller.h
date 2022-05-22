@@ -5,6 +5,7 @@
 
 class HoleFiller : public IModule {
 private:
+	int wallRange = 5;
 	bool obsidian = true;
 	bool bedrock = true;
 	bool holeSwitch = true;
@@ -18,6 +19,7 @@ public:
 	int origSlot;
 
 	bool attemptPitchUp = false;
+	std::vector<vec3_ti> plugMeDaddyUWU;
 
 	int range = 5;
 	HoleFiller();

@@ -5,7 +5,8 @@ HoleFiller::HoleFiller() : IModule(0x0, Category::WORLD, "Places a buttplug in y
 	this->registerBoolSetting("Bedrock Hole", &this->bedrock, this->bedrock);
 	this->registerBoolSetting("PitchUp", &this->doPitchUp, this->doPitchUp);
 	registerBoolSetting("Switch2Obby", &this->holeSwitch, true);
-	registerIntSetting("Range", &this->range, 1.f, 5.f, 15.f);
+	registerIntSetting("Range", &this->range, this->range, 0, 10);
+	registerIntSetting("WallRange", &this->wallRange, this->wallRange, 0, 10);
 }
 
 HoleFiller::~HoleFiller() {
@@ -159,13 +160,13 @@ void HoleFiller::onTick(C_GameMode* gm) {
 								attemptPitchUp = true;
 
 							if (bedrock) {
-								if ((blockId2 == 7 && blockId3 == 7 && blockId4 == 7 && blockId5 == 7 && blockId6 == 7 && blockId == 0) && (aircheck == 0)) {
+								if ((blockId2 == 7 && blockId3 == 7 && blockId4 == 7 && blockId5 == 7 && blockId6 == 7 && blockId == 0) && (aircheck == 0)  && (countBlksAlongLine(*pos , plugHole.toVec3t()).blockCount >= wallRange)) {
 									//gm->buildBlock(&plugHole, 0);
 									tryPlaceHF(plugHole.toVec3t());
 								}
 							}
 							if (obsidian) {
-								if ((blockId2 == 49 || blockId2 == 7) && (blockId3 == 49 || blockId3 == 7) && (blockId4 == 49 || blockId4 == 7) && (blockId5 == 49 || blockId5 == 7) && (blockId6 == 49 || blockId6 == 7) && (blockId == 0) && (aircheck == 0) && !((blockId2 == 7 && blockId3 == 7 && blockId4 == 7 && blockId5 == 7 && blockId6 == 7 && blockId == 0) && (aircheck == 0))) {
+								if ((blockId2 == 49 || blockId2 == 7) && (blockId3 == 49 || blockId3 == 7) && (blockId4 == 49 || blockId4 == 7) && (blockId5 == 49 || blockId5 == 7) && (blockId6 == 49 || blockId6 == 7) && (blockId == 0) && (aircheck == 0) && !((blockId2 == 7 && blockId3 == 7 && blockId4 == 7 && blockId5 == 7 && blockId6 == 7 && blockId == 0) && (aircheck == 0)) && (countBlksAlongLine(*pos, plugHole.toVec3t()).blockCount >= wallRange)) {
 									//gm->buildBlock(&plugHole, 0);
 									tryPlaceHF(plugHole.toVec3t());
 								}
