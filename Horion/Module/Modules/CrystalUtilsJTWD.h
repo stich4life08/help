@@ -76,13 +76,13 @@ public:
 
 	int delay = 0;  // Time to wait (in ticks) until to place a new crystal
 	//int placetimes = 1;     // Number of times the client should keep retrying to place a crystal
-	int maxProximity = 5;   // What is the maximum distance can a crystal be placed from a person before switching axis
-	int range = 10;         // Range for the enemies to be added to target list
-	float placeRange = 10;  // Range to place endCrystals
+	int maxProximity = 4;   // What is the maximum distance can a crystal be placed from a person before switching axis
+	int range = 8;         // Range for the enemies to be added to target list
+	float placeRange = 6.f;  // Range to place endCrystals
 	SettingEnum priority;   // Decides how targets are sorted (distance-> lowest to highest
 							//								   health-> lowest to highest)
-	int thruWallsR = 5;     // How many blocks you are allowed to place through walls
-	float postWallsR = 3;   // Maximum distance to place *after* going through a wall
+	int thruWallsR = 6;     // How many blocks you are allowed to place through walls
+	float postWallsR = 10;   // Maximum distance to place *after* going through a wall
 
 	/* SOON
 	int lookAhead = 5;		// how many ticks in the future to predict future enemy location (set to 0 to disable predict)
@@ -90,15 +90,15 @@ public:
 
 	SettingEnum calcDmgType;  // What method is used to calculate damage (java, bedrock)
 
-	bool safetyFirst = true;  // Whether to prioritize (reduce) self-damage over (maximizing) enemy damage
+	bool safetyFirst = false;  // Whether to prioritize (reduce) self-damage over (maximizing) enemy damage
 	float minHealth = 5.f;    // What is the minimum health you should have to stop placing crystals
 	float maxSelfDmg = 5.f;   // Maximum damage allowable to player
 	float minEnemDmg = 10.f;  // How much damage the crystals do to enemies, ON MINIMUM
 
 	SettingEnum facePlaceType;  // Controls faceplacing (none->obvious
 								//                       smart->faceplaces only when the enemy is at a certain health)
-	float fpThresh = 10.f;      // Only when facePlaceType is set to smart [if this is set to 20, client always faceplaces]
-	float dmgAtThresh = 2.f;    // When fpThreshold is reached, how much damage do the crystals need to deliver
+	float fpThresh = 20.f;      // Only when facePlaceType is set to smart [if this is set to 20, client always faceplaces]
+	float dmgAtThresh = 3.f;    // When fpThreshold is reached, how much damage do the crystals need to deliver
 
 	bool renderPlacing = true;  // Whether to render place position
 	bool noCheckUpper = false;  // Put true if crystals can fit under blocks(endzone 1.13+ Java)
@@ -167,12 +167,12 @@ public:
 
 	int breakdelay = 0;  // Time to wait (in ticks) until to break a new crystal
 
-	int breakRange = 10;  // Range to break endCrystals
+	float breakRange = 6.f;  // Range to break endCrystals
 
 	bool breakAll = true;  // Whether to break ALL the crystals or just the nearest one
 
-	int breakWalls = 5;    // How many blocks you are allowed to place through walls
-	float postBWalls = 3;  // Maximum distance to place *after* going through a wall
+	int breakWalls = 10;    // How many blocks you are allowed to place through walls
+	float postBWalls = 10;  // Maximum distance to place *after* going through a wall
 
 	float breakHealth = 5.f;  // What is the minimum health you should have to stop breaking crystals
 	float BmaxSelfDmg = 5.f;  // Maximum damage allowable to player

@@ -8,7 +8,7 @@ CrystalBreak::CrystalBreak() : IModule(0, Category::COMBAT, "comes as a set with
 	registerBoolSetting("AntiWeak(shitty)", &this->antiWeakness, this->antiWeakness);
 	registerIntSetting("Delay (ticks)", &this->breakdelay, this->breakdelay, 0, 8);
 
-	registerIntSetting("Break Range", &this->breakRange, this->breakRange, 0, 12);
+	registerFloatSetting("Break Range", &this->breakRange, this->breakRange, 0.f, 12.f);
 
 	registerBoolSetting("Break All", &this->breakAll, this->breakAll);
 
