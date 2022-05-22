@@ -1,6 +1,7 @@
 #include "AutoArmor.h"
-#include "../../../Utils/Utils.h"
+
 #include "../../../Utils/Logger.h"
+#include "../../../Utils/Utils.h"
 
 class ArmorStruct {
 public:
@@ -10,7 +11,7 @@ public:
 		m_item = item;
 	}
 	bool isEqual(ArmorStruct& src) {
-		if (m_item->getArmorValueWithEnchants() == src.m_item->getArmorValueWithEnchants())
+		if (this->m_item->getArmorValueWithEnchants() == src.m_item->getArmorValueWithEnchants())
 			return true;
 		else
 			return false;
@@ -25,6 +26,7 @@ public:
 };
 
 AutoArmor::AutoArmor() : IModule(0, Category::PLAYER, "Automatically equips the best armor") {
+	registerBoolSetting("Exploit", &this->exploit, this->exploit);
 }
 
 AutoArmor::~AutoArmor() {
@@ -60,8 +62,14 @@ void AutoArmor::onTick(C_GameMode* gm) {
 	for (int i = 0; i < 4; i++) {
 		for (int n = 0; n < 36; n++) {
 			C_ItemStack* stack = inv->getItemStack(n);
-			if (stack->item != NULL && (*stack->item)->isArmor() && reinterpret_cast<C_ArmorItem*>(*stack->item)->ArmorSlot == i) {
+			if (stack->item == nullptr)
+				continue;
+			int expectedSlot = i;
+			if (exploit)
+				expectedSlot = 1;
+			if (stack->item != NULL && (*stack->item)->isArmor() && (reinterpret_cast<C_ArmorItem*>(*stack->item)->ArmorSlot == expectedSlot || exploit)) {
 				armorList.push_back(ArmorStruct(stack, reinterpret_cast<C_ArmorItem*>(*stack->item), n));
+			} else if (stack->item != NULL && (*stack->item)->isArmor()) {
 			}
 		}
 
