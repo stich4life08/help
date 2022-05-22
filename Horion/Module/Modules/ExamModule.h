@@ -21,6 +21,7 @@ public:
 	bool testDTIW = false;
 
 	bool testLook = false;
+	bool testUnlookableEnt = false;
 
 	int pointedEnt;
 	bool seen;

@@ -7,6 +7,7 @@
 CrystalBreak::CrystalBreak() : IModule(0, Category::COMBAT, "comes as a set with CrystalPlaceJTWD ;)") {
 	registerBoolSetting("AntiWeak(shitty)", &this->antiWeakness, this->antiWeakness);
 	registerIntSetting("Delay (ticks)", &this->breakdelay, this->breakdelay, 0, 8);
+	registerBoolSetting("retard break", &this->retardBreak, this->retardBreak);
 
 	registerFloatSetting("Break Range", &this->breakRange, this->breakRange, 0.f, 12.f);
 
@@ -155,7 +156,7 @@ void CrystalBreak::findAFuckingWeapon() {
 }
 
 void CrystalBreak::onTick(C_GameMode* gm) {
-	if (g_Data.getLocalPlayer() == nullptr || !g_Data.canUseMoveKeys())
+	if (g_Data.getLocalPlayer() == nullptr || !g_Data.canUseMoveKeys() || retardBreak)
 		return;
 
 	crystalList.clear();
@@ -225,6 +226,62 @@ void CrystalBreak::onPreRender(C_MinecraftUIRenderContext* renderCtx) {
 							   i->eyePos0.add(.5f, 1, .5f), .1f);
 		}
 	}
+}
+
+void CrystalBreak::onLevelRender() {
+	if (g_Data.getLocalPlayer() == nullptr || !g_Data.canUseMoveKeys() || !retardBreak)
+		return;
+
+	crystalList.clear();
+
+	g_Data.forEachEntity(crystalFinder);
+
+	sortCrystals();
+	breakArrEmpty = crystalList.empty();
+	if (breakArrEmpty) return;
+
+	if (g_Data.getLocalPlayer()->getSelectedItemId() == 300 || g_Data.getLocalPlayer()->getSelectedItemId() == 316 || g_Data.getLocalPlayer()->getSelectedItemId() == 318 || g_Data.getLocalPlayer()->getSelectedItemId() == 319 || g_Data.getLocalPlayer()->getSelectedItemId() == 604 || g_Data.getLocalPlayer()->getSelectedItemId() == 607 || g_Data.getLocalPlayer()->getSelectedItemId() == 606)
+		return;
+
+	aSlot = g_Data.getLocalPlayer()->getSupplies()->selectedHotbarSlot;
+	if (moduleMgr->getModule<CrystalPlace>()->switchType.GetSelectedEntry().GetValue() == 3) {
+		if ((g_Data.getLocalPlayer()->level->hasEntity() != 0) && GameData::isLeftClickDown())
+			return;
+		if (g_Data.getLocalPlayer()->getSupplies()->selectedHotbarSlot != aSlot)
+			return;
+	}
+
+
+	if (antiWeakness) {
+		findAFuckingWeapon();
+		return;
+	}
+
+	if (breakAll) {
+		for (C_Entity* EC_ent : crystalList) {
+			if (EC_ent->isAlive() && EC_ent != nullptr) {
+				if (rotateBreak.GetSelectedEntry().GetValue() == 1 || rotateBreak.GetSelectedEntry().GetValue() == 2) {
+					rotAngleB = g_Data.getLocalPlayer()->getHumanPos().CalcAngle(EC_ent->eyePos0);
+				}
+
+				g_Data.getCGameMode()->attack(EC_ent);
+			}
+		}
+	} else if (!breakAll) {
+		if (crystalList[0]->isAlive() && crystalList[0] != nullptr) {
+			if (rotateBreak.GetSelectedEntry().GetValue() == 1 || rotateBreak.GetSelectedEntry().GetValue() == 2) {
+				rotAngleB = g_Data.getLocalPlayer()->getHumanPos().CalcAngle(crystalList[0]->eyePos0);
+			}
+
+			g_Data.getCGameMode()->attack(crystalList[0]);
+		}
+	}
+
+	if (antiWeakness) {
+		g_Data.getLocalPlayer()->getSupplies()->selectedHotbarSlot = oldSlot;
+	}
+
+	return;
 }
 
 void CrystalBreak::onSendPacket(C_Packet* packet) {

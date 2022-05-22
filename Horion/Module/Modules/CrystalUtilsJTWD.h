@@ -167,6 +167,8 @@ public:
 
 	int breakdelay = 0;  // Time to wait (in ticks) until to break a new crystal
 
+	bool retardBreak = false; // weird super fast break shit
+
 	float breakRange = 6.f;  // Range to break endCrystals
 
 	bool breakAll = true;  // Whether to break ALL the crystals or just the nearest one
@@ -198,5 +200,6 @@ public:
 	virtual void onEnable() override;
 	virtual void onDisable() override;
 	virtual void onPreRender(C_MinecraftUIRenderContext* renderCtx) override;
+	virtual void onLevelRender();
 	virtual void onSendPacket(C_Packet* packet) override;
 };
