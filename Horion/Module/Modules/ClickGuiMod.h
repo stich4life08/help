@@ -5,7 +5,7 @@ class ClickGuiMod : public IModule {
 public:
 	ClickGuiMod();
 	~ClickGuiMod();
-	SettingEnum theme;
+	//SettingEnum theme;
 
 	bool showTooltips = true;
 

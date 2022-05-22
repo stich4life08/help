@@ -3,10 +3,10 @@
 
 ClickGuiMod::ClickGuiMod() : IModule(VK_INSERT, Category::VISUAL, "The clickgui - toggle everything by just clicking on it!") {
 	registerBoolSetting("Show Tooltips", &showTooltips, showTooltips);
-	registerEnumSetting("Themes", &theme, 1);
-	theme = SettingEnum(this)
-				.addEntry(EnumEntry("Wurst", 0))
-				.addEntry(EnumEntry("Phobos", 1));
+	//registerEnumSetting("Themes", &theme, 1);
+	//theme = SettingEnum(this)
+		//		.addEntry(EnumEntry("Wurst", 0))
+			//	.addEntry(EnumEntry("Phobos", 1));
 }
 
 ClickGuiMod::~ClickGuiMod() {
