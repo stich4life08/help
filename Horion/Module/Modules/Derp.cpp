@@ -9,21 +9,21 @@ Derp::Derp() : IModule(0, Category::MISC, "100% entirely unhittable AA (real)") 
 	registerBoolSetting("Enable Real", &this->real, this->real);
 
 	registerBoolSetting("Enable rPitch", &this->enableRealPitch, this->enableRealPitch);
-	registerIntSetting("Real Pitch", &this->realPitch, this->realPitch, -180, 180);
+	registerIntSetting("Real Pitch", &this->realPitch, this->realPitch, -270, 270);
 	registerIntSetting("RPitch Jitter", &this->realPitchJitter, this->realPitchJitter, 0, 360);
 
 	registerBoolSetting("Enable rLBY", &this->enableRealLBY, this->enableRealLBY);
-	registerIntSetting("Real LBY", &this->realLBY, this->realLBY, -180, 180);
+	registerIntSetting("Real LBY", &this->realLBY, this->realLBY, -270, 270);
 	registerIntSetting("rLBY Jitter", &this->realLBYJitter, this->realLBYJitter, 0, 180);
 
 	registerBoolSetting("Enable Desync", &this->desync, this->desync);
 
 	registerBoolSetting("Enable dPitch", &this->enableFakePitch, this->enableFakePitch);
-	registerIntSetting("Desync Pitch", &this->fakePitch, this->fakePitch, -180, 180);
+	registerIntSetting("Desync Pitch", &this->fakePitch, this->fakePitch, -270, 270);
 	registerIntSetting("DPitch Jitter", &this->fakePitchJitter, this->fakePitchJitter, 0, 180);
 
 	registerBoolSetting("Enable dLBY", &this->enableFakeLBY, this->enableFakeLBY);
-	registerIntSetting("Desync LBY", &this->fakeLBY, this->fakeLBY, -180, 180);
+	registerIntSetting("Desync LBY", &this->fakeLBY, this->fakeLBY, -270, 270);
 	registerIntSetting("dLBY Jitter", &this->fakeLBYJitter, this->fakeLBYJitter, 0, 180);
 }
 
