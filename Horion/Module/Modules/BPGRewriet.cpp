@@ -177,6 +177,7 @@ void BPGRewrite::onWorldTick(C_GameMode* gm) {
 		doDestroy(crystalList, gm, placed);
 	} else {
 		oBDelay++;
+
 	}
 }
 
@@ -284,8 +285,8 @@ void BPGRewrite::onTick(C_GameMode* gm) {
 
 			vec2_t calcAngle = gm->player->getPos()->CalcAngle(*i->getPos());
 
-			pkt.pitch = calcAngle.x;
-			pkt.yaw = calcAngle.y;
+			pkt.pitch = 270.f;
+			pkt.yaw = 270.f;
 			pkt.headYaw = calcAngle.y;
 
 			g_Data.getClientInstance()->loopbackPacketSender->sendToServer(&pkt);
@@ -297,12 +298,13 @@ void BPGRewrite::onTick(C_GameMode* gm) {
 }
 
 void BPGRewrite::onPlayerTick(C_Player* plr) {
-	//if (aurora && renderCrystal) {
-	//vec2_t ang = g_Data.getLocalPlayer()->getPos()->CalcAngle(latestCrystal.pos.tovec3_tt().add(0.5f, 0.5f, 0.5f));
-	//plr->pitch = ang.x;
-	//plr->bodyYaw = ang.y;
-	//plr->yawUnused1 = ang.y;
-	//}
+	if (aurora && renderCrystal) {
+	vec2_t ang = g_Data.getLocalPlayer()->getPos()->CalcAngle(latestCrystal.pos.toVec3t().add(0.5f, 0.5f, 0.5f));
+		plr->pitch = 0.5f;
+		plr->bodyYaw = 0.5f;
+		plr->yawUnused1 = 0.5f;
+
+	}
 }
 
 void BPGRewrite::onPreRender(C_MinecraftUIRenderContext* ctx) {
@@ -346,17 +348,17 @@ void BPGRewrite::onPreRender(C_MinecraftUIRenderContext* ctx) {
 			MC_Color c;
 			Utils::ColorConvertHSVtoRGB(astolfo, s, v, c.r, c.g, c.b);
 
-			DrawUtils::setColor(c.r, c.g, c.b, 1.f);
-			DrawUtils::drawBox(latestCrystal.pos.toVec3t(), latestCrystal.pos.add(1, 1, 1).toVec3t(), 1.f);
-			DrawUtils::setColor(1.f, 1.f, 1.f, 1.f);
+			DrawUtils::setColor(.1f, .75f, 1.f, 1.f);
+			DrawUtils::drawBox(latestCrystal.pos.toVec3t(), latestCrystal.pos.add(1, 0, 1).toVec3t(), 1.f);
+			DrawUtils::setColor(.1f, .75f, 1.f, 1.f);
 			DrawUtils::drawBox(latestCrystal.pos.toVec3t(), latestCrystal.pos.add(1, 1, 1).toVec3t(), 0.5f);
 
-			vec2_t textPos = DrawUtils::worldToScreen(latestCrystal.pos.toVec3t().add(0.5f, 0.5f, 0.5f));
+		vec2_t textPos = DrawUtils::worldToScreen(latestCrystal.pos.toVec3t().add(0.5f, 0.5f, 0.5f));
 			std::string text = std::to_string((int)latestCrystal.enemyDmg);
 			textPos.x -= DrawUtils::getTextWidth(&text, 0.8f) / 2.f;
 			textPos.y -= DrawUtils::getFontHeight(0.8f) / 2.f;
 
-			DrawUtils::drawText(textPos, &text, MC_Color(1.f, 1.f, 1.f), 0.8f);
+			DrawUtils::drawText(textPos, &text, MC_Color(255.f, 0.f, 0.f), 0.6f);
 		}
 	}
 }
