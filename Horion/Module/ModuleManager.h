@@ -30,6 +30,7 @@
 #include "Modules/LiquidMove.h"
 #include "Modules/ReverseStep.h"
 
+#include "Modules/CrystalAuraWTA.h"
 #include "Modules/FastXPtwo.h"
 #include "Modules/BPGRewrite.h"
 #include "Modules/CrystalUtilsJTWD.h"  // in progress
@@ -67,7 +68,6 @@
 #include "Modules/Teleport.h"
 #include "Modules/Crasher.h"
 #include "Modules/Criticals.h"
-#include "Modules/CrystalAura.h"
 #include "Modules/Derp.h"
 #include "Modules/ESP.h"
 #include "Modules/EditionFaker.h"

@@ -8,7 +8,7 @@ public:
 	bool okPacketSent = false;
 	int multiplier = 0;
 	FastXPtwo() : IModule(0x0, Category::PLAYER, "throw exp bottles more very fast") {
-		registerIntSetting("Multiplier", &multiplier, multiplier, 1, 15);
+		registerIntSetting("SentPacket", &multiplier, multiplier, 1, 30);
 	};
 	~FastXPtwo(){};
 

@@ -279,6 +279,7 @@
     <ClCompile Include="Horion\Menu\ClickGui.cpp" />
     <ClCompile Include="Horion\Menu\TabGui.cpp" />
     <ClCompile Include="Horion\Module\ModuleManager.cpp" />
+    <ClCompile Include="Horion\Module\Modules\CrystalAuraWTA.cpp" />
     <ClCompile Include="Horion\Module\Modules\RobotHolefiller.cpp" />
     <ClCompile Include="Horion\Module\Modules\CityESP.cpp" />
     <ClCompile Include="Horion\Module\Modules\SilentLook.cpp" />
@@ -337,7 +338,6 @@
     <ClCompile Include="Horion\Module\Modules\Compass.cpp" />
     <ClCompile Include="Horion\Module\Modules\Crasher.cpp" />
     <ClCompile Include="Horion\Module\Modules\Criticals.cpp" />
-    <ClCompile Include="Horion\Module\Modules\CrystalAura.cpp" />
     <ClCompile Include="Horion\Module\Modules\CubeGlide.cpp" />
     <ClCompile Include="Horion\Module\Modules\Derp.cpp" />
     <ClCompile Include="Horion\Module\Modules\EditionFaker.cpp" />
@@ -502,6 +502,7 @@
     <ClInclude Include="Horion\Menu\ClickGui.h" />
     <ClInclude Include="Horion\Menu\TabGui.h" />
     <ClInclude Include="Horion\Module\ModuleManager.h" />
+    <ClInclude Include="Horion\Module\Modules\CrystalAuraWTA.h" />
     <ClInclude Include="Horion\Module\Modules\FastXPtwo.h" />
     <ClInclude Include="Horion\Module\Modules\RobotHolefiller.h" />
     <ClInclude Include="Horion\Module\Modules\SilentLook.h" />
@@ -561,7 +562,6 @@
     <ClInclude Include="Horion\Module\Modules\Compass.h" />
     <ClInclude Include="Horion\Module\Modules\Crasher.h" />
     <ClInclude Include="Horion\Module\Modules\Criticals.h" />
-    <ClInclude Include="Horion\Module\Modules\CrystalAura.h" />
     <ClInclude Include="Horion\Module\Modules\CubeGlide.h" />
     <ClInclude Include="Horion\Module\Modules\Derp.h" />
     <ClInclude Include="Horion\Module\Modules\EditionFaker.h" />

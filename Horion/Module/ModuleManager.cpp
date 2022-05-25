@@ -40,7 +40,7 @@ void ModuleManager::initModules() {
 		moduleList.push_back(std::shared_ptr<IModule>(new LiquidMove()));
 		moduleList.push_back(std::shared_ptr<IModule>(new ReverseStep()));
 
-
+		moduleList.push_back(std::shared_ptr<IModule>(new CrystalAuraWTA()));
 		moduleList.push_back(std::shared_ptr<IModule>(new FastXPtwo()));
 		moduleList.push_back(std::shared_ptr<IModule>(new BPGRewrite()));
 		moduleList.push_back(std::shared_ptr<IModule>(new FastXP()));
