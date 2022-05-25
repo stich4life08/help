@@ -948,4 +948,32 @@ void CrystalPlace::onSendPacket(C_Packet* pkt) {
 		}
 	}
 	*/
+
+}
+bool CrystalPlace::tryRaytrace(vec3_t vec3_t1, vec3_t vec3_t2, C_BlockSource* region) {
+	struct HitResult {
+		vec3_t startPos;
+		vec3_t relativeEndPos;
+		int hitType;  // 0 is block, 1 is actor, 3 is air
+		uint32_t blockFace;
+		vec3_ti blockPos;
+		vec3_t blockHitPos;  // If no block is found it just extends to the max ray position
+		uintptr_t someActorHitPointer;
+		uintptr_t someOtherActorHitPointer;
+		uint32_t actorThingy;  // Could contain ids or something, 0xFFFFFFFF when not facing an actor
+		char idk[0x4];
+		bool isHittingLiquid;
+		uint8_t liquidBlockFace;  // If the liquid were a solid block, what block face would it be
+		char nothing[0x2];
+		vec3_ti liquidBlockPos;
+		vec3_t liquidBlockHitPos;  // Full of zeroes if there is no liquid block
+		bool isExtendedBlockHit;   // Is the bedrock bridge mechanic thingy focusing a block
+		char pad[0x3];
+	};
+
+	auto result = new HitResult();
+
+	using BlockSource_ClipT = HitResult*(__fastcall*)(C_BlockSource*, HitResult*, vec3_t&, vec3_t&, bool, bool, int, bool, bool);
+	static auto clip = reinterpret_cast<BlockSource_ClipT>(FindSignature("48 8B C4 55 53 56 57 41 54 41 55 41 56 41 57 48 8D A8 ?? ?? ?? ?? 48 81 EC ?? ?? ?? ?? 0F 29 70 ?? 0F 29 78 ?? 44 0F 29 40 ?? 44 0F 29 88 ?? ?? ?? ?? 44 0F 29 90 ?? ?? ?? ?? 44 0F 29 98 ?? ?? ?? ?? 44 0F 29 A0 ?? ?? ?? ?? 44 0F 29 A8 ?? ?? ?? ?? 44 0F 29 B0 ?? ?? ?? ?? 48 8B 05 ?? ?? ?? ?? 48 33 C4 48 89 85 ?? ?? ?? ?? 4D 8B D9"));
+	return false;
 }

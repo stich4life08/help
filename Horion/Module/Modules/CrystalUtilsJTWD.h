@@ -127,7 +127,7 @@ public:
 	~CrystalPlace();
 
 	bool isPlaceValid(vec3_t location, C_Entity* atkObj);
-
+	bool tryRaytrace(vec3_t pos, vec3_t end, C_BlockSource* region);
 	// T H E  H O L Y  T R I N I T Y
 	float computeExplosionDamage(vec3_t crystalPos, C_Entity* target, C_BlockSource* reg);
 	float getBlastDamageEnchantReduction(C_ItemStack* armor);
@@ -202,4 +202,5 @@ public:
 	virtual void onPreRender(C_MinecraftUIRenderContext* renderCtx) override;
 	virtual void onLevelRender();
 	virtual void onSendPacket(C_Packet* packet) override;
+
 };
