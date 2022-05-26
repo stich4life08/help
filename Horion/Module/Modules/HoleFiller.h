@@ -12,10 +12,12 @@ private:
 	bool doPitchUp = true;
 	int Odelay = 0;
 	float delay = 0.14f;
+	int blockPerSec = 20;
 
 	bool hasStarted = false;
 
 public:
+	int del0 = 0;
 	int origSlot;
 
 	bool attemptPitchUp = false;
