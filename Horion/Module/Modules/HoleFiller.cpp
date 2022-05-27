@@ -6,6 +6,7 @@ HoleFiller::HoleFiller() : IModule(0x0, Category::WORLD, "Places a buttplug in y
 	this->registerBoolSetting("PitchUp", &this->doPitchUp, this->doPitchUp);
 	registerBoolSetting("Switch2Obby", &this->holeSwitch, true);
 	registerIntSetting("Range", &this->range, this->range, 0, 10);
+	registerIntSetting("Blk/sec", &this->blockPerSec, this->blockPerSec, 0, 20);
 	registerIntSetting("WallRange", &this->wallRange, this->wallRange, 0, 10);
 }
 
@@ -74,6 +75,7 @@ bool tryPlaceHF(vec3_t blkPlacement) {
 void HoleFiller::onEnable() {
 	if (g_Data.getLocalPlayer() == nullptr) return;
 	hasStarted = true;
+	del0 = 0;
 
 	origSlot = g_Data.getLocalPlayer()->getSupplies()->selectedHotbarSlot;
 	if (holeSwitch) {
@@ -102,6 +104,14 @@ void HoleFiller::onTick(C_GameMode* gm) {
 			hasStarted = false;
 			return;
 		}
+		int maxT = 20 / blockPerSec;
+
+		if (del0 < maxT) {
+			del0++;
+			return;
+		} else
+			del0 = 0;
+
 		if (g_Data.isInGame()) {
 			vec3_t* pos = g_Data.getLocalPlayer()->getPos();
 			for (int x = (int)pos->x - range; x < pos->x + range; x++) {
