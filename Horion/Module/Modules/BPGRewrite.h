@@ -61,9 +61,9 @@ public:
 	BPGRewrite() : IModule(0x0, Category::COMBAT, "CrystalAura but better") {
 		dmgEnum = SettingEnum(this)
 					  .addEntry(EnumEntry("Nukkit", dmg_nukkit))
-					  .addEntry(EnumEntry("2b2e", dmg_2b2e))
+					  .addEntry(EnumEntry("JAVA", dmg_java))
 					  .addEntry(EnumEntry("Vanilla", dmg_vanilla));
-		//.addEntry(EnumEntry("Horion", dmg_java));//dontuse
+		             
 		registerEnumSetting("Client", &dmgEnum, dmg_vanilla);
 
 		destroyEnum = SettingEnum(this)

@@ -107,10 +107,25 @@ void Killaura::onTick(C_GameMode* gm) {
 				if (!(i->damageTime > 1 && hurttime)) {
 					g_Data.getLocalPlayer()->swing();
 					g_Data.getCGameMode()->attack(i);
+					g_Data.getLocalPlayer()->swing();
+					g_Data.getCGameMode()->attack(i);
+					g_Data.getLocalPlayer()->swing();
+					g_Data.getCGameMode()->attack(i);
+					g_Data.getLocalPlayer()->swing();
+					g_Data.getCGameMode()->attack(i);
+				
 				}
 			}
 		} else {
 			if (!(targetList[0]->damageTime > 1 && hurttime)) {
+				g_Data.getLocalPlayer()->swing();
+				g_Data.getCGameMode()->attack(targetList[0]);
+				g_Data.getLocalPlayer()->swing();
+				g_Data.getCGameMode()->attack(targetList[0]);
+				g_Data.getLocalPlayer()->swing();
+				g_Data.getCGameMode()->attack(targetList[0]);
+				g_Data.getLocalPlayer()->swing();
+				g_Data.getCGameMode()->attack(targetList[0]);
 				g_Data.getLocalPlayer()->swing();
 				g_Data.getCGameMode()->attack(targetList[0]);
 			}
