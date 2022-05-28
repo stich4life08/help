@@ -7,13 +7,13 @@ CrystalPlace::CrystalPlace() : IModule(0, Category::COMBAT, "p100 java CA by Joh
 	registerIntSetting("Delay (ticks)", &this->delay, this->delay, 0, 25);
 	//registerIntSetting("Times to place", &this->placetimes, this->placetimes, 1, 5);
 	registerIntSetting("Max Proximity", &this->maxProximity, this->maxProximity, 1, 8);
-	registerIntSetting("Enemy Range", &this->range, this->range, 5, 15);
+	registerFloatSetting("Enemy Range", &this->range, this->range, 5, 15);
 	registerFloatSetting("Place Range", &this->placeRange, this->placeRange, 0.f, 12.f);
 	priority = SettingEnum(this)
 				   .addEntry(EnumEntry("Distance", 0))
 				   .addEntry(EnumEntry("Health", 1));
 	registerEnumSetting("Priority", &this->priority, 0);
-	registerIntSetting("Thru Walls", &this->thruWallsR, this->thruWallsR, 0, 10);
+	registerFloatSetting("Thru Walls", &this->thruWallsR, this->thruWallsR, 0, 10);
 	registerFloatSetting("Post Walls", &this->postWallsR, this->postWallsR, 0.f, 10.f);
 
 	calcDmgType = SettingEnum(this)

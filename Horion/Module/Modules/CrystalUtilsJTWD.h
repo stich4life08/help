@@ -37,21 +37,21 @@ inline lineResults countBlksAlongLine(vec3_t start, vec3_t end) {
 	float dZ = endf.z - startf.z;
 
 	int steps = 200;
-	float segment = dist / steps;
-	vec3_t seggs3d = vec3_t((dX / steps), (dY / steps), (dZ / steps));
+	const float segment = dist / steps;
+	const vec3_t seggs3d = vec3_t((dX / steps), (dY / steps), (dZ / steps));
 
 	vec3_t imHere = startf;
 	vec3_ti inCoord = startf;
 
 	while (steps-- >= 0) {
-		if ((vec3_ti)imHere.floor() != inCoord) {
-			inCoord = imHere.floor();
+		//if ((vec3_ti)imHere.floor() != inCoord) {
+		inCoord = imHere.floor();
 
-			if (!g_Data.getLocalPlayer()->region->getBlock(inCoord)->blockLegacy->material->isReplaceable) {  // if inCoord is a block
-				rtn.blockCount = rtn.blockCount + 1;
-				rtn.lastSolidBlock = inCoord.toVec3t();
-			}
+		if (!g_Data.getLocalPlayer()->region->getBlock(inCoord)->blockLegacy->material->isReplaceable) {  // if inCoord is a block
+			rtn.blockCount = rtn.blockCount + segment;
+			rtn.lastSolidBlock = inCoord.toVec3t();
 		}
+		//}
 
 		imHere = imHere.add(seggs3d);
 	}
@@ -77,11 +77,11 @@ public:
 	int delay = 0;  // Time to wait (in ticks) until to place a new crystal
 	//int placetimes = 1;     // Number of times the client should keep retrying to place a crystal
 	int maxProximity = 4;   // What is the maximum distance can a crystal be placed from a person before switching axis
-	int range = 8;         // Range for the enemies to be added to target list
+	float range = 8;         // Range for the enemies to be added to target list
 	float placeRange = 6.f;  // Range to place endCrystals
 	SettingEnum priority;   // Decides how targets are sorted (distance-> lowest to highest
 							//								   health-> lowest to highest)
-	int thruWallsR = 6;     // How many blocks you are allowed to place through walls
+	float thruWallsR = 6;     // How many blocks you are allowed to place through walls
 	float postWallsR = 10;   // Maximum distance to place *after* going through a wall
 
 	/* SOON
@@ -173,7 +173,7 @@ public:
 
 	bool breakAll = true;  // Whether to break ALL the crystals or just the nearest one
 
-	int breakWalls = 10;    // How many blocks you are allowed to place through walls
+	float breakWalls = 10;    // How many blocks you are allowed to place through walls
 	float postBWalls = 10;  // Maximum distance to place *after* going through a wall
 
 	float breakHealth = 5.f;  // What is the minimum health you should have to stop breaking crystals

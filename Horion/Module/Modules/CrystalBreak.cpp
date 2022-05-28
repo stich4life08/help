@@ -13,7 +13,7 @@ CrystalBreak::CrystalBreak() : IModule(0, Category::COMBAT, "comes as a set with
 
 	registerBoolSetting("Break All", &this->breakAll, this->breakAll);
 
-	registerIntSetting("Thru Walls", &this->breakWalls, this->breakWalls, 0, 10);
+	registerFloatSetting("Thru Walls", &this->breakWalls, this->breakWalls, 0, 10);
 	registerFloatSetting("Post Walls", &this->postBWalls, this->postBWalls, 0.f, 10.f);
 
 	registerFloatSetting("Minimum Health", &this->breakHealth, this->breakHealth, 0.f, 20.f);

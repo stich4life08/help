@@ -24,10 +24,10 @@ std::string generateReportID() {
 	int ran;
 	char idArr[10] = {'X','X','X','X','X','X','X','X','X','X'};  // there's prob a better way, but if it works, it ain't stupid
 
-	char A[4] = {'A', 'D', 'J', 'W'};
-	char B[7] = {'0', '1', '2', '5', '6', '8', '9'};
-	char C[2] = {'R', 'L'};
-	char D[4] = {'T', '3', '4', '7'};
+	const char A[8] = {'A', 'D', 'J', 'W', 'C', 'R', 'Y', 'N'};
+	const char B[7] = {'0', '1', '2', '5', '6', '8', '9'};
+	const char C[2] = {'R', 'L'};
+	const char D[8] = {'T', '3', '4', '7', '5', 'S', 'V', 'J'};
 
 	// generate A
 	ran = rand() % 3;
