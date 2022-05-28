@@ -116,46 +116,6 @@ int findRelativeAngle(vec3_t playerVec, vec3_t enemyVec) { // damn, school maths
 }
 */
 
-bool checkCornerHitboxCollision(vec3_t* block, C_Entity* ent) {  // THANK SB HOLY SHIT I WAS TRYING TO MAKE THIS BY MYSELF FOR HOURS!!11!1
-	std::vector<vec3_t*> corners;
-	corners.clear();
-	
-	corners.push_back(new vec3_t(ent->aabb.lower.x, ent->aabb.lower.y, ent->aabb.lower.z));
-	corners.push_back(new vec3_t(ent->aabb.lower.x, ent->aabb.lower.y, ent->aabb.upper.z));
-	corners.push_back(new vec3_t(ent->aabb.upper.x, ent->aabb.lower.y, ent->aabb.upper.z));
-	corners.push_back(new vec3_t(ent->aabb.upper.x, ent->aabb.lower.y, ent->aabb.lower.z));
-
-	if (ent->getEntityTypeId() != 319) {
-		if (!corners.empty()) {
-			for (auto corner : corners) {
-				if ((floor(corner->x) == floor(block->x)) && (floor(corner->y) == floor(block->y)) && (floor(corner->z) == floor(block->z))) {
-					return true;
-				}
-			}
-		}
-	} else {
-		vec3_t pp = ent->getHumanPos();
-		vec3_t entCorners[8] = {
-			pp.add(.3f, 0, .3f),
-			pp.add(-.3f, 0, .3f),
-			pp.add(.3f, 0, -.3f),
-			pp.add(-.3f, 0, -.3f),
-			pp.add(.33541f, 0, 0),
-			pp.add(-.33541f, 0, 0),
-			pp.add(0, 0, .33541f),
-			pp.add(0, 0, -.33541f),
-		};
-
-		for (vec3_t i : entCorners) {
-			if (i.floor() == *block) {
-				return true;
-			}
-		}
-	}
-
-	return false;
-}
-
 static std::vector<C_Entity*> tgtList;
 bool locateEntCrPl(C_Entity* curEnt, bool isRegularEntity) {
 	if (curEnt == nullptr) return false;
@@ -950,6 +910,7 @@ void CrystalPlace::onSendPacket(C_Packet* pkt) {
 	*/
 
 }
+/* WHYYYYY
 bool CrystalPlace::tryRaytrace(vec3_t vec3_t1, vec3_t vec3_t2, C_BlockSource* region) {
 	struct HitResult {
 		vec3_t startPos;
@@ -976,4 +937,4 @@ bool CrystalPlace::tryRaytrace(vec3_t vec3_t1, vec3_t vec3_t2, C_BlockSource* re
 	using BlockSource_ClipT = HitResult*(__fastcall*)(C_BlockSource*, HitResult*, vec3_t&, vec3_t&, bool, bool, int, bool, bool);
 	static auto clip = reinterpret_cast<BlockSource_ClipT>(FindSignature("48 8B C4 55 53 56 57 41 54 41 55 41 56 41 57 48 8D A8 ?? ?? ?? ?? 48 81 EC ?? ?? ?? ?? 0F 29 70 ?? 0F 29 78 ?? 44 0F 29 40 ?? 44 0F 29 88 ?? ?? ?? ?? 44 0F 29 90 ?? ?? ?? ?? 44 0F 29 98 ?? ?? ?? ?? 44 0F 29 A0 ?? ?? ?? ?? 44 0F 29 A8 ?? ?? ?? ?? 44 0F 29 B0 ?? ?? ?? ?? 48 8B 05 ?? ?? ?? ?? 48 33 C4 48 89 85 ?? ?? ?? ?? 4D 8B D9"));
 	return false;
-}
+}*/
