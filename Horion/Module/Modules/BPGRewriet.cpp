@@ -308,6 +308,8 @@ void BPGRewrite::onPlayerTick(C_Player* plr) {
 }
 
 void BPGRewrite::onPreRender(C_MinecraftUIRenderContext* ctx) {
+	
+
 	if (!g_Data.isInGame()) {
 		previousSlot = -1;
 		if (flash)
@@ -348,20 +350,23 @@ void BPGRewrite::onPreRender(C_MinecraftUIRenderContext* ctx) {
 			MC_Color c;
 			Utils::ColorConvertHSVtoRGB(astolfo, s, v, c.r, c.g, c.b);
 
-			DrawUtils::setColor(.1f, .75f, 1.f, 1.f);
-			DrawUtils::drawBox(latestCrystal.pos.toVec3t(), latestCrystal.pos.add(1, 0, 1).toVec3t(), 1.f);
-			DrawUtils::setColor(.1f, .75f, 1.f, 1.f);
-			DrawUtils::drawBox(latestCrystal.pos.toVec3t(), latestCrystal.pos.add(1, 1, 1).toVec3t(), 0.5f);
+			 DrawUtils::setColor(0.f, 1.f, 0.f, 1.f);
+			 DrawUtils::drawBox(latestCrystal.pos.toVec3t(), latestCrystal.pos.add(1, 1, 1).toVec3t(), .4f);
+			
+			vec2_t textPos = DrawUtils::worldToScreen(latestCrystal.pos.toVec3t().add(0.5f, 0.5f, 0.5f));
+			vec2_t textPos1 = DrawUtils::worldToScreen(latestCrystal.pos.toVec3t().add(0.5f, 0.6f, 0.5f));
+			vec2_t textPos2 = DrawUtils::worldToScreen(latestCrystal.pos.toVec3t().add(0.5f, 0.4f, 0.5f));
+			
+			
+			
+				std::string text = std::to_string((int)latestCrystal.enemyDmg);
+				std::string text1 = std::to_string((int)computeExplosionDamage(latestCrystal.pos.toVec3t(), g_Data.getLocalPlayer(), g_Data.getLocalPlayer()->region, dmgEnum.selected));
 
-		vec2_t textPos = DrawUtils::worldToScreen(latestCrystal.pos.toVec3t().add(0.5f, 0.5f, 0.5f));
-			std::string text = std::to_string((int)latestCrystal.enemyDmg);
-			textPos.x -= DrawUtils::getTextWidth(&text, 0.8f) / 2.f;
-			textPos.y -= DrawUtils::getFontHeight(0.8f) / 2.f;
-
-			DrawUtils::drawText(textPos, &text, MC_Color(255.f, 0.f, 0.f), 0.6f);
+				DrawUtils::drawText(textPos2, &text, MC_Color(255, 0, 0), 0.8f);
+				DrawUtils::drawText(textPos1, &text1, MC_Color(66, 238, 238), 0.8f);
+			}
 		}
 	}
-}
 
 void BPGRewrite::onEnable() {
 	if (flash && g_Data.getCGameMode() != nullptr) {

@@ -283,6 +283,7 @@
     <ClCompile Include="Horion\Module\Modules\CrystalAura.cpp" />
     <ClCompile Include="Horion\Module\Modules\CrystalAuraOW.cpp" />
     <ClCompile Include="Horion\Module\Modules\CrystalAuraWTA.cpp" />
+    <ClCompile Include="Horion\Module\Modules\Disabler.cpp" />
     <ClCompile Include="Horion\Module\Modules\Placer.cpp" />
     <ClCompile Include="Horion\Module\Modules\RobotHolefiller.cpp" />
     <ClCompile Include="Horion\Module\Modules\CityESP.cpp" />
@@ -510,6 +511,7 @@
     <ClInclude Include="Horion\Module\Modules\CrystalAura.h" />
     <ClInclude Include="Horion\Module\Modules\CrystalAuraOW.h" />
     <ClInclude Include="Horion\Module\Modules\CrystalAuraWTA.h" />
+    <ClInclude Include="Horion\Module\Modules\Disabler.h" />
     <ClInclude Include="Horion\Module\Modules\FastXPtwo.h" />
     <ClInclude Include="Horion\Module\Modules\Placer.h" />
     <ClInclude Include="Horion\Module\Modules\RobotHolefiller.h" />

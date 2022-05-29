@@ -121,6 +121,7 @@ void ModuleManager::initModules() {
 		moduleList.push_back(std::shared_ptr<IModule>(new Placer()));
 		moduleList.push_back(std::shared_ptr<IModule>(new CrystalAura()));
 		moduleList.push_back(std::shared_ptr<IModule>(new CrystalAuraOW()));
+		moduleList.push_back(std::shared_ptr<IModule>(new Disabler()));
 		moduleList.push_back(std::shared_ptr<IModule>(new Timer()));
 		moduleList.push_back(std::shared_ptr<IModule>(new NightMode()));
 		moduleList.push_back(std::shared_ptr<IModule>(new NoSwing()));
