@@ -5,7 +5,7 @@
 
 class APVPDisabler : public IModule {
 private:
-	int angle = -90;
+	int angle = 270;
 	bool onlyOnBuildMods = true;
 	bool pauseOnXP = true;
 	bool pauseOnBow = true;

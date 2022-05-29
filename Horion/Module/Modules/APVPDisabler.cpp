@@ -11,15 +11,14 @@ APVPDisabler::~APVPDisabler() {
 }
 
 const char* APVPDisabler::getModuleName() {
-	return "AVPVPDISABLER";
+	return "APVPDisabler";
 }
 
 void APVPDisabler::onPlayerTick(C_Player* player) {
 
-	player->pitch = 270.f;
 	if (g_Data.getLocalPlayer() == nullptr)
 		return;
-	
+
 	if (onlyOnBuildMods) {
 		// modules with build capabilities
 
@@ -66,5 +65,5 @@ void APVPDisabler::onPlayerTick(C_Player* player) {
 	}
 
 	// here's the actual main part; its short af
-	player->pitch = 270.f;
+	player->pitch = angle;
 }
