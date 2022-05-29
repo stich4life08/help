@@ -276,6 +276,8 @@ void Hooks::Enable() {
 bool Hooks::playerCallBack(C_Player* lp, __int64 a2, __int64 a3) {
 	static auto oTick = g_Hooks.playerCallBack_Hook->GetFastcall<bool, C_Player*, __int64, __int64>();
 	// om, we need this check or else is makes all entitys look the directions we are setting rotations to look lol
+	if (lp == g_Data.getLocalPlayer())
+		moduleMgr->onPlayerTick(lp);
 
 	// Fix I Hope
 	{

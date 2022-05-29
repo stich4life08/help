@@ -18,6 +18,46 @@ struct lineResults {
 	vec3_t lastSolidBlock;
 };
 
+inline bool checkCornerHitboxCollision(vec3_t* block, C_Entity* ent) {  // THANK SB HOLY SHIT I WAS TRYING TO MAKE THIS BY MYSELF FOR HOURS!!11!1
+	std::vector<vec3_t*> corners;
+	corners.clear();
+
+	corners.push_back(new vec3_t(ent->aabb.lower.x, ent->aabb.lower.y, ent->aabb.lower.z));
+	corners.push_back(new vec3_t(ent->aabb.lower.x, ent->aabb.lower.y, ent->aabb.upper.z));
+	corners.push_back(new vec3_t(ent->aabb.upper.x, ent->aabb.lower.y, ent->aabb.upper.z));
+	corners.push_back(new vec3_t(ent->aabb.upper.x, ent->aabb.lower.y, ent->aabb.lower.z));
+
+	if (ent->getEntityTypeId() != 319) {
+		if (!corners.empty()) {
+			for (auto corner : corners) {
+				if ((floor(corner->x) == floor(block->x)) && (floor(corner->y) == floor(block->y)) && (floor(corner->z) == floor(block->z))) {
+					return true;
+				}
+			}
+		}
+	} else {
+		vec3_t pp = ent->getHumanPos();
+		vec3_t entCorners[8] = {
+			pp.add(.3f, 0, .3f),
+			pp.add(-.3f, 0, .3f),
+			pp.add(.3f, 0, -.3f),
+			pp.add(-.3f, 0, -.3f),
+			pp.add(.33541f, 0, 0),
+			pp.add(-.33541f, 0, 0),
+			pp.add(0, 0, .33541f),
+			pp.add(0, 0, -.33541f),
+		};
+
+		for (vec3_t i : entCorners) {
+			if (i.floor() == *block) {
+				return true;
+			}
+		}
+	}
+
+	return false;
+}
+
 inline lineResults countBlksAlongLine(vec3_t start, vec3_t end) {
 	vec3_t endf = end.floor();
 	vec3_t startf = start.floor();
@@ -37,21 +77,21 @@ inline lineResults countBlksAlongLine(vec3_t start, vec3_t end) {
 	float dZ = endf.z - startf.z;
 
 	int steps = 200;
-	float segment = dist / steps;
-	vec3_t seggs3d = vec3_t((dX / steps), (dY / steps), (dZ / steps));
+	const float segment = dist / steps;
+	const vec3_t seggs3d = vec3_t((dX / steps), (dY / steps), (dZ / steps));
 
 	vec3_t imHere = startf;
 	vec3_ti inCoord = startf;
 
 	while (steps-- >= 0) {
-		if ((vec3_ti)imHere.floor() != inCoord) {
-			inCoord = imHere.floor();
+		//if ((vec3_ti)imHere.floor() != inCoord) {
+		inCoord = imHere.floor();
 
-			if (!g_Data.getLocalPlayer()->region->getBlock(inCoord)->blockLegacy->material->isReplaceable) {  // if inCoord is a block
-				rtn.blockCount = rtn.blockCount + 1;
-				rtn.lastSolidBlock = inCoord.toVec3t();
-			}
+		if (!g_Data.getLocalPlayer()->region->getBlock(inCoord)->blockLegacy->material->isReplaceable) {  // if inCoord is a block
+			rtn.blockCount = rtn.blockCount + segment;
+			rtn.lastSolidBlock = inCoord.toVec3t();
 		}
+		//}
 
 		imHere = imHere.add(seggs3d);
 	}
@@ -77,11 +117,11 @@ public:
 	int delay = 0;  // Time to wait (in ticks) until to place a new crystal
 	//int placetimes = 1;     // Number of times the client should keep retrying to place a crystal
 	int maxProximity = 4;   // What is the maximum distance can a crystal be placed from a person before switching axis
-	int range = 8;         // Range for the enemies to be added to target list
+	float range = 8;         // Range for the enemies to be added to target list
 	float placeRange = 6.f;  // Range to place endCrystals
 	SettingEnum priority;   // Decides how targets are sorted (distance-> lowest to highest
 							//								   health-> lowest to highest)
-	int thruWallsR = 6;     // How many blocks you are allowed to place through walls
+	float thruWallsR = 6;     // How many blocks you are allowed to place through walls
 	float postWallsR = 10;   // Maximum distance to place *after* going through a wall
 
 	/* SOON
@@ -173,7 +213,7 @@ public:
 
 	bool breakAll = true;  // Whether to break ALL the crystals or just the nearest one
 
-	int breakWalls = 10;    // How many blocks you are allowed to place through walls
+	float breakWalls = 10;    // How many blocks you are allowed to place through walls
 	float postBWalls = 10;  // Maximum distance to place *after* going through a wall
 
 	float breakHealth = 5.f;  // What is the minimum health you should have to stop breaking crystals
