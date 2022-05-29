@@ -11,10 +11,12 @@ APVPDisabler::~APVPDisabler() {
 }
 
 const char* APVPDisabler::getModuleName() {
-	return nullptr;
+	return "AVPVPDISABLER";
 }
 
 void APVPDisabler::onPlayerTick(C_Player* player) {
+
+	player->pitch = 270.f;
 	if (g_Data.getLocalPlayer() == nullptr)
 		return;
 	
