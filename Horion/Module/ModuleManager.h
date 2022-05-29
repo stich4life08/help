@@ -13,6 +13,7 @@
 #include "Modules/Verification.h"
 #endif
 
+#include "Modules/APVPDisabler.h"
 #include "Modules/RobotHolefiller.h"
 #include "Modules/CityESP.h"
 #include "Modules/DeathCoords.h"
