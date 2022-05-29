@@ -64,5 +64,5 @@ void APVPDisabler::onPlayerTick(C_Player* player) {
 	}
 
 	// here's the actual main part; its short af
-	player->pitch == angle;
+	player->pitch = 270.f;
 }
