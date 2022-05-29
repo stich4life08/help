@@ -71,6 +71,7 @@
 #include "Modules/Placer.h"
 #include "Modules/CrystalAura.h"
 #include "Modules/CrystalAuraOW.h"
+#include "Modules/Disabler.h"
 #include "Modules/Derp.h"
 #include "Modules/ESP.h"
 #include "Modules/EditionFaker.h"

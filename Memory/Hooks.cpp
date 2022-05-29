@@ -1826,7 +1826,7 @@ void Hooks::Actor__setRot(C_Entity* _this, vec2_t& angle) {
 	if (jtwdCAMod->isEnabled() &&
 		jtwdCAMod->rotate.GetSelectedEntry().GetValue() == 3 && jtwdCAMod->rotUpNow &&
 		_this == g_Data.getLocalPlayer() && !jtwdCAMod->placeArrEmpty) {
-		func(_this, angle = vec2_t(-90, 0));
+		func(_this, angle = vec2_t(-270, 0));
 	}
 
 	if (surrMod->isEnabled() && (surrMod->rotate.GetSelectedEntry().GetValue() == 1 || surrMod->rotate.GetSelectedEntry().GetValue() == 3) &&
@@ -1843,7 +1843,7 @@ void Hooks::Actor__setRot(C_Entity* _this, vec2_t& angle) {
 	}
 
 	if (rensurrMod->isEnabled() && rensurrMod->enum3.GetSelectedEntry().GetValue() == 3 && _this == g_Data.getLocalPlayer() && rensurrMod->mustPitchUp) {
-		for (int i = 0; i > -90; i--) {
+		for (int i = 0; i > 270; i--) {
 			func(_this, angle = vec2_t(i, 0));
 		}
 	}
@@ -1862,6 +1862,7 @@ void Hooks::Actor__setRot(C_Entity* _this, vec2_t& angle) {
 
 	func(_this, angle);
 }
+
 
 void Hooks::test(void* _this) {
 	auto func = g_Hooks.testHook->GetFastcall<void, void*>();
