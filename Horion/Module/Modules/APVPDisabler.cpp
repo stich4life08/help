@@ -15,7 +15,6 @@ const char* APVPDisabler::getModuleName() {
 }
 
 void APVPDisabler::onPlayerTick(C_Player* player) {
-	player->pitch = angle;
 	if (g_Data.getLocalPlayer() == nullptr)
 		return;
 
@@ -62,7 +61,7 @@ void APVPDisabler::onPlayerTick(C_Player* player) {
 				return;
 		}
 	}
-}
 
 	// here's the actual main part; its short af
-	
+	player->pitch = angle;
+}

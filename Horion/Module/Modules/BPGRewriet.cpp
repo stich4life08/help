@@ -76,8 +76,7 @@ void BPGRewrite::onWorldTick(C_GameMode* gm) {
 				allEnts.push_back(ent);
 				return;
 			}
-			if (strcmp(ent->getNameTag()->getText(), "SBreality5860") == 0)
-				return;
+			
 			if (!Target::isValidTarget(ent))
 				return;
 
