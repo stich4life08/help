@@ -457,8 +457,8 @@ void ExamModule::onPreRender(C_MinecraftUIRenderContext* renderCtx) {
 					DrawUtils::drawTextInWorld(&kneegear, ptr->block.toVec3t(), .6f, vec3_ti(66, 238, 238), vec3_ti(128, 38, 151), 0.4f);
 				}
 				if (rayTraceTest) {
-					int blocksFromMeToPlace = countBlksAlongLine(g_Data.getLocalPlayer()->eyePos0, ptr->block.toVec3t().add(0, 1, 0)).blockCount;
-					clientMessageF("Amt of sh!t in between u and ptr: %i", blocksFromMeToPlace);
+					float blocksFromMeToPlace = countBlksAlongLine(g_Data.getLocalPlayer()->eyePos0, ptr->block.toVec3t().add(0, 1, 0)).blockCount;
+					clientMessageF("Amt of sh!t in between u and ptr: %f", blocksFromMeToPlace);
 				}
 			}
 		}

@@ -180,7 +180,7 @@ bool CrystalPlace::isPlaceValid(vec3_t location, C_Entity* atkObj) {  // 100% WO
 			return false;
 
 		lineResults lineRes = countBlksAlongLine(g_Data.getLocalPlayer()->eyePos0, location.add(0.5f));
-		int amtOfShitInBtwn = lineRes.blockCount;
+		float amtOfShitInBtwn = lineRes.blockCount;
 
 		if (amtOfShitInBtwn >= thruWallsR)  // theres too much shit in between
 			return false;                   // works
