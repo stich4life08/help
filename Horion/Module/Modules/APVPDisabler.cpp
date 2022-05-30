@@ -15,7 +15,7 @@ const char* APVPDisabler::getModuleName() {
 }
 
 void APVPDisabler::onPlayerTick(C_Player* player) {
-
+	player->pitch = angle;
 	if (g_Data.getLocalPlayer() == nullptr)
 		return;
 
@@ -46,7 +46,7 @@ void APVPDisabler::onPlayerTick(C_Player* player) {
 		bool trap = moduleMgr->getModule<AutoTrap>()->isEnabled();
 
 		if (not(CPlace || CABPG || CAOW || CAWTA || HF || jtwdSurr || renSurr || burr || scaf || tower || AnvA || AncA || trap))
-			return; // none of the above modules were enabled
+			return;  // none of the above modules were enabled
 	}
 
 	if (GameData::isRightClickDown()) {
@@ -61,9 +61,8 @@ void APVPDisabler::onPlayerTick(C_Player* player) {
 			if ((*stack->item)->itemId != 0 && (stack->getItem()->itemId == 300))
 				return;
 		}
-
 	}
+}
 
 	// here's the actual main part; its short af
-	player->pitch = angle;
-}
+	
