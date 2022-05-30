@@ -14,7 +14,7 @@ struct CrystalInfo {
 };
 
 struct lineResults {
-	int blockCount = 0;
+	float blockCount = 0;
 	vec3_t lastSolidBlock;
 };
 
@@ -65,7 +65,7 @@ inline lineResults countBlksAlongLine(vec3_t start, vec3_t end) {
 	lineResults rtn;
 
 	if (endf == startf) {
-		rtn.blockCount = 0;
+		rtn.blockCount = 0.f;
 		rtn.lastSolidBlock = startf;
 		return rtn;
 	}

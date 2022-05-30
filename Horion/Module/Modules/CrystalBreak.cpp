@@ -88,7 +88,7 @@ void CrystalBreak::sortCrystals() {
 						continue;
 
 					lineResults lineRes = countBlksAlongLine(g_Data.getLocalPlayer()->eyePos0, cPos.add(0.5f));
-					int amtOfShitInBtwn = lineRes.blockCount;
+					float amtOfShitInBtwn = lineRes.blockCount;
 
 					if (amtOfShitInBtwn >= breakWalls)  // theres too much shit in between
 						continue;
