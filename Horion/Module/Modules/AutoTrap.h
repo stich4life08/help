@@ -6,6 +6,8 @@ private:
 	bool ATRots = true;
 	bool fullbody = false;
 	bool niggerTurnCAOn = false;
+	bool switch2obby = true;
+	bool airplace = false;
 
 	/* GROUND   FEET     HEAD
 	   0 0 N	0 0 N    N N N
@@ -14,17 +16,6 @@ private:
 	*/
 
 	std::vector<vec3_t> placements;
-
-	vec3_t h1;
-	vec3_t h2;
-	vec3_t h3;
-	vec3_t h4;
-	vec3_t h5;
-	vec3_t h6;
-	vec3_t h7;
-
-	vec3_t g1;
-	vec3_t f1;
 
 public:
 	bool mustGoUp = false;
