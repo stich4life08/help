@@ -16,7 +16,6 @@ const char* APVPDisabler::getModuleName() {
 }
 
 void APVPDisabler::onPlayerTick(C_Player* player) {
-
 	if (g_Data.getLocalPlayer() == nullptr)
 		return;
 

@@ -3,6 +3,7 @@
 Killaura::Killaura() : IModule('P', Category::COMBAT, "Attacks entities around you automatically") {
 	registerBoolSetting("MultiAura", &isMulti, isMulti);
 	registerBoolSetting("MobAura", &isMobAura, isMobAura);
+	registerBoolSetting("Aurora", &isnotfast, isnotfast);
 	registerFloatSetting("range", &range, range, 2.f, 20.f);
 	registerIntSetting("delay", &delay, delay, 0, 20);
 	registerBoolSetting("hurttime", &hurttime, hurttime);
@@ -128,6 +129,21 @@ void Killaura::onTick(C_GameMode* gm) {
 				g_Data.getCGameMode()->attack(targetList[0]);
 				g_Data.getLocalPlayer()->swing();
 				g_Data.getCGameMode()->attack(targetList[0]);
+			}
+		}
+		if (isnotfast) {
+			for (auto& i : targetList) {
+				if (!(i->damageTime > 1 && hurttime)) {
+					g_Data.getLocalPlayer()->swing();
+					g_Data.getCGameMode()->attack(i);
+					
+				}
+			}
+		} else {
+			if (!(targetList[0]->damageTime > 1 && hurttime)) {
+				g_Data.getLocalPlayer()->swing();
+				g_Data.getCGameMode()->attack(targetList[0]);
+				
 			}
 		}
 		if (rotations) {

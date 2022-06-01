@@ -7,6 +7,7 @@ class Killaura : public IModule
 {
 private:
 	bool isMulti = true;
+	bool isnotfast = false;
 	int delay = 0;
 	int Odelay = 0;
 	bool autoweapon = false;
