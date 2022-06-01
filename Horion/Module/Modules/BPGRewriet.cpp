@@ -361,7 +361,7 @@ void BPGRewrite::onPreRender(C_MinecraftUIRenderContext* ctx) {
 				std::string text = std::to_string((int)latestCrystal.enemyDmg);
 				std::string text1 = std::to_string((int)computeExplosionDamage(latestCrystal.pos.toVec3t(), g_Data.getLocalPlayer(), g_Data.getLocalPlayer()->region, dmgEnum.selected));
 
-				DrawUtils::drawText(textPos2, &text, MC_Color(255, 0, 0), 0.8f);
+				DrawUtils::drawText(textPos2, &text, MC_Color(102, 0, 102), 0.8f);
 				DrawUtils::drawText(textPos1, &text1, MC_Color(66, 238, 238), 0.8f);
 			}
 		}
