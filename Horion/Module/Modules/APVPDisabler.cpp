@@ -52,14 +52,16 @@ void APVPDisabler::onPlayerTick(C_Player* player) {
 	if (GameData::isRightClickDown()) {
 		C_ItemStack* stack = g_Data.getLocalPlayer()->getSupplies()->inventory->getItemStack(g_Data.getLocalPlayer()->getSupplies()->selectedHotbarSlot);
 
-		if (pauseOnXP) {
-			if ((*stack->item)->itemId != 0 && (stack->getItem()->itemId == 508 || stack->getItem()->itemId == 374))
-				return;
-		}
+		if (stack != nullptr && *stack->item != nullptr) {
+			if (pauseOnXP) {
+				if ((*stack->item)->itemId != 0 && (stack->getItem()->itemId == 508 || stack->getItem()->itemId == 374))
+					return;
+			}
 
-		if (pauseOnBow) {
-			if ((*stack->item)->itemId != 0 && (stack->getItem()->itemId == 300))
-				return;
+			if (pauseOnBow) {
+				if ((*stack->item)->itemId != 0 && (stack->getItem()->itemId == 300))
+					return;
+			}
 		}
 
 	}
