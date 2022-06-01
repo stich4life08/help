@@ -9,6 +9,7 @@ private:
 	bool onlyOnBuildMods = true;
 	bool pauseOnXP = true;
 	bool pauseOnBow = true;
+	bool pauseOnMine = true;
 
 public:
 	APVPDisabler();

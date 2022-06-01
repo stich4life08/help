@@ -5,6 +5,7 @@ APVPDisabler::APVPDisabler() : IModule(0, Category::WORLD, "stops villafag654 se
 	registerBoolSetting("On Mod w/ build", &this->onlyOnBuildMods, this->onlyOnBuildMods);
 	registerBoolSetting("Pause On XP", &this->pauseOnXP, this->pauseOnXP);
 	registerBoolSetting("Pause On Bow", &this->pauseOnBow, this->pauseOnBow);
+	registerBoolSetting("Pause On Mine", &this->pauseOnMine, this->pauseOnMine);
 }
 
 APVPDisabler::~APVPDisabler() {
@@ -62,6 +63,9 @@ void APVPDisabler::onPlayerTick(C_Player* player) {
 		}
 
 	}
+
+	if (GameData::isLeftClickDown() && pauseOnMine)
+		return;
 
 	// here's the actual main part; its short af
 	player->pitch = angle;

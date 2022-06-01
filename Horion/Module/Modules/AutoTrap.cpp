@@ -10,6 +10,8 @@ AutoTrap::AutoTrap() : IModule(0x0, Category::COMBAT, "Automatically traps the n
 	registerBoolSetting("PitchUp", &this->ATRots, this->ATRots);
 	registerBoolSetting("Full body", &this->fullbody, this->fullbody);
 	registerBoolSetting("Auto CA", &this->niggerTurnCAOn, this->niggerTurnCAOn);
+	registerBoolSetting("Switch2Obby", &this->switch2obby, this->switch2obby);
+	registerBoolSetting("Airplace", &this->airplace, this->airplace);
 }
 
 AutoTrap::~AutoTrap() {
@@ -17,6 +19,20 @@ AutoTrap::~AutoTrap() {
 
 const char* AutoTrap::getModuleName() {
 	return ("AutoTrap");
+}
+
+void getObbyAT() {
+	auto supplies = g_Data.getLocalPlayer()->getSupplies();
+	auto inv = supplies->inventory;  // g_Data.getLocalPlayer()->getSupplies()->inventory->getItemStack(g_Data.getLocalPlayer()->getSupplies())->getItem()->itemID
+	for (int n = 0; n < 9; n++) {
+		C_ItemStack* stack = inv->getItemStack(n);
+		if (stack->item != nullptr) {
+			if (stack->getItem()->itemId == 49) {  // select obsid
+				supplies->selectedHotbarSlot = n;
+				return;
+			}
+		}
+	}
 }
 
 static std::vector<C_Entity*> targetList15;
@@ -127,6 +143,9 @@ void AutoTrap::onTick(C_GameMode* gm) {
 		place = 0;
 	}
 
+	if (switch2obby)
+		getObbyAT();
+
 	if (!targetList15.empty()) {
 		//ground level
 		vec3_t enemLoc = (targetList15[0]->eyePos0).floor();
@@ -180,7 +199,10 @@ void AutoTrap::onTick(C_GameMode* gm) {
 				mustGoUp = true;
 
 			for (vec3_t i : placements) {
-				tryAutoTrap(i);
+				if (airplace)
+					tryAutoTrap(i);
+				else
+					gm->buildBlock(&vec3_ti(i), 0, true);
 			}
 
 			if (niggerTurnCAOn) {
