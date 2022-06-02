@@ -299,9 +299,8 @@ void BPGRewrite::onTick(C_GameMode* gm) {
 void BPGRewrite::onPlayerTick(C_Player* plr) {
 	if (aurora && renderCrystal) {
 	vec2_t ang = g_Data.getLocalPlayer()->getPos()->CalcAngle(latestCrystal.pos.toVec3t().add(0.5f, 0.5f, 0.5f));
-		plr->pitch = 0.5f;
-		plr->bodyYaw = 0.5f;
-		plr->yawUnused1 = 0.5f;
+		plr->pitch = 170.f;
+	
 
 	}
 }
@@ -409,6 +408,7 @@ bool BPGRewrite::tryRaytrace(vec3_t vec3_t1, vec3_t vec3_t2, C_BlockSource* regi
 
 	using BlockSource_ClipT = HitResult*(__fastcall*)(C_BlockSource*, HitResult*, vec3_t&, vec3_t&, bool, bool, int, bool, bool);
 	static auto clip = reinterpret_cast<BlockSource_ClipT>(FindSignature("48 8B C4 55 53 56 57 41 54 41 55 41 56 41 57 48 8D A8 ?? ?? ?? ?? 48 81 EC ?? ?? ?? ?? 0F 29 70 ?? 0F 29 78 ?? 44 0F 29 40 ?? 44 0F 29 88 ?? ?? ?? ?? 44 0F 29 90 ?? ?? ?? ?? 44 0F 29 98 ?? ?? ?? ?? 44 0F 29 A0 ?? ?? ?? ?? 44 0F 29 A8 ?? ?? ?? ?? 44 0F 29 B0 ?? ?? ?? ?? 48 8B 05 ?? ?? ?? ?? 48 33 C4 48 89 85 ?? ?? ?? ?? 4D 8B D9"));
+	
 	return false;
 }
 

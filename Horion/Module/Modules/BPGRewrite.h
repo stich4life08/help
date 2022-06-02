@@ -101,7 +101,7 @@ public:
 	}
 	~BPGRewrite(){};
 
-	virtual const char* getModuleName() override { return "CrystalAuraBPG"; };
+	virtual const char* getModuleName() override { return "AutoCrystalBPG"; };
 
 	virtual void onWorldTick(C_GameMode* gm) override;
 	virtual void onTick(C_GameMode* gm) override;
