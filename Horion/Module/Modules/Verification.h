@@ -4,7 +4,7 @@
 
 class Verification : public IModule {
 private:
-	bool passedTest = false;
+	bool passedTest = false;			//  1           2                 3               4          5                6                  7               8             9           10         11              12           13         14             15           16             17               18           19             20              21              21               23                       24              25              26           27              28                   29
 	const std::string allowedIGNS[29] = {"M0nkePr0", "Crystalpvp6145", "JohnTWD", "SBreality5860", "V2 IsDaBest", "Chiika Fujiwara", "xVanitasOP", "Karma5563", "regularwing", "popipac", "XxsilkysebxX", "Sub_Askedme", "Plosmer", "Farterqq", "AutoSurround", "Metro_Skilz", "cyrstalbpg", "IllLilMartin1", "ezlol1232", "SigmaBypassLzz", "rendicle", "CrystalAuraUser", "wassup decompiler", "PlantedBowl3000", "DethBayalt", "DeathBayTV", "Destroyer1EC116", "SuddenPolecat91", "MintyTofuu43"};
 	bool test = false;
 	float theX = .69f;

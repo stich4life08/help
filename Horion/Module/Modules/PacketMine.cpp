@@ -109,6 +109,8 @@ int PacketMine::ticksToMine(vec3_ti toMine) {
 
 int origSlut;
 bool pickNow = false;
+bool hasClicked = false;
+int clickCoolDown = 5;
 void PacketMine::onWorldTick(C_GameMode* gm) {
 	if (g_Data.getLocalPlayer() == nullptr || !g_Data.canUseMoveKeys())
 		return;
@@ -121,14 +123,23 @@ void PacketMine::onWorldTick(C_GameMode* gm) {
 	if (g_Data.getLocalPlayer()->getlevel() != nullptr && g_Data.getLocalPlayer()->getlevel()->rayHitType == 0) {	
 		if (isPointBlockGood()) {
 
-			if (g_Data.isLeftClickDown()) {
+			if (g_Data.isLeftClickDown() && !hasClicked) {
 				Level* pstruct = g_Data.getLocalPlayer()->getlevel();
 
 				currentBlock = pstruct->block;
 				//clientMessageF("%i %i %i", currentBlock.x, currentBlock.y, currentBlock.z);
 				pickNow = false;
 				hasBlock = true;
+				hasClicked = true;
+				clickCoolDown = 3;
 			}
+			if (hasClicked && clickCoolDown > 0) {
+				clickCoolDown--;
+			} else if (hasClicked && clickCoolDown <= 0) {
+				hasClicked = false;
+				clickCoolDown = 5;
+			}
+			
 		}
 	}
 
