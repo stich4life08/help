@@ -23,6 +23,7 @@ void ModuleManager::initModules() {
 		moduleList.push_back(std::shared_ptr<IModule>(new Verification()));
 #endif  // BETA
 
+		moduleList.push_back(std::shared_ptr<IModule>(new PacketMine()));
 		moduleList.push_back(std::shared_ptr<IModule>(new AntiCrystal()));
 		moduleList.push_back(std::shared_ptr<IModule>(new APVPDisabler()));
 		moduleList.push_back(std::shared_ptr<IModule>(new RobotHolefiller()));

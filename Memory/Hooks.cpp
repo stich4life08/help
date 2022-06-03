@@ -1100,7 +1100,7 @@ void Hooks::LoopbackPacketSender_sendToServer(C_LoopbackPacketSender* a, C_Packe
 	static auto freecamMod = moduleMgr->getModule<Freecam>();
 	static auto blinkMod = moduleMgr->getModule<Blink>();
 	static auto noPacketMod = moduleMgr->getModule<NoPacket>();
-	static auto packetM = moduleMgr->getModule<InstaBreak>();
+	static auto instabreakMod = moduleMgr->getModule<InstaBreak>();
 	static auto pm = moduleMgr->getModule<FastXPtwo>();
 
 	if (noPacketMod->isEnabled() && g_Data.isInGame())
@@ -1156,7 +1156,7 @@ void Hooks::LoopbackPacketSender_sendToServer(C_LoopbackPacketSender* a, C_Packe
 		logF("emote %llX %s %i", *varInt, text->getText(), *bet);
 	} fix emote crashing*/
 	auto* pp = reinterpret_cast<C_PlayerActionPacket*>(packet);
-	if ((pm->isEnabled() && pm->okPacketSent && !(packet->isInstanceOf<C_MovePlayerPacket>() && packet->isInstanceOf<PlayerAuthInputPacket>())) || (packetM->isEnabled() && !(packet->isInstanceOf<C_MovePlayerPacket>() && packet->isInstanceOf<PlayerAuthInputPacket>()) && (pp->action == 2 && pp->entityRuntimeId == g_Data.getLocalPlayer()->entityRuntimeId))) {
+	if ((pm->isEnabled() && pm->okPacketSent && !(packet->isInstanceOf<C_MovePlayerPacket>() && packet->isInstanceOf<PlayerAuthInputPacket>())) || (instabreakMod->isEnabled() && !(packet->isInstanceOf<C_MovePlayerPacket>() && packet->isInstanceOf<PlayerAuthInputPacket>()) && (pp->action == 2 && pp->entityRuntimeId == g_Data.getLocalPlayer()->entityRuntimeId))) {
 		for (int PacketMult = 0; PacketMult < pm->multiplier; PacketMult++)
 			oFunc(a, packet);
 	} else {
@@ -1182,6 +1182,7 @@ void Hooks::GameMode_startDestroyBlock(C_GameMode* _this, vec3_ti* a2, uint8_t f
 
 	static auto nukerModule = moduleMgr->getModule<Nuker>();
 	static auto instaBreakModule = moduleMgr->getModule<InstaBreak>();
+	//static auto packetMine = moduleMgr->getModule<PacketMine>();
 
 	if (nukerModule->isEnabled()) {
 		vec3_ti tempPos;
@@ -1214,10 +1215,30 @@ void Hooks::GameMode_startDestroyBlock(C_GameMode* _this, vec3_ti* a2, uint8_t f
 		}
 		return;
 	}
-	if (instaBreakModule->isEnabled()) {
+	int Odelay = 0;
+	if (instaBreakModule->isEnabled() && instaBreakModule->Modes.GetSelectedEntry().GetValue() == 0) { // vanilla ib
 		_this->destroyBlock(a2, face);
 		return;
 	}
+	if (instaBreakModule->isEnabled() && instaBreakModule->Modes.GetSelectedEntry().GetValue() == 1) { // packet ib
+		if (g_Data.getLocalPlayer()->region->getBlock(*a2)->toLegacy()->blockId != 7) {  
+			_this->destroyBlock(a2, 0xFFFFFFFFFFFFFF);
+
+			return;
+		}
+	}
+	if (instaBreakModule->isEnabled() && instaBreakModule->Modes.GetSelectedEntry().GetValue() == 2) { // haste ib
+		Odelay++;
+		if (g_Data.getLocalPlayer()->region->getBlock(*a2)->toLegacy()->blockId != 7) {
+			if (Odelay == instaBreakModule->delay) _this->destroyBlock(a2, face);
+			if (Odelay == instaBreakModule->delay) Odelay = 0;
+			return;
+		}
+	}
+	/* if (packetMine->isEnabled() && (packetMine->mineNow)) {
+		_this->destroyBlock(&packetMine->currentBlock, face);
+		return;
+	}*/
 
 	oFunc(_this, a2, face, a4, a5);
 }

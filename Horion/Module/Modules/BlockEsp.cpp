@@ -110,6 +110,7 @@ void BlockEsp::onPostRender(C_MinecraftUIRenderContext* renderCtx) {
 									break;
 								case 154:
 									if (hoppers) render14 = true;
+									break;
 								}
 
 								//diamond

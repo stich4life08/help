@@ -1,6 +1,7 @@
 #include "APVPDisabler.h"
 
 APVPDisabler::APVPDisabler() : IModule(0, Category::WORLD, "stops villafag654 servers from doing that weird anti-place shit; rmb to turn off rotates")  {
+	// registerBoolSetting("Packlet Mode", &this->packetLook, this->packetLook); - doesnt work right
 	registerIntSetting("Angle", &this->angle, this->angle, -360, 360);
 	registerBoolSetting("On Mod w/ build", &this->onlyOnBuildMods, this->onlyOnBuildMods);
 	registerBoolSetting("Pause On XP", &this->pauseOnXP, this->pauseOnXP);
@@ -19,56 +20,61 @@ void APVPDisabler::onPlayerTick(C_Player* player) {
 	if (g_Data.getLocalPlayer() == nullptr)
 		return;
 
-	if (onlyOnBuildMods) {
-		// modules with build capabilities
+	if (!packetLook) {
+		if (onlyOnBuildMods) {
+			// modules with build capabilities
 
-		// crystalauras
-		bool CPlace = moduleMgr->getModule<CrystalPlace>()->isEnabled();
-		bool CABPG = moduleMgr->getModule<CrystalAura>()->isEnabled();
-		bool CAOW = moduleMgr->getModule<CrystalAura>()->isEnabled();
-		bool CAWTA = moduleMgr->getModule<CrystalAura>()->isEnabled();
+			// crystalauras
+			bool CPlace = moduleMgr->getModule<CrystalPlace>()->isEnabled();
+			bool CABPG = moduleMgr->getModule<CrystalAura>()->isEnabled();
+			bool CAOW = moduleMgr->getModule<CrystalAura>()->isEnabled();
+			bool CAWTA = moduleMgr->getModule<CrystalAura>()->isEnabled();
 
-		// holefiller
-		bool HF = moduleMgr->getModule<HoleFiller>()->isEnabled();
+			// holefiller
+			bool HF = moduleMgr->getModule<HoleFiller>()->isEnabled();
 
-		// surround
-		bool jtwdSurr = moduleMgr->getModule<Surround>()->isEnabled();
-		bool renSurr = moduleMgr->getModule<RenSurround>()->isEnabled();
-		bool burr = moduleMgr->getModule<Burrow>()->isEnabled();
+			// surround
+			bool jtwdSurr = moduleMgr->getModule<Surround>()->isEnabled();
+			bool renSurr = moduleMgr->getModule<RenSurround>()->isEnabled();
+			bool burr = moduleMgr->getModule<Burrow>()->isEnabled();
 
-		// scaffold
-		bool scaf = moduleMgr->getModule<Scaffold>()->isEnabled();
-		bool tower = moduleMgr->getModule<Tower>()->isEnabled();
+			// scaffold
+			bool scaf = moduleMgr->getModule<Scaffold>()->isEnabled();
+			bool tower = moduleMgr->getModule<Tower>()->isEnabled();
 
-		// specials
-		bool AnvA = moduleMgr->getModule<AnvilAura>()->isEnabled();
-		bool AncA = moduleMgr->getModule<AnchorAura>()->isEnabled();
-		bool trap = moduleMgr->getModule<AutoTrap>()->isEnabled();
+			// specials
+			bool AnvA = moduleMgr->getModule<AnvilAura>()->isEnabled();
+			bool AncA = moduleMgr->getModule<AnchorAura>()->isEnabled();
+			bool trap = moduleMgr->getModule<AutoTrap>()->isEnabled();
 
-		if (not(CPlace || CABPG || CAOW || CAWTA || HF || jtwdSurr || renSurr || burr || scaf || tower || AnvA || AncA || trap))
-			return; // none of the above modules were enabled
-	}
+			if (not(CPlace || CABPG || CAOW || CAWTA || HF || jtwdSurr || renSurr || burr || scaf || tower || AnvA || AncA || trap))
+				return;  // none of the above modules were enabled
+		}
 
-	if (GameData::isRightClickDown()) {
-		C_ItemStack* stack = g_Data.getLocalPlayer()->getSupplies()->inventory->getItemStack(g_Data.getLocalPlayer()->getSupplies()->selectedHotbarSlot);
+		if (GameData::isRightClickDown()) {
+			C_ItemStack* stack = g_Data.getLocalPlayer()->getSupplies()->inventory->getItemStack(g_Data.getLocalPlayer()->getSupplies()->selectedHotbarSlot);
 
-		if (stack != nullptr && *stack->item != nullptr) {
-			if (pauseOnXP) {
-				if ((*stack->item)->itemId != 0 && (stack->getItem()->itemId == 508 || stack->getItem()->itemId == 374))
-					return;
-			}
+			if (stack != nullptr && *stack->item != nullptr) {
+				if (pauseOnXP) {
+					if ((*stack->item)->itemId != 0 && (stack->getItem()->itemId == 508 || stack->getItem()->itemId == 374))
+						return;
+				}
 
-			if (pauseOnBow) {
-				if ((*stack->item)->itemId != 0 && (stack->getItem()->itemId == 300))
-					return;
+				if (pauseOnBow) {
+					if ((*stack->item)->itemId != 0 && (stack->getItem()->itemId == 300))
+						return;
+				}
 			}
 		}
 
+		if (GameData::isLeftClickDown() && pauseOnMine)
+			return;
+
+		// here's the actual main part; its short af
+		player->pitch = angle;
+	} else { // packet pitchUp - non functional
+		C_MovePlayerPacket pkt(g_Data.getLocalPlayer(), player->getHumanPos());
+		pkt.pitch = angle;
+		g_Data.getClientInstance()->loopbackPacketSender->sendToServer(&pkt);
 	}
-
-	if (GameData::isLeftClickDown() && pauseOnMine)
-		return;
-
-	// here's the actual main part; its short af
-	player->pitch = angle;
 }

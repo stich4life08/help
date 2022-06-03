@@ -5,6 +5,7 @@
 
 class APVPDisabler : public IModule {
 private:
+	bool packetLook = false;
 	int angle = 270;
 	bool onlyOnBuildMods = true;
 	bool pauseOnXP = true;
