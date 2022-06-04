@@ -18,10 +18,6 @@ const char* AutoCity::getModuleName() {
 	return ("AutoCity");
 }
 
-void AutoCity::onEnable() {
-	cityTarg.shouldStart = false;
-}
-
 int AutoCity::ticksToMineAC(vec3_ti toMine) {
 	float speedMultiplier;
 	int pickSlot;
@@ -147,9 +143,15 @@ bool distSorterAC(C_Entity* E1, C_Entity* E2) {
 }
 
 int origSlutAC;
-bool hasMeasuredOldBlockAC = false;
 int hasPickAC = 0;
-void AutoCity::onTick(C_GameMode* gm) {
+
+void AutoCity::onEnable() {
+	hasPickAC = 0;
+	cityTarg.shouldStart = false;
+	cityTarg.mineTime = 0;
+}
+
+void AutoCity::onWorldTick(C_GameMode* gm) {
 	niggerList.clear();
 
 	if (g_Data.getLocalPlayer() == nullptr) return;
@@ -221,6 +223,7 @@ void AutoCity::onTick(C_GameMode* gm) {
 
 	if (cityTarg.shouldStart) {
 		if (cityTarg.ent->getHumanPos().floor() != cityTarg.entPos) {  // opponent moved; probably no longer in hole
+			cityTarg.shouldStart = false;
 			clientMessageF("Enemy has moved out of hole! Disabling...");
 			this->setEnabled(false);
 			return;
@@ -228,13 +231,15 @@ void AutoCity::onTick(C_GameMode* gm) {
 	}
 }
 
-void AutoCity::onWorldTick(C_GameMode* gm) {
+void AutoCity::onTick(C_GameMode* gm) {
 	if (g_Data.getLocalPlayer() == nullptr)
 		return;
 
 	if (cityTarg.shouldStart && cityTarg.mineTime > 0) {
-		clientMessageF("%i", cityTarg.mineTime);
-
+		//clientMessageF("%i", cityTarg.mineTime);
+		bool isDestroyed = false;
+		gm->startDestroyBlock(cityTarg.breaker, 0, isDestroyed);
+		gm->stopDestroyBlock(cityTarg.breaker);
 		gm->destroyBlock(&cityTarg.breaker, 0);
 		origSlutAC = g_Data.getLocalPlayer()->getSupplies()->selectedHotbarSlot;
 
@@ -252,6 +257,7 @@ void AutoCity::onWorldTick(C_GameMode* gm) {
 			clientMessageF("Finished citying!");
 			this->setEnabled(false);
 		}
+		hasPickAC++;
 	}
 	return;
 }
