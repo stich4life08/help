@@ -13,6 +13,7 @@
 #include "Modules/Verification.h"
 #endif
 
+#include "Modules/AutoCity.h"
 #include "Modules/PacketMine.h"
 #include "Modules/AntiCrystal.h"
 #include "Modules/APVPDisabler.h"
