@@ -2,8 +2,9 @@
 
 PacketMine::PacketMine() : IModule(0, Category::WORLD, "Geyser Packet Mine - idk if it works on other servers") {
 	registerIntSetting("Mine Range", &this->mineRange, this->mineRange, 3, 10);
-	//registerIntSetting("Addt. Wait", &this->addtWait, this->addtWait, 0, 30);
-	registerIntSetting("Mine Time", &this->mineTime, this->mineTime, 1, 180);
+	registerIntSetting("Addt. Wait", &this->addtWait, this->addtWait, 0, 60);
+	registerIntSetting("Default Time", &this->defMineTime, this->defMineTime, 1, 180);
+	registerIntSetting("Pick Time", &this->pickTime, this->pickTime, 1, 40);
 }
 
 PacketMine::~PacketMine() {
@@ -58,13 +59,14 @@ bool doIHaveAPick() {
 
 	return false;
 }
-/*
+
 int PacketMine::ticksToMine(vec3_ti toMine) {
 
 	float speedMultiplier;
 	int pickSlot;
 	auto supplies = g_Data.getLocalPlayer()->getSupplies();
 	auto inv = supplies->inventory;  // g_Data.getLocalPlayer()->getSupplies()->inventory->getItemStack(g_Data.getLocalPlayer()->getSupplies())->getItem()->itemID
+
 
 	for (int n = 0; n < 9; n++) {
 		C_ItemStack* stack = inv->getItemStack(n);
@@ -87,37 +89,45 @@ int PacketMine::ticksToMine(vec3_ti toMine) {
 
 	int id = g_Data.getLocalPlayer()->region->getBlock(toMine)->toLegacy()->blockId;
 	float blockHardness;
+	bool correctBlk = false;
 
 	switch (id) {
 	case 145:
 		blockHardness = 5.f;
+		correctBlk = true;
 		break;
 	case 49:
-		blockHardness = 50.f;
+		blockHardness = 170.f;
+		correctBlk = true;
 		break;
 	case 130:
-		blockHardness = 22.5f;
+		blockHardness = 73.f;
+		correctBlk = true;
 		break;
 	}
 
+	if (!correctBlk)
+		return defMineTime;
+
 	float damage = speedMultiplier / blockHardness;
 	damage /= 30;
-
-	return (int) (round(1 / damage) + addtWait);
+	//clientMessageF("%i %i %i", (int)(round(1 / damage)), addtWait, (int)(round(1 / damage) + addtWait));
+	return (int)(round(1 / damage) + addtWait);
 }
-*/
+
 
 int origSlut;
 bool pickNow = false;
 bool hasClicked = false;
-int clickCoolDown = 5;
+bool hasMeasuredOldBlock = false;
 void PacketMine::onWorldTick(C_GameMode* gm) {
 	if (g_Data.getLocalPlayer() == nullptr || !g_Data.canUseMoveKeys())
 		return;
 
 	if (!doIHaveAPick()) {
-		clientMessageF("Pickaxe not detected! Disabling...");
-		this->setEnabled(false);
+		return;
+		//clientMessageF("Pickaxe not detected! Disabling...");
+		//this->setEnabled(false);
 	}
 
 	if (g_Data.getLocalPlayer()->getlevel() != nullptr && g_Data.getLocalPlayer()->getlevel()->rayHitType == 0) {	
@@ -131,13 +141,9 @@ void PacketMine::onWorldTick(C_GameMode* gm) {
 				pickNow = false;
 				hasBlock = true;
 				hasClicked = true;
-				clickCoolDown = 3;
 			}
-			if (hasClicked && clickCoolDown > 0) {
-				clickCoolDown--;
-			} else if (hasClicked && clickCoolDown <= 0) {
+			if (hasClicked && !g_Data.isLeftClickDown()) {
 				hasClicked = false;
-				clickCoolDown = 5;
 			}
 			
 		}
@@ -150,10 +156,26 @@ void PacketMine::onWorldTick(C_GameMode* gm) {
 		hasBlock = false;
 		displayBlock = 0;
 		mDel = 0;
+		hasMeasuredOldBlock = false;
 	}
 
 	if (!hasBlock && displayBlock == 0)
 		return;
+
+	if (!hasMeasuredOldBlock) {
+		mineTime = ticksToMine(currentBlock);
+		hasMeasuredOldBlock = true;
+	}
+	clientMessageF("%i",  mineTime);
+	if (mineTime == -1) {
+		currentBlock = vec3_ti(999410, -420622, -23494);
+		pickNow = false;
+		hasBlock = false;
+		displayBlock = 0;
+		mDel = 0;
+		hasMeasuredOldBlock = false;
+		return;
+	}
 
 	if (hasBlock) {
 		displayBlock = 1;
@@ -173,6 +195,7 @@ void PacketMine::onWorldTick(C_GameMode* gm) {
 			currentBlock = vec3_ti(999410, -420622, -23494);
 			origSlut = g_Data.getLocalPlayer()->getSupplies()->selectedHotbarSlot;
 			pickNow = true;
+			hasMeasuredOldBlock = false;
 			//getPickaxePM();
 			//g_Data.getLocalPlayer()->getSupplies()->selectedHotbarSlot = origSlut;
 			return;
@@ -203,12 +226,12 @@ void PacketMine::onTick(C_GameMode* gm) {
 			gm->destroyBlock(&currentBlock, 0);
 	}
 
-	if (pickNow && hasPick < 3) {
+	if (pickNow && hasPick < pickTime) {
 		getPickaxePM();
 		hasPick++;
 		return;
 	}
-	if (hasPick >= 3) {
+	if (hasPick >= pickTime) {
 		g_Data.getLocalPlayer()->getSupplies()->selectedHotbarSlot = origSlut;
 		hasPick = 0;
 		pickNow = false;

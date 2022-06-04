@@ -5,8 +5,12 @@
 
 class PacketMine : public IModule {
 private:
-	int addtWait = 8;
-	int mineTime = 25;
+	int addtWait = 5;
+	int defMineTime = 120;
+	int pickTime = 3;
+
+
+	int mineTime = 0;
 
 public:
 	int mineRange = 8;
@@ -24,7 +28,7 @@ public:
 	bool hasBlock = false;
 	vec3_ti currentBlock;
 
-	//int ticksToMine(vec3_ti b);
+	int ticksToMine(vec3_ti b);
 	// Inherited via IModule
 	virtual const char* getModuleName() override;
 	virtual void onEnable() override;
