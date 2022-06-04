@@ -150,7 +150,7 @@ void PacketMine::onWorldTick(C_GameMode* gm) {
 	}
 
 	if (currentBlock.toVec3t().dist(g_Data.getLocalPlayer()->getHumanPos()) > mineRange && (hasBlock || displayBlock != 0)) {
-		clientMessageF("Block is too far! Clearing...");
+		//clientMessageF("Block is too far! Clearing...");
 		currentBlock = vec3_ti(999410, -420622, -23494);
 		pickNow = false;
 		hasBlock = false;
@@ -166,7 +166,7 @@ void PacketMine::onWorldTick(C_GameMode* gm) {
 		mineTime = ticksToMine(currentBlock);
 		hasMeasuredOldBlock = true;
 	}
-	clientMessageF("%i",  mineTime);
+	// clientMessageF("%i",  mineTime);
 	if (mineTime == -1) {
 		currentBlock = vec3_ti(999410, -420622, -23494);
 		pickNow = false;

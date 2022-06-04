@@ -194,6 +194,8 @@ bool CrystalPlace::isPlaceValid(vec3_t location, C_Entity* atkObj) {  // 100% WO
 		return false;                                                                                                 // works
 	if (!noCheckUpper && g_Data.getLocalPlayer()->region->getBlock(location.add(0, 1, 0))->toLegacy()->blockId != 0)  // location+(0,1,0) is not air when 1.12 on
 		return false;                                                                                                 // works
+	if (!noCheckUpper && checkCornerHitboxCollision(&location.add(0, 1, 0), atkObj))								  // make sure opponent does not step on the crystal, thereby blocking placements
+		return false;
 	if (checkCornerHitboxCollision(&location, atkObj))                                                                // opponent's hitbox intersects location
 		return false;                                                                                                 // works
 	if (g_Data.getLocalPlayer()->region->getBlock(location.sub(0, 1, 0))->toLegacy()->blockId != 49 &&                // floor is not obsidian or bedrock;

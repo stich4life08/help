@@ -240,7 +240,7 @@ void CityESP::onPreRender(C_MinecraftUIRenderContext* renderCtx) {
 			float b = (expB / 255.f);
 
 			DrawUtils::setColor(r, g, b, 1.f);
-			DrawUtils::drawBox(loc.add(-0.5f,0,-0.5f), loc.add(0.5f,1,0.5f), expT, true);
+			DrawUtils::drawBox(loc.add(-0.5f,0,-0.5f), loc.add(0.5f,1,0.5f), expT, false);
 		}
 	}
 
