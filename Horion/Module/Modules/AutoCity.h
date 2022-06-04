@@ -17,7 +17,6 @@ private:
 	bool turnOnCA = true;
 	float breakRange = 10.f;
 
-
 	bool showExposed = true;
 	bool inclSelf = true;
 
@@ -39,4 +38,5 @@ public:
 	virtual void onEnable() override;
 	virtual void onTick(C_GameMode* gm) override;
 	virtual void onWorldTick(C_GameMode* gm) override;
+	virtual void onPreRender(C_MinecraftUIRenderContext* renderCtx) override;
 };

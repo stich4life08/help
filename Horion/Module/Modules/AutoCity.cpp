@@ -154,16 +154,18 @@ void AutoCity::onTick(C_GameMode* gm) {
 
 	if (g_Data.getLocalPlayer() == nullptr) return;
 
-	g_Data.forEachEntity(niggerLooker69);
-
 	if (!doIHaveAPickAC()) {
 		clientMessageF("Wow! I forgot to bring a pickaxe!!! - Disabling...");
 		this->setEnabled(false);
+		return;
 	}
 
-	if (niggerList.empty() || niggerList.size() == 0) {
+	g_Data.forEachEntity(niggerLooker69);
+
+	if (niggerList.empty()) {
 		clientMessageF("No Entities found within %i blocks! Disabling...", (int)(entRange));
 		this->setEnabled(false);
+		return;
 	}
 
 	std::sort(niggerList.begin(), niggerList.end(), distSorterAC);
@@ -192,13 +194,14 @@ void AutoCity::onTick(C_GameMode* gm) {
 				break;
 			}
 
-			// check for obsidian
-			if (!guyExposed && blockLegacy->blockId == 49 && isBlockGoodForBreaking(&side, &loc)) {
+			// check for non bedrock
+			if (!guyExposed && blockLegacy->blockId != 7 && isBlockGoodForBreaking(&side, &loc)) {
 				possibleCities.push_back(side);
 			}
 		}
 
 		if (!possibleCities.empty()) {
+			clientMessageF("Attempting to city %s...", niggerList[0]->getNameTag()->getText());
 			cityTarg.breaker = possibleCities[0];
 			cityTarg.ent = niggerList[0];
 			cityTarg.entPos = niggerList[0]->getHumanPos().floor();
@@ -211,6 +214,7 @@ void AutoCity::onTick(C_GameMode* gm) {
 			} else {
 				clientMessageF("No suitable persons for citying! Disabling...");
 				this->setEnabled(false);
+				return;
 			}
 		}
 	}
@@ -219,6 +223,7 @@ void AutoCity::onTick(C_GameMode* gm) {
 		if (cityTarg.ent->getHumanPos().floor() != cityTarg.entPos) {  // opponent moved; probably no longer in hole
 			clientMessageF("Enemy has moved out of hole! Disabling...");
 			this->setEnabled(false);
+			return;
 		} 
 	}
 }
@@ -228,14 +233,17 @@ void AutoCity::onWorldTick(C_GameMode* gm) {
 		return;
 
 	if (cityTarg.shouldStart && cityTarg.mineTime > 0) {
+		clientMessageF("%i", cityTarg.mineTime);
 
 		gm->destroyBlock(&cityTarg.breaker, 0);
 		origSlutAC = g_Data.getLocalPlayer()->getSupplies()->selectedHotbarSlot;
 
+		cityTarg.mineTime--;
+	}
+
+	if (cityTarg.shouldStart && cityTarg.mineTime <= 0) {
 		if (hasPickAC < 5) {
 			getPickaxeAC();
-			hasPickAC++;
-			return;
 		}
 		if (hasPickAC >= 5) {
 			g_Data.getLocalPlayer()->getSupplies()->selectedHotbarSlot = origSlutAC;
@@ -244,7 +252,19 @@ void AutoCity::onWorldTick(C_GameMode* gm) {
 			clientMessageF("Finished citying!");
 			this->setEnabled(false);
 		}
-		cityTarg.mineTime--;
-		return;
+	}
+	return;
+}
+
+void AutoCity::onPreRender(C_MinecraftUIRenderContext* renderCtx) {
+	if (g_Data.getLocalPlayer() == nullptr || !cityTarg.shouldStart) return;
+
+	if (cityTarg.mineTime > 10) {
+		DrawUtils::setColor(.5411765f, .1058824f, 1.f, 1.f);  // 138,27,255
+		DrawUtils::drawBox(cityTarg.breaker.toVec3t(), cityTarg.breaker.toVec3t().add(1), .5f, false);
+	}
+	if (cityTarg.mineTime <= 10) {
+		DrawUtils::setColor(1.f, 0.f, 0.f, 1.f);  // 134,21,158
+		DrawUtils::drawBox(cityTarg.breaker.toVec3t(), cityTarg.breaker.toVec3t().add(1), .4f, true);
 	}
 }
