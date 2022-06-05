@@ -17,7 +17,6 @@ private:
 	bool turnOnCA = true;
 	float breakRange = 10.f;
 
-
 	bool showExposed = true;
 	bool inclSelf = true;
 

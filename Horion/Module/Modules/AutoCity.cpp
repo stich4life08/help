@@ -18,10 +18,6 @@ const char* AutoCity::getModuleName() {
 	return ("AutoCity");
 }
 
-void AutoCity::onEnable() {
-	cityTarg.shouldStart = false;
-}
-
 int AutoCity::ticksToMineAC(vec3_ti toMine) {
 	float speedMultiplier;
 	int pickSlot;
@@ -147,8 +143,14 @@ bool distSorterAC(C_Entity* E1, C_Entity* E2) {
 }
 
 int origSlutAC;
-bool hasMeasuredOldBlockAC = false;
 int hasPickAC = 0;
+
+void AutoCity::onEnable() {
+	hasPickAC = 0;
+	cityTarg.shouldStart = false;
+	cityTarg.mineTime = 0;
+}
+
 void AutoCity::onTick(C_GameMode* gm) {
 	niggerList.clear();
 
@@ -201,6 +203,7 @@ void AutoCity::onTick(C_GameMode* gm) {
 		}
 
 		if (!possibleCities.empty()) {
+			clientMessageF("Attempting to city %s...", niggerList[0]->getNameTag()->getText());
 			cityTarg.breaker = possibleCities[0];
 			cityTarg.ent = niggerList[0];
 			cityTarg.entPos = niggerList[0]->getHumanPos().floor();
@@ -220,14 +223,11 @@ void AutoCity::onTick(C_GameMode* gm) {
 
 	if (cityTarg.shouldStart) {
 		if (cityTarg.ent->getHumanPos().floor() != cityTarg.entPos) {  // opponent moved; probably no longer in hole
+			cityTarg.shouldStart = false;
 			clientMessageF("Enemy has moved out of hole! Disabling...");
 			this->setEnabled(false);
 			return;
 		} 
-	}
-
-	if (cityTarg.shouldStart && cityTarg.mineTime > 0) {
-		gm->destroyBlock(&cityTarg.breaker, 0);
 	}
 }
 
@@ -236,21 +236,18 @@ void AutoCity::onWorldTick(C_GameMode* gm) {
 		return;
 
 	if (cityTarg.shouldStart && cityTarg.mineTime > 0) {
-		clientMessageF("%i", cityTarg.mineTime);
-
+		bool isDestroyed = false;
+		gm->startDestroyBlock(cityTarg.breaker, 0, isDestroyed);
+		gm->stopDestroyBlock(cityTarg.breaker);
 		gm->destroyBlock(&cityTarg.breaker, 0);
 		origSlutAC = g_Data.getLocalPlayer()->getSupplies()->selectedHotbarSlot;
 
 		cityTarg.mineTime--;
-		return;
 	}
 
 	if (cityTarg.shouldStart && cityTarg.mineTime <= 0) {
 		if (hasPickAC < 5) {
-			clientMessageF(" getting pick ");
-			hasPickAC++;
 			getPickaxeAC();
-			return;
 		}
 		if (hasPickAC >= 5) {
 			g_Data.getLocalPlayer()->getSupplies()->selectedHotbarSlot = origSlutAC;
@@ -258,9 +255,10 @@ void AutoCity::onWorldTick(C_GameMode* gm) {
 			cityTarg.shouldStart = false;
 			clientMessageF("Finished citying!");
 			this->setEnabled(false);
-			return;
 		}
+		hasPickAC++;
 	}
+	return;
 }
 
 void AutoCity::onPreRender(C_MinecraftUIRenderContext* renderCtx) {
@@ -271,7 +269,7 @@ void AutoCity::onPreRender(C_MinecraftUIRenderContext* renderCtx) {
 		DrawUtils::drawBox(cityTarg.breaker.toVec3t(), cityTarg.breaker.toVec3t().add(1), .5f, false);
 	}
 	if (cityTarg.mineTime <= 10) {
-		DrawUtils::setColor(1.f, 0.f, 0.f /* .5251902f, .0823529f, .6196078f*/, 1.f);  // 134,21,158
+		DrawUtils::setColor(1.f, 0.f, 0.f, 1.f);  // 134,21,158
 		DrawUtils::drawBox(cityTarg.breaker.toVec3t(), cityTarg.breaker.toVec3t().add(1), .4f, true);
 	}
 }
