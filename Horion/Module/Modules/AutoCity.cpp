@@ -151,7 +151,7 @@ void AutoCity::onEnable() {
 	cityTarg.mineTime = 0;
 }
 
-void AutoCity::onWorldTick(C_GameMode* gm) {
+void AutoCity::onTick(C_GameMode* gm) {
 	niggerList.clear();
 
 	if (g_Data.getLocalPlayer() == nullptr) return;
@@ -231,12 +231,11 @@ void AutoCity::onWorldTick(C_GameMode* gm) {
 	}
 }
 
-void AutoCity::onTick(C_GameMode* gm) {
+void AutoCity::onWorldTick(C_GameMode* gm) {
 	if (g_Data.getLocalPlayer() == nullptr)
 		return;
 
 	if (cityTarg.shouldStart && cityTarg.mineTime > 0) {
-		//clientMessageF("%i", cityTarg.mineTime);
 		bool isDestroyed = false;
 		gm->startDestroyBlock(cityTarg.breaker, 0, isDestroyed);
 		gm->stopDestroyBlock(cityTarg.breaker);
