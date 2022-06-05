@@ -2,9 +2,11 @@
 
 #include "../../../Utils/Target.h"
 
-CityESP::CityESP() : IModule(0, Category::VISUAL, "Reminds you to city that guy you're fighting") {
+CityESP::CityESP() : IModule(0, Category::VISUAL, "Reminds you to city that guy your fighting") {
 	registerFloatSetting("Range", &this->range, this->range, 0.f, 10.f);
 	registerBoolSetting("Incl. Self", &this->inclSelf, this->inclSelf);
+
+	registerBoolSetting("1.12", &this->oneDot12, this->oneDot12);
 
 	registerBoolSetting("Show Exposed", &this->showExposed, this->showExposed);
 	registerIntSetting("ExposedBox-R", &this->expR, this->expR, 0, 255);
@@ -46,7 +48,45 @@ bool weLookForAGuy(C_Entity* curEnt, bool isRegularEntity) {
 	return false;
 }
 
-void CityESP::onTick(C_GameMode* gm) {
+bool CityESP::isBlockAGoodCity(vec3_ti* blk, vec3_ti* personPos) {
+	C_Block* block = g_Data.getLocalPlayer()->region->getBlock(*blk);
+	C_BlockLegacy* blockLegacy = (block->blockLegacy);
+
+	if (blockLegacy->blockId == 7) {  // block is bedrock
+		return false;
+	}
+
+	if (oneDot12) {
+		if (!g_Data.getLocalPlayer()->region->getBlock(blk->toVec3t().add(0, 1, 0))->toLegacy()->material->isReplaceable) {  // top half is blocked
+
+			vec3_ti delta = blk->sub(*personPos);
+			vec3_ti checkMe = blk->add(delta);
+
+			if (!g_Data.getLocalPlayer()->region->getBlock(checkMe.toVec3t())->toLegacy()->material->isReplaceable)  // next block after is also blocked
+				return false;
+		}
+	}
+
+	return true;
+}
+/*
+bool isExposedActuallyExposed(vec3_ti* blk, vec3_ti* personPos) {
+	C_Block* block = g_Data.getLocalPlayer()->region->getBlock(*blk);
+	C_BlockLegacy* blockLegacy = (block->blockLegacy);
+
+	if (!g_Data.getLocalPlayer()->region->getBlock(blk->toVec3t().add(0, 1, 0))->toLegacy()->material->isReplaceable) {  // top half is blocked
+
+		vec3_ti delta = blk->sub(*personPos);
+		vec3_ti checkMe = blk->add(delta);
+
+		if (!g_Data.getLocalPlayer()->region->getBlock(checkMe.toVec3t())->toLegacy()->material->isReplaceable)  // next block after is also blocked
+			return false;
+	}
+
+	return true;
+}*/
+
+void CityESP::onWorldTick(C_GameMode* gm) {
 	guyzz.clear();
 	highlightCity.clear();
 	exposee.clear();
@@ -61,7 +101,6 @@ void CityESP::onTick(C_GameMode* gm) {
 		return;
 
 	for (auto& guy : guyzz) {
-
 		vec3_ti loc = guy->getHumanPos().floor();
 		bool guyExposed = false;
 
@@ -69,8 +108,7 @@ void CityESP::onTick(C_GameMode* gm) {
 			loc.add(1, 0, 0),
 			loc.sub(1, 0, 0),
 			loc.sub(0, 0, 1),
-			loc.add(0, 0, 1)
-		};
+			loc.add(0, 0, 1)};
 
 		std::vector<vec3_ti> possibleCities;
 
@@ -79,144 +117,23 @@ void CityESP::onTick(C_GameMode* gm) {
 			C_Block* block = g_Data.getLocalPlayer()->region->getBlock(side);
 			C_BlockLegacy* blockLegacy = (block->blockLegacy);
 			if (blockLegacy->material->isReplaceable) {
-				guyExposed = true;
-				break;
+				if (!oneDot12) {
+					guyExposed = true;
+					break;
+				} else if (isBlockAGoodCity(&side, &loc)) {
+					guyExposed = true;
+					break;
+				}
 			}
 
 			// check for non-bedrock sides
-			if (!guyExposed && blockLegacy->blockId != 7) {
+			if (!guyExposed && isBlockAGoodCity(&side, &loc)) {
 				possibleCities.push_back(side);
-			} 
+			}
 		}
-	
-		if (guyExposed) { // 4-block exposure test failed, now test if hitbox is blocking thingz
-			bool actuallyExposed = true;
 
-			const vec3_ti burgerKingBurger[8] = {
-				loc.add(1, 0, 0),
-				loc.sub(1, 0, 0),
-				loc.sub(0, 0, 1),
-				loc.add(0, 0, 1),
-				loc.add(1, 0, 1),
-				loc.sub(1, 0, 1),
-				loc.sub(-1, 0, 1),
-				loc.add(-1, 0, 1)
-			};
-
-			std::vector<vec3_ti> overlapHere;
-
-			for (vec3_ti cornz : burgerKingBurger) {
-				if (checkCornerHitboxCollision(&cornz.toVec3t(), guy)) {
-					actuallyExposed = false; // dude's corner hitboxes actually don't overlap cornz
-				} else {
-					overlapHere.push_back(cornz);
-				}
-			}
-
-			if (!overlapHere.empty()) { // there are overlaps
-
-				std::vector<vec3_ti> toCheck;
-
-				if (overlapHere.size() == 1) {
-					/* when a person only overlaps 1 block in addt to his current location:
-				*	the overlap is an I shape;
-				*		C			 CC		 C
-				*	   COC	 CC		CPOC 	CPC			+x
-				*	   CPC  COPC	 CC		COC		-z		+z
-				*		C	 CC				 C			-x
-				*/
-
-					if (overlapHere[0].x > loc.x) {
-						toCheck.push_back(loc.add(vec3_ti(2, 0, 0)));
-						toCheck.push_back(loc.add(vec3_ti(-1, 0, 0)));
-						toCheck.push_back(loc.add(vec3_ti(0, 0, -1)));
-						toCheck.push_back(loc.add(vec3_ti(0, 0, 1)));
-						toCheck.push_back(loc.add(vec3_ti(1, 0, -1)));
-						toCheck.push_back(loc.add(vec3_ti(1, 0, 1)));
-					}
-					else if (overlapHere[0].x < loc.x) {
-						toCheck.push_back(loc.add(vec3_ti(-2, 0, 0)));
-						toCheck.push_back(loc.add(vec3_ti(1, 0, 0)));
-						toCheck.push_back(loc.add(vec3_ti(0, 0, -1)));
-						toCheck.push_back(loc.add(vec3_ti(0, 0, 1)));
-						toCheck.push_back(loc.add(vec3_ti(-1, 0, -1)));
-						toCheck.push_back(loc.add(vec3_ti(-1, 0, 1)));
-					} 
-					else if (overlapHere[0].z < loc.z) {
-						toCheck.push_back(loc.add(vec3_ti(0, 0, 2)));
-						toCheck.push_back(loc.add(vec3_ti(0, 0, -1)));
-						toCheck.push_back(loc.add(vec3_ti(1, 0, 0)));
-						toCheck.push_back(loc.add(vec3_ti(-1, 0, 0)));
-						toCheck.push_back(loc.add(vec3_ti(1, 0, 1)));
-						toCheck.push_back(loc.add(vec3_ti(-1, 0, 1)));
-					} 
-					else {
-						toCheck.push_back(loc.add(vec3_ti(0, 0, -2)));
-						toCheck.push_back(loc.add(vec3_ti(0, 0, 1)));
-						toCheck.push_back(loc.add(vec3_ti(-1, 0, 0)));
-						toCheck.push_back(loc.add(vec3_ti(1, 0, 0)));
-						toCheck.push_back(loc.add(vec3_ti(-1, 0, -1)));
-						toCheck.push_back(loc.add(vec3_ti(1, 0, -1)));
-					}
-					
-				}
-				else if (overlapHere.size() == 3) {
-					/* When overlap is 3 however, you are checking a square instead
-					*	 CC		 CC	    CC     CC
-					*	CPOC	COOC   COPC	  COOC  	+x
-					*	COOC	CPOC   COOC	  COPC	-z		+z
-					*	 CC		 CC	    CC	   CC		-x
-					* 
-					*	from left to right
-					*	1) P has highest X, lowest Z
-					*	2) P has lowest X, lowest Z
-					*	3) P has highest X, highest Z
-					*	4) P has lowest X, highest Z
-					*/
-
-					overlapHere.push_back(loc);
-					std::vector<vec3_ti*> checkSides;
-
-					for (vec3_ti i : overlapHere) {
-						checkSides.push_back(&i.add(1, 0, 0));
-						checkSides.push_back(&i.sub(1, 0, 0));
-						checkSides.push_back(&i.add(0, 0, 1));
-						checkSides.push_back(&i.sub(0, 0, 1));
-					}
-
-					// remove duplicates from checkSides
-					std::sort(checkSides.begin(), checkSides.end());
-					checkSides.erase(std::unique(checkSides.begin(), checkSides.end()), checkSides.end());
-					
-					for (vec3_ti* i : checkSides) {
-						toCheck.push_back(*i);
-					}
-				} 
-				else {
-					actuallyExposed = true;
-				}
-
-				if (!actuallyExposed) {
-					for (vec3_ti i : toCheck) {
-						// check if for empty sides
-						C_Block* block = g_Data.getLocalPlayer()->region->getBlock(i);
-						C_BlockLegacy* blockLegacy = (block->blockLegacy);
-						if (blockLegacy->material->isReplaceable) {
-							actuallyExposed = true;
-							break;
-						}
-
-						// check for non-bedrock sides
-						if (!actuallyExposed && blockLegacy->blockId != 7) {
-							possibleCities.push_back(i);
-						} 
-					}
-				}
-			}
-
-			if (actuallyExposed)
-				exposee.push_back(guy->getHumanPos());
-
+		if (guyExposed) {
+			exposee.push_back(guy->getHumanPos());
 		} else {
 			for (vec3_ti i : possibleCities) {
 				highlightCity.push_back(i);
@@ -240,7 +157,7 @@ void CityESP::onPreRender(C_MinecraftUIRenderContext* renderCtx) {
 			float b = (expB / 255.f);
 
 			DrawUtils::setColor(r, g, b, 1.f);
-			DrawUtils::drawBox(loc.add(-0.5f,0,-0.5f), loc.add(0.5f,1,0.5f), expT, false);
+			DrawUtils::drawBox(loc.add(-0.5f, 0, -0.5f), loc.add(0.5f, 1, 0.5f), expT, false);
 		}
 	}
 

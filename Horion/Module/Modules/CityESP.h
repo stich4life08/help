@@ -8,6 +8,8 @@ private:
 	bool showExposed = true;
 	bool inclSelf = true;
 
+	bool oneDot12 = true;
+
 	int expR = 255;
 	int expG = 50;
 	int expB = 0;
@@ -22,11 +24,13 @@ public:
 	std::vector<vec3_ti> highlightCity;
 	std::vector<vec3_t> exposee;
 
+	bool isBlockAGoodCity(vec3_ti* blk, vec3_ti* personPos);
+
 	float range = 10.f;
 	CityESP();
 	~CityESP();
 	// Inherited via IModule
 	virtual const char* getModuleName() override;
-	virtual void onTick(C_GameMode* gm) override;
+	virtual void onWorldTick(C_GameMode* gm) override;
 	virtual void onPreRender(C_MinecraftUIRenderContext* renderCtx) override;
 };
