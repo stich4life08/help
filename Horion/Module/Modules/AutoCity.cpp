@@ -122,14 +122,22 @@ bool niggerLooker69(C_Entity* curEnt, bool isRegularEntity) {
 }
 
 bool AutoCity::isBlockGoodForBreaking(vec3_ti* blk, vec3_ti* personPos) {
+	C_Block* block = g_Data.getLocalPlayer()->region->getBlock(*blk);
+	C_BlockLegacy* blockLegacy = (block->blockLegacy);
+
+	if (blockLegacy->blockId == 7) {  // block is bedrock
+		return false;
+	}
+
 	if (blk->toVec3t().dist(g_Data.getLocalPlayer()->getHumanPos()) > breakRange) return false; // block is too far
 
 	if (onedot12) {
-		if (g_Data.getLocalPlayer()->region->getBlock(blk->toVec3t().add(0, 1, 0))->toLegacy()->blockId != 0) {  // top half is blocked
+		if (!g_Data.getLocalPlayer()->region->getBlock(blk->toVec3t().add(0, 1, 0))->toLegacy()->material->isReplaceable) {  // top half is blocked
+
 			vec3_ti delta = blk->sub(*personPos);
 			vec3_ti checkMe = blk->add(delta);
 
-			if (g_Data.getLocalPlayer()->region->getBlock(checkMe.toVec3t())->toLegacy()->blockId != 0)  // next block after is also blocked
+			if (!g_Data.getLocalPlayer()->region->getBlock(checkMe.toVec3t())->toLegacy()->material->isReplaceable)  // next block after is also blocked
 				return false;
 		}
 	}
@@ -140,6 +148,10 @@ bool AutoCity::isBlockGoodForBreaking(vec3_ti* blk, vec3_ti* personPos) {
 
 bool distSorterAC(C_Entity* E1, C_Entity* E2) {
 	return g_Data.getLocalPlayer()->getHumanPos().dist(E1->getHumanPos()) < g_Data.getLocalPlayer()->getHumanPos().dist(E2->getHumanPos());
+}
+
+bool vecDistSorterAC(vec3_ti E1, vec3_ti E2) {
+	return g_Data.getLocalPlayer()->getHumanPos().dist(E1.toVec3t()) < g_Data.getLocalPlayer()->getHumanPos().dist(E2.toVec3t());
 }
 
 int origSlutAC;
@@ -191,18 +203,23 @@ void AutoCity::onTick(C_GameMode* gm) {
 			C_Block* block = g_Data.getLocalPlayer()->region->getBlock(side);
 			C_BlockLegacy* blockLegacy = (block->blockLegacy);
 			if (blockLegacy->material->isReplaceable) {
-				guyExposed = true;
-				possibleCities.clear();
-				break;
+				if (!onedot12) {
+					guyExposed = true;
+					break;
+				} else if (isBlockGoodForBreaking(&side, &loc)) {
+					guyExposed = true;
+					break;
+				}
 			}
 
-			// check for non bedrock
-			if (!guyExposed && blockLegacy->blockId != 7 && isBlockGoodForBreaking(&side, &loc)) {
+			// check for non-bedrock sides
+			if (!guyExposed && isBlockGoodForBreaking(&side, &loc)) {
 				possibleCities.push_back(side);
 			}
 		}
 
 		if (!possibleCities.empty()) {
+			std::sort(possibleCities.begin(), possibleCities.end(), vecDistSorterAC); // sort to find the block with lowest dist
 			clientMessageF("Attempting to city %s...", niggerList[0]->getNameTag()->getText());
 			cityTarg.breaker = possibleCities[0];
 			cityTarg.ent = niggerList[0];

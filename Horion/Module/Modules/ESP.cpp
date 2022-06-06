@@ -45,6 +45,7 @@ void doRenderStuff(C_Entity* ent, bool isRegularEntitie) {
 			}
 		}
 
+		if (ent == localPlayer) return;
 		if (ent->timeSinceDeath > 0)
 			return;
 		if (!noFriendsModule->isEnabled() && FriendList::findPlayer(ent->getNameTag()->getText())) {
