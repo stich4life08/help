@@ -271,6 +271,12 @@ void AutoCity::onWorldTick(C_GameMode* gm) {
 			hasPickAC = 0;
 			cityTarg.shouldStart = false;
 			clientMessageF("Finished citying!");
+			if (turnOnCA) {
+				auto CBreak = moduleMgr->getModule<CrystalBreak>();
+				if (!CBreak->isEnabled())
+					CBreak->setEnabled(true);
+			}
+
 			this->setEnabled(false);
 		}
 		hasPickAC++;
