@@ -14,13 +14,14 @@ public:
 
 	void onTick(C_GameMode* gm) {
 		C_ItemStack* stack = gm->player->getSupplies()->inventory->getItemStack(g_Data.getLocalPlayer()->getSupplies()->selectedHotbarSlot);
-		if (GameData::isRightClickDown() && stack->item != nullptr && (*stack->item)->itemId != 0 && (stack->getItem()->itemId == 508 || stack->getItem()->itemId == 374 || stack->getItem()->itemId == 300)) {
+		if (GameData::isRightClickDown() && stack != nullptr && (g_Data.getLocalPlayer()->getSelectedItemId() == 508 || g_Data.getLocalPlayer()->getSelectedItemId() == 374 || g_Data.getLocalPlayer()->getSelectedItemId() == 300)) {
 			if (Odel >= delay) {
 				gm->baseUseItem(*stack);
 				Odel = 0;
 			}
 			Odel++;
 		}
+		return;
 	}
 
 	virtual const char* getModuleName() override {
