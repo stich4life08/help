@@ -805,9 +805,15 @@ std::string chopOffDigits(std::string STUFF, int digits) {
 
 void CrystalPlace::onPreRender(C_MinecraftUIRenderContext* renderCtx) {
 	if (g_Data.getLocalPlayer() == nullptr) return;
-
-	if (!g_Data.canUseMoveKeys() || tgtList.empty() || !g_Data.isInGame() || tgtList[0] == NULL || tgtList.size() == 0)
+	if (!g_Data.getLocalPlayer()->isAlive()) {
+		moduleMgr->getModule<CrystalBreak>()->setEnabled(false);
 		return;
+	}
+
+	if (!g_Data.canUseMoveKeys() || tgtList.empty() || !g_Data.isInGame() || tgtList[0] == NULL || tgtList.size() == 0 || tgtList[0] == nullptr || !g_Data.getLocalPlayer()->isAlive()) {
+		tgtList.clear();
+		return;
+	}
 
 	C_GuiData* dat = g_Data.getClientInstance()->getGuiData();
 	vec2_t windowSize = dat->windowSize;
@@ -816,6 +822,7 @@ void CrystalPlace::onPreRender(C_MinecraftUIRenderContext* renderCtx) {
 
 	std::string realname = "Name: " + text;
 	int health = tgtList[0]->getHealth();
+
 
 	auto healthstring3 = std::to_string(health);
 	std::string health2 = "HP: " + healthstring3;
@@ -872,6 +879,7 @@ void CrystalPlace::onPreRender(C_MinecraftUIRenderContext* renderCtx) {
 			DrawUtils::drawTextInWorld(&enem_dmg, placeLoc.sub(0, 1.2f, 0), 0.6f, vec3_ti(255, 0, 0), vec3_ti(12, 12, 12), .1f);
 		}
 	}
+	return;
 }
 
 void CrystalPlace::onSendPacket(C_Packet* pkt) {

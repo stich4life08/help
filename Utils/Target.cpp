@@ -10,7 +10,7 @@ void Target::init(C_LocalPlayer** cl) {
 	localPlayer = cl;
 }
 
-bool Target::isValidTarget(C_Entity* ent) {
+bool Target::isValidTarget(C_Entity* ent, bool checkFriends) {
 	if (ent == NULL)
 		return false;
 
@@ -75,7 +75,7 @@ bool Target::isValidTarget(C_Entity* ent) {
 	if (antibot->isNameCheckEnabled() && !Target::containsOnlyASCII(ent->getNameTag()->getText()))
 		return false;
 
-	if (!noFriends->isEnabled() && FriendList::findPlayer(ent->getNameTag()->getText()))
+	if (checkFriends && !noFriends->isEnabled() && FriendList::findPlayer(ent->getNameTag()->getText()))
 		return false;
 
 	if (antibot->isInvisibleCheckEnabled() && ent->isInvisible())
@@ -98,7 +98,7 @@ bool Target::isValidTarget(C_Entity* ent) {
 	if (!Target::containsOnlyASCII(ent->getNameTag()->getText()) && antibot->isNameCheckEnabled())
 		return false;
 
-	if (FriendList::findPlayer(ent->getNameTag()->getText()) && !moduleMgr->getModule<NoFriends>()->isEnabled())
+	if (checkFriends && FriendList::findPlayer(ent->getNameTag()->getText()) && !moduleMgr->getModule<NoFriends>()->isEnabled())
 		return false;
 
 	if (ent->isInvisible() && antibot->isInvisibleCheckEnabled())

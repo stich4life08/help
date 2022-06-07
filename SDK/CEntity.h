@@ -606,17 +606,24 @@ public:
 	void lerpTo(vec3_t const &pos, vec2_t const &a2, int a3);
 
 	float getHealth() {
-		static int *healthAttribute = 0x0;
+		if (this->isAlive() || this != nullptr) {
+			static int *healthAttribute = 0x0;
 
-		if (healthAttribute == 0x0) {
-			uintptr_t sigOffset = FindSignature("48 8D 15 ?? ?? ?? ?? FF 90 ?? ?? ?? ?? F3 ?? ?? 88 ?? ?? ?? ?? 85 C9 7E ??");
-			int offset = *(int *)(sigOffset + 3);
-			healthAttribute = (int *)(sigOffset + offset + 7);
+			if (healthAttribute == 0x0) {
+				uintptr_t sigOffset = FindSignature("48 8D 15 ?? ?? ?? ?? FF 90 ?? ?? ?? ?? F3 ?? ?? 88 ?? ?? ?? ?? 85 C9 7E ??");
+				int offset = *(int *)(sigOffset + 3);
+				healthAttribute = (int *)(sigOffset + offset + 7);
+			}
+			if (healthAttribute == nullptr) {
+				return 0;
+			}
+		
+			__int64 attribute = getAttribute(healthAttribute);
+
+			return *(float *)(attribute + 0x84);
+		} else {
+			return 0.f;
 		}
-
-		__int64 attribute = getAttribute(healthAttribute);
-
-		return *(float *)(attribute + 0x84);
 	}
 
 	void cancelHurtAnimation() {

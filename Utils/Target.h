@@ -10,5 +10,5 @@ private:
 
 public:
 	static void init(C_LocalPlayer** lc);
-	static bool isValidTarget(C_Entity* ent);
+	static bool isValidTarget(C_Entity* ent, bool cf = true);
 };

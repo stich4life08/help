@@ -65,12 +65,9 @@ void APVPDisabler::onPlayerTick(C_Player* player) {
 			if (GameData::isLeftClickDown() && pauseOnMine)
 				return;
 
-			// here's the actual main part; its short af
-			player->pitch = angle;
-		} else {  // packet pitchUp - non functional
-			C_MovePlayerPacket pkt(g_Data.getLocalPlayer(), player->getHumanPos());
-			pkt.pitch = angle;
-			g_Data.getClientInstance()->loopbackPacketSender->sendToServer(&pkt);
 		}
+
 	}
+	// here's the actual main part; its short af
+	player->pitch = angle;
 }

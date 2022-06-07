@@ -44,7 +44,7 @@ int AutoCity::ticksToMineAC(vec3_ti toMine) {
 	speedMultiplier += powf((inv->getItemStack(pickSlot)->getEnchantValue(15)), 2) + 1;
 
 	int id = g_Data.getLocalPlayer()->region->getBlock(toMine)->toLegacy()->blockId;
-	float blockHardness;
+	float blockHardness = 1;
 	bool correctBlk = false;
 
 	switch (id) {
