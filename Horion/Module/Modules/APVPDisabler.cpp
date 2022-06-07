@@ -52,7 +52,6 @@ void APVPDisabler::onPlayerTick(C_Player* player) {
 		}
 
 		if (GameData::isRightClickDown()) {
-
 			if (pauseOnXP) {
 				if ((g_Data.getLocalPlayer()->getSelectedItemId() == 508 || g_Data.getLocalPlayer()->getSelectedItemId() == 374))
 					return;
@@ -61,17 +60,17 @@ void APVPDisabler::onPlayerTick(C_Player* player) {
 			if (pauseOnBow) {
 				if (g_Data.getLocalPlayer()->getSelectedItemId() == 374 == 300)
 					return;
+			}
 
+			if (GameData::isLeftClickDown() && pauseOnMine)
+				return;
+
+			// here's the actual main part; its short af
+			player->pitch = angle;
+		} else {  // packet pitchUp - non functional
+			C_MovePlayerPacket pkt(g_Data.getLocalPlayer(), player->getHumanPos());
+			pkt.pitch = angle;
+			g_Data.getClientInstance()->loopbackPacketSender->sendToServer(&pkt);
 		}
-
-		if (GameData::isLeftClickDown() && pauseOnMine)
-			return;
-
-		// here's the actual main part; its short af
-		player->pitch = angle;
-	} else { // packet pitchUp - non functional
-		C_MovePlayerPacket pkt(g_Data.getLocalPlayer(), player->getHumanPos());
-		pkt.pitch = angle;
-		g_Data.getClientInstance()->loopbackPacketSender->sendToServer(&pkt);
 	}
 }
